@@ -1,0 +1,81 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:19:56 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=8765",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\n\\npackage org.apache.commons.math3.geometry.euclidean.threed;\\n\\nimport java.io.Serializable;\\n\\nimport org.apache.commons.math3.geometry.Space;\\nimport org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;\\n\\n/**\\n * This class implements a three-dimensional space.\\n * @version $Id$\\n * @since 3.0\\n */\\npublic class Euclidean3D implements Serializable, Space {\\n\\n    /** Serializable version identifier. */\\n    private static final long serialVersionUID = 6249091865814886817L;\\n\\n    /** Dimension of the space. */\\n    private static final int SPACE_DIMENSION = 3;\\n\\n    /** Private constructor for the singleton.\\n     */\\n    private Euclidean3D() {\\n    }\\n\\n    /** Get the unique instance.\\n     * @return the unique instance\\n     */\\n    public static Euclidean3D getInstance() {\\n        return LazyHolder.INSTANCE;\\n    }\\n\\n    /** {@inheritDoc} */\\n    public int getDimension() {\\n        return SPACE_DIMENSION;\\n    }\\n\\n    /** {@inheritDoc} */\\n    public Euclidean2D getSubSpace() {\\n        return Euclidean2D.getInstance();\\n    }\\n\\n    // CHECKSTYLE: stop HideUtilityClassConstructor\\n    /** Holder for the instance.\\n     * <p>We use here the Initialization On Demand Holder Idiom.</p>\\n     */\\n    private static class LazyHolder {\\n        /** Cached field instance. */\\n        private static final Euclidean3D INSTANCE = new Euclidean3D();\\n    }\\n    // CHECKSTYLE: resume HideUtilityClassConstructor\\n\\n    /** Handle deserialization of the singleton.\\n     * @return the singleton instance\\n     */\\n    private Object readResolve() {\\n        // return the singleton instance\\n        return LazyHolder.INSTANCE;\\n    }\\n\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "EoUjCoIjAQw51secEyKgBapJwbsV2mJnWZTeXdlQ0n4FNoDhN_Y_XXnwPuwuOGA1QFcs6kemgftNSIS5zQetWRvucLlf3CTejOEsmsEUoZdGW89UhSvQZjZH_4_f6bCoXkrTeIAmI7dLa0VKpBMWJWXNQctLB-MYcGr-c_Z0Iqydz-YICAOoS_rQBVXIdg0H8YK5pNdx8iftm6IcBpPBB1zn-pqYD1M0P3gzxOMLeB4HyzgjCXgqGBrFlZOpyfKt44feypx_PLR0Ph_PjrcWGnmtwDGLdExkM3IXts0Z-WfremEwuk6khh0j69zn3AGp54vvDkpWS779r2eJD04dtxYJau3DZRMQ7g1SLNx3bblX2_BOj6HR5MbR5gEfRtH32yNiVYu_8iiR0Uxy3RgPLMbZdFiLA5WeWf7vw4gIzXsYBNKUMpcoDF0fXu13Nr8GziGaOzKgv8f0oiTLySftgsKNmrr3wGIzqIhlc0WlyPz_71-dWdiFcH-JpslyucRDMf-otlBF5yvatrpMHWCiuDRZXe-s788-EhRQh_VFlbQzQrFE-qkM-ZA_scswaspMomyF3HGnAYmioLWmnKVB43Vwjy6VXy5-DzW9FPWFY8Lf8c9JdLw4QH5XPZ5XQO_QzdvvQNnaJmGSEfo90lBaDGXSPq5o0WrHY8EYKccGWLxqnqkGhPce2po4x3mgoJObtM18uPBWyvYkwKUGNbNldPECo2LTDaTgf_VsQAqQFCpK2fBkcL14T8YGv3Rh3Lqi-wRwS3tbDiUIYu7aT0abnhgTUKOWWPWDB7uiEDsx7hChC08B--HWaEw1W8x6SL69tqsgntZbDkb51zyZZe-xqumbbSzdH3Ohyil1zXKARhZuAU-rd1w_zGXk5XUhm3YdC3wkDxp46OMw0HL5yaOaOUUya2WzRpWd5oncM7ttQsEEUQBNZkT4L5Hm1XUqjSPL7ooRZ0-U-VuBS9cT7xZKFiuoH2LKxvUoOMSLnYuXXpUlag0HnYeFjM9XtWsmbtUlll8BOvXvjOIswsEBFNwVUFadoazcMutctE-Gq9ngWu3BrHnT21ZJk08wLOldhvs_vfpygVgs4saDOcrCaMaM3HvqwGAlfcjMGfT80sHcxTc1DaZqhuT6dcD7TRH3DCl5QuaYpsrOwhzIN053S7uVMe6zQeQUmq38aHE8kJdmNtmvzhGo66xXOHiCE2xVYeGAmol5WhEhxKKAXX-bOvunX8Q2Jpg26NQfRM7BFZ2If2stLJUiymV0zNDe1XI6DXYVNDJ9_4q1MnCmQ1ebnEJvo95fT9hMLmOGzXzY7pmLsOKWgSJvK6BwIWIcmNX4mkR02WXBg5MxHV-WtcEGw77OU-LS02BbkeZlHgVpTRn1vQxZLgxQZaCGfT_PnT6a-M6A8ZuljeASzhZCfH4_fxkeVq36CVYx4N7tIoWOcg-5EbWzSbMHP76h52OkLbsuL7dXCaRhVXKAtfNNi8JMhtzaghtbODNgHVxmwTtWEaPvhuVu-KvJmB3vTgCM3ULEkhl9Zh9frxcRQPdw7ycvU_tfhd869NOSXrJpoL8YZPXHkcIlfi5nmpkp9__W-bHPsdEusW6jUIluzUh4Q9CZuXWh6BZhpOuJ--FajnoQ7AfOyyG295NAFkIzuB1FuQAERNQn6wcgY13j85vQmhca8HJaGMGiM7nCLD6Bx8zBvMImWYQcEMSBlIfssC8vYzpQKjKoZvN9l96E-H58lEXAvpD9AEfCjAnIL1uIrClAROtW7EohThknjsIpJHoh8ZdcOJgjQRfRhHiJk6pbM7tz0OxCasb34OYpSu3hS6Ei3hEBm3EY5m3qvVglMaLxF7wRjDwO1OPZNpskB6kfDGhRItiDsRlNcjPOLaqGtvTGiVZ4rhRSkNDMKW74ytvU13rGDGD05LEXtAv6T6fnu9OFUU9MWlSQ_8aGtgyqRTfzAHxUOMOfgyIFgAlYrwmWj8DZNxlUUS2qYWt_JranzKoZS5gdig9WRCJjlY9L3sDUTFdDyOVOUQR8WE1tPJ6ByUu5oZvHoDjDpHzmaX0q1rsCmzD4EJo_goQMtR1EguCkwuNzWMAuielfL1gMyOyGKJfY38qNoeFNsaxcO7p0IBDRNQtPk76MuMhdFHnrd8wOr_N5X53msiybX3EQMcTyoHvTZyOgFs6W5xRaxectPFnhfz-tITJAcP_vN0G7I8ICuiKCjyZKgbcdpXcyumXiEeac5F4oYS1VRqVyOeKbJTs9zmOroRgv7YwRuK6QilK-vhZ94Tyt2O0kg_ymVG_8C5_M_RoyAaLo8g-9UMjavy8abyiFFqUEVKE-Rr609CD6YVHmsbBJGd1h_BU2cptKjl-08HJfwjbMy-uSk_8OKnRK_KnlsqkBslGlG0xqfpRx-X2FP4jtwxQR1pSu8ZOAvNl-zDAVHh_H8yWoWtDP1W_9pBLo0sX9EFl94ygFl-9Ctz4uFehQ_ZJhe2tRvoNNm_y49IRt8Jdh0AXjuZxT64evdpszbGRov_Jpxj431aS7SWOle5IzH1zty-1mWpRjRaxXQOj_gKMu-Ov5gmQNg7NQ6uBUwW3NeKwYD6bMBwgTHaoQr0yb-6flYrb4UKuThk-1TLwpNviqKfDSEtNI2Vhj00e8pngqIlYTw9_CW5LZ62koXjMyW7DoyHpEHHrhjPqYC-TwSqnwNe14Q1gSP8wXRNCc-G6_1HiJRUjAJh1mYuMXdO4SNVGlPxZyzzBLH4E9SNJyCWy1UUkUh6LFjwe3pfT8Mx09_pS2V8ySOTc9IQOZMkR3WcqTRUWSxN5Z0ZFykE_N_5XpbQmI2OcKA1_VGFOYHnSMHIC_NAaSeQ-MOdO8U2iy1qJwLPChCDdDWaFTgqIzy5fscveQDtbJYuwOvNE_K0u5HoUDF77Bh-UfqzVHf_CpLrq0gg4pRJNsh2t8dABKyIFz0OZQZvzhdGXSb03GYzzHnoUt8hDUEme1o7pRRpqYS77Zdr7miYRnqulN0WARMTLNkXTgOS5qNKIuOIhHKTQV-rhPCqU7YF6CANIdhplpIGJ7m2xMn9KrIkhR3ALdHlWCpBGKI1M0hR0qeI0nev5emn7wxJBa3sXAjuuMFRD9jeJ39hARGlr_baX8VepQf3vZBIK-lI7apkdPYJlBBOe1buPNfmszG1l6ZAoLbt5wLdj3o_yTv0zjvQjYMp4f9WARd0mAbLAvG_YprtPuWdsFDO8ZekfJPdqYkB5lI2nM4SGayqTmoUQ4jV5vpzEbDjoF9eH62Us8_FgMz1tw6OFpR78e30gn9y5lPUsCAkuZL0Y_tvdi8jnEoRf8_YAO74Ld74A4EJh1ldQ4Dva6qbmporu_OMmoFBW5tV08uOPgYeQtQiNYmYQqFZn_XD0lN2L-5-oK53b84QYsyxKrrKAj5R29g672cazMAX3nRq4I_s-Nz5wS6gvLWWBqhF8q5BDm7Myh7-kYmqcz19lZ8a0Hb7L-1hk5-uSkWD1HyV6zkfe1_BiBNnl3w78dOnzyEhFkFjMvNgAaebC4fsAtffACNGk6lZYga2ASiAj-XH2TRVkvb5Tm9r3i2yBWWhD9vHjUtGdTm43y1D-fLmpRAu1NPlNXidW00fSoF11W43UffnzFXtcErmQMCQ4d-t7iC-6HP3ADl3EyL6cHGqhDumZDfDQss25ZoBt4u27_mm6vilv2yF8SzDfPQM_gDC5PjiSZ2dzXL0C8ulhgYi6hFCb68nr8yY2_mje44xCxCAoObuvkXXkXWFDU6HxxPwlsmfNy8Aw8EWSGHeP59E85qhJpWRxUjkTZaNGCurnbFnfon25FECkuF9VMTlVw81-q09-ipPSr9En7WQOSThK5Yl0JfykN606sQnQbmJ1-9kVv8Uv5RAYT900cyVcIoXhFmheb6rj6H5HmzfNhy2IwcqtuHvkzJ8wms41GU6wcm8NAstf8n4jliD6-BUI-P_6ECfmTrXw3XiW_hoL7hGBTgi8B0aL-ucNYrQDEcCdLImwou_vuhNmV_DnC73ECQMVePyqbnDzbGrIu4NQouEaQSbEzptmc9D2QKu-OyODqB69Y2Tc4IvKln4jKKb_DyvcGmASVAj-fAto4ngyMFJxkph227miePrK5mHTGqDoCO5TAgZg4TGfPWGJqBXuCQOjh-TAjFiLbIo8qSfkHc-HY2BFh4Otdet6wlEuDzFdnpArVaFQkVxJFhRm9ZvzDhqDnbkLO0Pv7Cu1p87pixI6vXVQpUHhPxKuyubJiNH8rSAXv1RKQYRKmiO3EJGwvWmDU_ipSL0jAN6HJ6TEsMndUcVokev7crCATaURFA3SM644VtgkIk0rEaumaoFJ9L__oXjdBs2PsbqP8oxbDb2OhbLCTsKu31WpCo-XvaKMTXC1btTV3MP1HJabxfTYOotYtqLO1sNjjKyFWHlfxsxgfHzexBbwT8uFxfsSA787ZP-RPxWZ2NsrMrdz3iabJJC0Y1YYXN1FepiKXjcVoW2bi6k7vqHBJlsGKqQMeErlJ4aPysUtE62jJr6JjA-JQK1wSLBb1XHCHsOaF-BTJFmEJS3S5y0qu_jYyoi9JScsBI_2pZTn3viCLvrBhy-KbloqlLmLsk31ycCI-6vCvLT_swS2aEP1YrgV00PL0-AcgP0dnIuleFB18hzkLQ7B6pipZ7MgyfjC0-ir-d-hQeB3xnDCLdhKr3-B3J6n5Vrz8CYX7-taqDhas7-n_CwDl4FVIWxMkO7dq1_9IZ_RomElU-g2d8M21xEGSswL0sCvg5-dhTYVKb3CVp0WQAa5hSNFPJdQQVlaBPSnMVlLXDfQH8rlTjWmXCpwhORBPki9T4gWlfDul38XwCOZpUGVVQKmOEo_jDGM2fbWghqdq2Ki7dZZ9Vn3OE1ea5X0eUuWYTXapIrqnGzySIU8TqjV14n2NRGITMg-flnjxBrAUJ-EhEdRGAGuAGZT7Sq8As9eznlILdJrk-xh6d_1GgFQi0Yuazt1tTIrw7zC7zs1_VaeNSeVl4LDQ2B2lG0mxQGkp6i95ZUhpVdDvRALFlYwc3IjiwDnakmqX0whMB-d9kQsc3sUuGarhutF2ma1qmp-7O-5mkhRogl9cRf1zJQg8TqjuABiXH1P6X4bkRF9HDn-n9-Ko4GeXHSlJAsQw8NxGh9DIJv57JoCEAFHbr1_UgJLroqBAx7NaB7h_MH86zoQsD7iSMPtIytH-EC-GHk3NR7cEqTWkUp4_IXIvQSurgGcutCYN06GJwFJsmjLUFgJt4TIgwqLFSKLMHlafMDETAol6eXGlq5sWv_ufR5XqyRV2VZWgl75oPK0B0vsKlf7EIgjAvV5udIOupG9KtCCtDIp6Rvt3YXHXd-UKJ-FkkJC1tADTqKdB1Ps4_HetXW9NqEhGxAfTjTCvOkht53rH9XPwsZRQptTbBx3rYnaLUqBgW2CsT1vBB7Z-Cof2h0AmIq4j_VJZsYKqcxC2ZH6LL3bCR6xUdPfmh8RSgeAEmADdxkOxjSYdNYDZvpoabtrKB-AObaEWRuyqfSUBxWpu78up94-EJOJtavXFdQR_1JzcXGpBrDKAQXvJ8lKVCNzhu0fSICdBWb63gnYsA0JrYBpADXBa1HxZLG7FjAQA5BcNhdGuLyBfbQ7POmxGOVVoNMkRQevlyEEYbaaB5Gw2U_Sf5Jn9mPy1sKHu4Zo9PcLjE5f7SkF4QCsY_NPXJdz-phhsgwAEsMV5BboOWkVQxhP9cIqvTeRxafETu9TgU_u7klfj1cdKXPajqxMkXj4KcoY3iKyn9IBvynsnBsay_Tiy9CI4jFdfGC3K6mP_MEAQK9xRqpeZqW__p2_n1BdeXNPXNXZ5a3PjTgDBhtwKxfs-DgbgT-YwOpa5xh23R2W5Hm2Dlaf1vdCDv-1xnzDfgBZzbHBi4bsSaACZozFjjIhTanjTQ8XAjixf-PKgiDbfDZJrDAnJlfvjKy8qA4AMDlDACWeJLX6p",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": null,
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "0zVDaqPyMvaGz7IP9MGK8As",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 674,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 667,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 667
+      }
+    ],
+    "thoughts_token_count": 1171,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 2512,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\npackage org.apache.commons.math3.geometry.euclidean.threed;\n\nimport java.io.Serializable;\n\nimport org.apache.commons.math3.geometry.Space;\nimport org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;\n\n/**\n * This class implements a three-dimensional space.\n * @version $Id$\n * @since 3.0\n */\npublic class Euclidean3D implements Serializable, Space {\n\n    /** Serializable version identifier. */\n    private static final long serialVersionUID = 6249091865814886817L;\n\n    /** Dimension of the space. */\n    private static final int SPACE_DIMENSION = 3;\n\n    /** Private constructor for the singleton.\n     */\n    private Euclidean3D() {\n    }\n\n    /** Get the unique instance.\n     * @return the unique instance\n     */\n    public static Euclidean3D getInstance() {\n        return LazyHolder.INSTANCE;\n    }\n\n    /** {@inheritDoc} */\n    public int getDimension() {\n        return SPACE_DIMENSION;\n    }\n\n    /** {@inheritDoc} */\n    public Euclidean2D getSubSpace() {\n        return Euclidean2D.getInstance();\n    }\n\n    // CHECKSTYLE: stop HideUtilityClassConstructor\n    /** Holder for the instance.\n     * <p>We use here the Initialization On Demand Holder Idiom.</p>\n     */\n    private static class LazyHolder {\n        /** Cached field instance. */\n        private static final Euclidean3D INSTANCE = new Euclidean3D();\n    }\n    // CHECKSTYLE: resume HideUtilityClassConstructor\n\n    /** Handle deserialization of the singleton.\n     * @return the singleton instance\n     */\n    private Object readResolve() {\n        // return the singleton instance\n        return LazyHolder.INSTANCE;\n    }\n\n}"
+  }
+}

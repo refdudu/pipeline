@@ -1,0 +1,81 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:22:44 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=7916",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\npackage org.apache.commons.math3.optim.univariate;\\n\\nimport org.apache.commons.math3.optim.OptimizationData;\\nimport org.apache.commons.math3.exception.NumberIsTooLargeException;\\nimport org.apache.commons.math3.exception.OutOfRangeException;\\n\\n/**\\n * Search interval and (optional) start value.\\n * <br/>\\n * Immutable class.\\n *\\n * @version $Id$\\n * @since 3.1\\n */\\npublic class SearchInterval implements OptimizationData {\\n    /** Factor used to calculate the default start value (midpoint of the interval). */\\n    private static final double DEFAULT_START_FACTOR = 0.5;\\n\\n    /** Lower bound. */\\n    private final double lower;\\n    /** Upper bound. */\\n    private final double upper;\\n    /** Start value. */\\n    private final double start;\\n\\n    /**\\n     * @param lo Lower bound.\\n     * @param hi Upper bound.\\n     * @param init Start value.\\n     * @throws NumberIsTooLargeException if {@code lo >= hi}.\\n     * @throws OutOfRangeException if {@code init < lo} or {@code init > hi}.\\n     */\\n    public SearchInterval(double lo,\\n                          double hi,\\n                          double init) {\\n        if (lo >= hi) {\\n            throw new NumberIsTooLargeException(lo, hi, false);\\n        }\\n        if (init < lo ||\\n            init > hi) {\\n            throw new OutOfRangeException(init, lo, hi);\\n        }\\n\\n        lower = lo;\\n        upper = hi;\\n        start = init;\\n    }\\n\\n    /**\\n     * @param lo Lower bound.\\n     * @param hi Upper bound.\\n     * @throws NumberIsTooLargeException if {@code lo >= hi}.\\n     */\\n    public SearchInterval(double lo,\\n                          double hi) {\\n        this(lo, hi, DEFAULT_START_FACTOR * (lo + hi));\\n    }\\n\\n    /**\\n     * Gets the lower bound.\\n     *\\n     * @return the lower bound.\\n     */\\n    public double getMin() {\\n        return lower;\\n    }\\n    /**\\n     * Gets the upper bound.\\n     *\\n     * @return the upper bound.\\n     */\\n    public double getMax() {\\n        return upper;\\n    }\\n    /**\\n     * Gets the start value.\\n     *\\n     * @return the start value.\\n     */\\n    public double getStartValue() {\\n        return start;\\n    }\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "EuwbCukbAQw51scUxHWRgnBNXqAyRMh2F4cp-yxZS0ehL3G_hlnsN8RZqCgICqNVBU5f3Zg4Rx1_-qVReWsiTjuiZ6EWGxWCLv8jBYdlC6OWeejZCX_toNk74G8-wbwdZJ4Toe--FpKbvsYikn2uWN8jeE0xEp-lTj6lkhohI60uo6zK37PsKgfcaVDHUp9KYagSz6deMd_kCqPlinhxuu1-nzVHqCmlsj7s8CZdlvYXEjOJYbxyNbGe1zEy303bfaQ7YFYOXqptdQH2SLTY00tsOhNE3dIhnD_TD2mo56rDtusEcz_KJGQvaSvVa3ie0eGbgtVf34QD39rC4fj5u-BQJhAO6MQfzIfTWM1K3tIKT6ndDZNksCbuvrDRni7ViE1trY1PkPJeadmHnr5aA0z6xwv1jwlfrAkpqpujYVix6mNx8Q6U8-T6sle5uaQbo53HUmP5_je2TFCyy4gUWq1aXS0JvcOr4dhJ0XZxlTT3ATInjCUd0HSzdyC_nHZ4kETznFzsd4xyqCZqDPI5QY23C1PHY6T6BaQg6mT1rKt9W8ynWr1emHmnNb0RgX_0QhfFQhtUOB--eS8Iknu3u7BALu78o6ErPzpk6tMbc_MEMYdSqwamUOtMD3bd57l2l_XO3mTIZq53zylFEcCQlf90QjWO-RnhPqD5i3fzpKBooY3p_KVLyj1ddAh-8IYUiA2K5LgGRKZpSmDUr6PcnZ-ph1ffPF7L9kWFfGh3WlWQkXf1JvkbnhvZ_zGTkbbqJDlSNusHY8J8VkCCuM7_rhAqrDNQMb4U4XTGV8Mh0zIuwDUmJBK5JjEC4IX5dFCDKupZe0eJ5XH-14LJ2Za3VDxXZduYUfdEax7KHYJ2FLS1g7yLovJeFKYXQW9FjFQH6zo7eNOf35qAwkWT5NQvwwGU5gWGAfXjvZXIGyYVum2ntJrCWaWfKd7TUlYg0VHQ9lpQSg9PLdMJHOxBz0e2GD18PAHNOCDjZiQ6CbGseavJUNWAJrAP57R3uAVkWPsHf0rRTi4KrNwt1yQugAihnysIWSd-RWiypNKnH9R5-qx1ApjeeB2JxJOSxIdH2brpJQ89dwl1p41BYfNaxrzcOuGozi4XSHMBAK9QVQWfYYFIPfY_xVmoacIRrVJf2ZnXMuMSb6N_jar3L0RGLmOjcZ-wcqrgK8o3uXSotzt9h-zmBnaqsn4rrGyMOo_gMIBxXnGNmIjNkmbOLoOfz9JbQ7V6J-VNuuyJC81nzrAYMTvwMHQDA8d0chKFXK8HLL4BTKxgShyYJxv1LI4ks0DWB1zEByG6KsHrzqLEZMD2BQaFGk5U_t2RbDTS96Kr53dIFxa1NaRLwkF3DDq_lo3iEb00RSdjALahUwLhfzdKygVm-shQJcZsc4kwc-UiwD7XzH6OKlCjUO7Fp-zV8BZO9Lp5YOQ3NRHYX7j8O_HN08BvTsLyoYGqZ4RPcxy5FKRrW7JhakvxgnorU0iC4zjpmR5fgf-w701LDsg_stQ06cqmyWNiC8SHnrXtSrtZZPSakclU0suksfqP8GTMhAqyASxvW-dZxOdPeGc7ZEJAvFEUyCulsiHtgiscxdnUTeX4mhswUcUACklqRoalpfVBnx-d_isGuGKJcU7SHYXT3og1bjAmn-PwWw-vJmUo2vfL72qEp5Hk_re26V8fkUwkeHEBeIJoiuwN2ofumgFiTzR58KUSEpybXdNu3-tImHttbuePCAuSSQNad6SZLTOmFo4j2lh-9nX8ABYrmQYZUDgMQsEZegsCFenB_hE9H-npjSx-1nv7YUkUw3rVRdUuvTpiXiNghY89HJPuJk8fXJ3HqwR8kGCjOEiWRKHCy2aoeh5aIJygHISoJAecEv3SHWjKIYlIx72leEAj44ZAl3_B1hO7qDTt2j4bMc40Lo0vEY7dF_ga0eI4AMMnGB50OaunDmGuhMaEscJeiOoaRsZnPgY5n-scNItrk6ibhpJRHDJ7czcwYAglQpNg6uS-pNq7ru86ozQZ9sBG9IMNBqszAyA11G0noJVzAvaAQlNfzJTxPiFMkyXk7Ne_C7OSJZJsb-FY0A1djEmICdE3WHRU_flqA1m2qXaOVh0X-Plg5gxoPaMpLRWHIJ4Em3WEhg5_h8w5jipwr7txwagt99NNHkf3iYeLuYlefkQa7QOfPI8QwSg7SnEYeJenWx_PPjYBiuqCY7erPPEs-3jDDokrKOju5Us9DahtMF5gcqr7h8dec8ISDR_sP_qEQswd_68MPC8piMPtEOan5VuD_toBpjE3jGm3z1wjCyTjWPOnFiYgMC2RbgEXHRyzn_fWZHafhn_6a3uh24otXna6kzXGCSSZ7MIlCO1_phXP9UcB1jFvp-rjJOz7rBKxG3tU4h6tEasbjqwqdagMeY-g6tG_4LOLf99HqV-WnXsYBOZQcKDX90ncCHgMfVCRKdxalmZz1o5MyGA-2vp3CrLG_tzhyRrgpGqbfF7NEaZgl6gISeTvJjR_lDVAd3kEbTwehytRpqY0_NiCyNCZZEbZqJIjAtxWZsHN5gqQIdgvSLcdS1HjG63iQQ4TsPO7b86jmNXeUG8f2H1HVJDJgNtE4WuDI9ehmA4PlgcroRAg_wIr115BisgIWzEPfZp_bHHvlvSgu2SXppi4SnbDqrmNLtdXaTksdo3hnwxxrZ1TcmZM-rIDjqoUfQpEq4UTFIYH9P57fCgFoarWNyZED5hP10KV61Q8frIXJqgB0OBBEZqJTMK2GBPVNYvx2Pe8ZfbysQhex2d47xtzJlCCWxKSepFphDnSKTT3X-NhHxTuf3lg1Obk9N8AaHTx-Amxp9rbZQajayjsmCj2LQhoQD-HJQzThy3Opr8MzLqR7joRqFA9KK5QFAKYFEicTwK5MAljldZciFGdFvn_lafxbWvsTZZf3dBa-K9KBgf1h8NtOJ7yqKljbBHII8L3GT4LwUnSmTc3JLddngRd4PuK0kjLgXrVNpH4bvDV4EeXWIWk4oyZvVXTajCXE3kEzRHjRrTXek597qXYqEC7G0YWWRZY8NMw6mDCnieWh7FDnTTztyS9ZbC5f1AS6gbpFyZX0d3NH-axGf0Vv7qctrGClzMaw6egNrNXLlgCkRUqddIpws9DM6fruanjj68KBS-pAgi5LaQvcXuoBXC_AP7GerbzadedyFhMjSpuQ6hY2vWH6Y2hRtSXcrufAdea0ky1P86BGXuY4mxfpYegHDn2VwhUu7X_5qvx8wo-EehDzAk8jBJukAlT1chDjECCcXzITzPM3QSRbKHY1k5cGd8ahTTM8AFG0gLi6TkcwHsM0EHX2AsYWIFkiK8801keoN8C1XENEceMLdSpF-2upgO5Ao75-8Fz63Vamei49h5XQGFOPHTXZ2toKZJBTJvm5aaLtbhzwElpTM5ZCp-PSqQ0wRVigh-Awd39vOeHUlthAVHAkbQj_wmZBXycSQXjZEbGROjoybJCKX3vPM17Gag6XopYHK86XrSEBZ_FWMG1o5qIOmdQLbwc8m0a2tliA6ArAnK6yzj72mD6cRYx7_9LQ5__RUc5b9aIwEvEaKutEz8DW6cBoIj43dLSRAY9Y2Nfdlfqz4c-gUjHvSz0ABa6objHV48KkuIDrJy1Qty3CemjiX9IWqdS25iKt1LP3jafGR0AbIH9w46HhyYO7y0HA6G7ubSgEf3Ey9keuBPfl3gZ8hAyerI0e2M2tt6jIZnzr1Iq5gVblxWfkQ7KfjFrvO44Q6uuOEvuqq0eMUye8JDJWbacunz0flSNhtoA4VWS2BFUT5SwnIckyoLzVGSP9p1AGciHaxloiRmY9o6qHHtcDbn6XpJ945GhPWc2L9ccIFNEnswBwsGGESv8w0LJVWSd-WjXBSLzWx08x65appo4bVOGL3BVD5iHrNljzXFb5xj27xNFeSC085_TfcqnQOEc4hGKaT8dg1LXr6pOaLgKdkz6BO4ujDk7538tzo59B6N8rGkKgMDz-pgUMbF9HVDBb9OqcV_iRIxQVJsUBDI7nTuYQDWEDqpi3JPlAwQUkZN5sOx3-ghG66OvetZBx-ppHN3XFWf1nR7GBhiQ1m-9o9HA8Nx9jo-uIRrOoWe9LBaqRVVBzvlITSoCG1rPMQe2Om3YnBv6z5kVFqhrHusPkpiIyQKBSUxCj4tMpxLfGuOvcms1PJQpbrMf59Bk4GcFC-yD2HrHZwOoyBSZEWiuFPesSn5NeYiytkPrgJEN_89OEc09rw7coFp97JCFRkZU3mSSXA123K5ffIh_l8Tl_ajERiY70xCB9wheIVfjcI4LYAEIIkhN5AIHnX0tVBTzCvm7znF6ubEHiSXnpYjxVahozLRQUxFM5ftKgA1vznO-vOp1JhegprY-JXalaWOVXzd5zvz3YkpTTtIrP-BoRQlxeg3vfiFXt8dDsWe339T8cegSJSnfJUVcVnpiFGo2IXq1e_ZF1Gs9OZ1NgqMmsR9eu_rkIHKFhSXASozm9kiLki7IqSBzw7icVQ2Qn4PVp016h3sjUa4xa3dS4Rz91Dc9Q0IWHhyIqV7yjuHn9ilssgrVfmj4OWEirhq4-ySJ3nA1IAQMc8zYQSTRiuuYhV_g2bQp8wvVxYCZOy9cLVuJSvR91iqSVN081bXj7z9nUTWptRxGQTmXaE15x-fXyyLqKWksys55XPjC6pGep5A6WhqKQthBPXNcCsqIENP8JGwju1nNUHPWrxOP-Ghc3GmP5oTMUEvzoIvua0vwR5Au",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": null,
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "fDZDatrlM8ysz7IP5O-lCA",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 812,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 806,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 806
+      }
+    ],
+    "thoughts_token_count": 1001,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 2619,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.math3.optim.univariate;\n\nimport org.apache.commons.math3.optim.OptimizationData;\nimport org.apache.commons.math3.exception.NumberIsTooLargeException;\nimport org.apache.commons.math3.exception.OutOfRangeException;\n\n/**\n * Search interval and (optional) start value.\n * <br/>\n * Immutable class.\n *\n * @version $Id$\n * @since 3.1\n */\npublic class SearchInterval implements OptimizationData {\n    /** Factor used to calculate the default start value (midpoint of the interval). */\n    private static final double DEFAULT_START_FACTOR = 0.5;\n\n    /** Lower bound. */\n    private final double lower;\n    /** Upper bound. */\n    private final double upper;\n    /** Start value. */\n    private final double start;\n\n    /**\n     * @param lo Lower bound.\n     * @param hi Upper bound.\n     * @param init Start value.\n     * @throws NumberIsTooLargeException if {@code lo >= hi}.\n     * @throws OutOfRangeException if {@code init < lo} or {@code init > hi}.\n     */\n    public SearchInterval(double lo,\n                          double hi,\n                          double init) {\n        if (lo >= hi) {\n            throw new NumberIsTooLargeException(lo, hi, false);\n        }\n        if (init < lo ||\n            init > hi) {\n            throw new OutOfRangeException(init, lo, hi);\n        }\n\n        lower = lo;\n        upper = hi;\n        start = init;\n    }\n\n    /**\n     * @param lo Lower bound.\n     * @param hi Upper bound.\n     * @throws NumberIsTooLargeException if {@code lo >= hi}.\n     */\n    public SearchInterval(double lo,\n                          double hi) {\n        this(lo, hi, DEFAULT_START_FACTOR * (lo + hi));\n    }\n\n    /**\n     * Gets the lower bound.\n     *\n     * @return the lower bound.\n     */\n    public double getMin() {\n        return lower;\n    }\n    /**\n     * Gets the upper bound.\n     *\n     * @return the upper bound.\n     */\n    public double getMax() {\n        return upper;\n    }\n    /**\n     * Gets the start value.\n     *\n     * @return the start value.\n     */\n    public double getStartValue() {\n        return start;\n    }\n}"
+  }
+}

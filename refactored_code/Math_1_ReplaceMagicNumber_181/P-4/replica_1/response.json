@@ -1,0 +1,100 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:33:35 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=10584",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\n\\npackage org.apache.commons.math3.ode.nonstiff;\\n\\nimport org.apache.commons.math3.ode.sampling.StepInterpolator;\\n\\n/**\\n * This class implements a linear interpolator for step.\\n *\\n * <p>This interpolator computes dense output inside the last\\n * step computed. The interpolation equation is consistent with the\\n * integration scheme :\\n * <ul>\\n *   <li>Using reference point at step start:<br>\\n *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub>) + &theta; h y'\\n *   </li>\\n *   <li>Using reference point at step end:<br>\\n *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub> + h) - (1-&theta;) h y'\\n *   </li>\\n * </ul>\\n * </p>\\n *\\n * where &theta; belongs to [0 ; 1] and where y' is the evaluation of\\n * the derivatives already computed during the step.</p>\\n *\\n * @see EulerIntegrator\\n * @version $Id$\\n * @since 1.2\\n */\\n\\nclass EulerStepInterpolator\\n  extends RungeKuttaStepInterpolator {\\n\\n  /** Serializable version identifier. */\\n  private static final long serialVersionUID = 20111120L;\\n\\n  /** Threshold for choosing reference point (step start or step end). */\\n  private static final double THETA_THRESHOLD = 0.5;\\n\\n  /** Index for the Euler derivative evaluation stage in yDotK. */\\n  private static final int EULER_STAGE_INDEX = 0;\\n\\n  /** Simple constructor.\\n   * This constructor builds an instance that is not usable yet, the\\n   * {@link\\n   * org.apache.commons.math3.ode.sampling.AbstractStepInterpolator#reinitialize}\\n   * method should be called before using the instance in order to\\n   * initialize the internal arrays. This constructor is used only\\n   * in order to delay the initialization in some cases. The {@link\\n   * RungeKuttaIntegrator} class uses the prototyping design pattern\\n   * to create the step interpolators by cloning an uninitialized model\\n   * and later initializing the copy.\\n   */\\n  public EulerStepInterpolator() {\\n  }\\n\\n  /** Copy constructor.\\n   * @param interpolator interpolator to copy from. The copy is a deep\\n   * copy: its arrays are separated from the original arrays of the\\n   * instance\\n   */\\n  public EulerStepInterpolator(final EulerStepInterpolator interpolator) {\\n    super(interpolator);\\n  }\\n\\n  /** {@inheritDoc} */\\n  @Override\\n  protected StepInterpolator doCopy() {\\n    return new EulerStepInterpolator(this);\\n  }\\n\\n  /** {@inheritDoc} */\\n  @Override\\n  protected void computeInterpolatedStateAndDerivatives(final double theta,\\n                                          final double oneMinusThetaH) {\\n      if ((previousState != null) && (theta <= THETA_THRESHOLD)) {\\n          for (int i = 0; i < interpolatedState.length; ++i) {\\n              interpolatedState[i] = previousState[i] + theta * h * yDotK[EULER_STAGE_INDEX][i];\\n          }\\n          System.arraycopy(yDotK[EULER_STAGE_INDEX], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);\\n      } else {\\n          for (int i = 0; i < interpolatedState.length; ++i) {\\n              interpolatedState[i] = currentState[i] - oneMinusThetaH * yDotK[EULER_STAGE_INDEX][i];\\n          }\\n          System.arraycopy(yDotK[EULER_STAGE_INDEX], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);\\n      }\\n  }\\n\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "Ep4mCpsmAQw51sd9rDLzDI0UJV83OTyhJkjVFCd7x1tx83hlUoX1zwNsdCr0IQy3xfbW1HC1WpjH1AR1-VGGycMJ5Ba621558VKkSYwQzCez8TpQusDP2FL5hBUQ2CHp7JeXE0mzh3x5ubxzE4awKWg_FXP1QHH8nurjpHfIp-L_eud54t58uAQ6EboGFCkwlCnnWFRv-JUxlszMsjlWlztwqkBEj2Kya73YVi9GcWBfDTS_SwbvTxfg_QLR-fk9P3NMm2_7JeEzuTr7Zot1I8FXg-bqyupiFub9gj8bm3Jv-bASs4Cyt_3QigK2Z5pbDuV1eqiAxtaGJyfCvhMzH4oSo-reV9nZq5kzDXQXW1EtBG9YGYBbIGIRuhUlYQ9wDiT8wmJP5K87QYi6eEfQu6Ce_hnv5I_IGkJ3dzoGy_9eYDLjqlv8Pi1aBnLaptSaIkBkDN_lvNbnNMCzlhG6ZiU0lgnQSgsz29fa3oFEsuOM2Fv_Cl0pHd7Vc4Lh-j3SJ4gpmgtQNUB0JPowzdz5dP98iEksBtE1RUeKhXrwABjJ-TAsMNmdlP_wDOXnL5zODUIRTQvLUtUsMHRYP_XNws6ZUb8r_WA20pwyz-KWbiV2TOmOxX2OqGdSeGIkmBttlLhZrfopyfJf_OD-g3Bdblf3mP9ZgaLpb_xbMgjUKh7XbvEPWrtTOGIxOH-Ol6y7phx4KKzGE9I6TsikG-pt-gPoslx7wt53Fp-k3t40Uqw_UjjP8dMxQTrX31q-gVfQtbnYtnNrORZZTnliq4wLq_CaAZ3i-BuBuMpD2k3FQobsM4Q7eXdcwmrghvsFQw5lLbzZlAKJdXosPKJWSuUHeOEvmar21ZdCJ8Rc_j5_kgU3vMIijrx0Ndg7KHbTEsKN8o05iUb7egKaQFEBeA41Rpn718Fa1mEaH2MTLLtiZbF7AO2R6nuSTnDBSLJqK2MlNS6MCJ6AonIFyKAk2dYSs8YXqMGz6uiXrODLsof2cYFb24iadkZyztpCaCMuoGeMzq4CLAUERIoDuOtH5ZC5qWDviQkyOGFitFAKrp8cUTvNz6Gh8KBSdq2PcYDBAwnZrnaG_brWBiXH7M27FgTK6Ml258xmIfwC_y55YaIyKPbq6rR_YFJj0q5Zfi4dyUpMdW6tsn-9ybyRxdgEYxf3TR1uikuCWRBihug2K5kJ3MxbesRDPbHurkf9JZxIC9-787cU4CGhjUptnrPa2rlI4Z9k9eFh0AObG1zX-GXkv5miAEpsLGfUHrmAn_EnaH7WFjmTzCGoGIS6PoQviXwydLzz-sqKf6FyGddbGO1EOqKG1jDY80TDht_G8RDZzAYf-eRyWjUrB7PSRK-CpaBMyHRPdDpAtbG94XlXlgHEyDqSM1N7nDxKpfLv_lqEDiig5GYVNUE1-notY8meMkK2jCGqabP79ZfUT8f4ZehmTIFXtbSimD9LacVX9H9RaoTV6fGfAq-dkGqpqDfB88pszWSXditYyaJMVyn6ja3V6kDm6lKdlljTDeU3MIMoLB7rwJvvdNY7vXxUEUCs3SFlxMjkh1alP4hQqqsQok4Y8tAyoukdU7vbvR-bRKQw3cf8AV8XcH-mjLsJQBL6zIp2gCjg2-TjxSvJj1RedmWizPPfULIUiK0rzhhLQ6ViRsf2uzY4EEiW-2lNFDQCi8yAGjmOo574VLfOzbq-RKeOZaO2NV_sY_6v7KaBk7SypIbZbRD6JQL7dI1u3fKJQYPttyvnJEPAt_eAGl4dlmEiHqCwSd2Neptxw1RLLemFrBMheInPlhiLCtPDsu4-FjM47Rd5Hq_mPUrncp54JXa37rXmM7ff1h8w2T1o04KKdUAZOQdScwnkCLZl9wZEgLqEapQMEOuWmOTcxIZ30NnglN4LutHHs26rrLEfgWCDve8L3tBMXeqPoWyHYLuTuPh2iNKh2tOquC7l9dssmFwlRtKEbx-Gm-moufANg64wg8blMFGTERPv5xhkpPoYASN4V5Mn7iUxDFp7b9OxClfnTquQXUnB7_Mmi650l4AZpYJNj4SvErLfFb2AKqjhrzzqNJIdcRyv5CvNzTEjKzrzok454vdA16Lec6Hc_E4UuwWkRhIAns8IKhRzuAEh6J2HVhD60-0QaM6MYcUkT0MuF5cPX14XXc7BE4madehZgRicf3_JUwjBcj-UDBqTWro5jQ047yB_V2Cch9viKteRQqMLGv_zuYHTN87dkfWlujT8Ebi2tVkH-MJjA6kZoJ4YM_5iiiIveJk7kVqA4PzEYqFedFHVJOjawS-9dzLjEYOr_TIM-1-BTICSnKbWlqIDmK4yT3ORGwPhrrglqrNCYavdAwSAoYmAYpdNWJ7hx4EGUMDFVw-V-r7xaNr0jIZDAH5BO2MJlDCG6uQimUZx8vIUjpzvUEBQpqLzweVdGtDDYqWDvs5XqodLhqL3uE7jxNJwexaacJoT6KWdurK45NnoAzejxswJUejkhU170dcw_lFhsVfE1N9M2sLUpum-s2Hl8Bpw1uSVzr7pgM7PQq-dQ3w52AtJAC-CXFaaLHNPjMdFeqiT0IXxIReLWoaQszkdLLRjVKY9BwZmawcavBlcK_iSbqYsvhltjRUHpaFciEm2EYLesaPMwHs-jpO2nrrpL2CmML1ieh_ri1fApmiWln9YwXmsKSXdxpvDI9VG38cwGCQhuyri6MHsswPeq6GaYZAHCqIT6ZG9DDlxV0L8tK1E5f1UtI1vBjfnl98Fc4X4fGf432y382cIMz8jvtvPp7seLbz8Rxm9JhKn6R4arCEx2bjQut0OeoLqNuEkWmxwCOnslJ10QGlEB2P0OkUlBPr6HahkICfUtP39L7HFAAOsMDouJR55r5PCAxsY3iWratSIYLhBYDObhjggSMgm-m7vX3jUSU_cGo70D0DzNTXWnxr0zp98pT5-N6r0eC_9GVocqPcecw0FwlJgT6njlJPaeN_a9nH7IH0Vra0Kb--7ySyQVbY6Tc7ATh-vV7NkLYM6HgHoZA5uQBwA5OZBEH6Z_9p1PXszBVkIcahLima87bYM3DpObrwWAz2hU3k1R4gZ64SnJOxUve0pVRNCNrr2QRvYbTWLvwRkEwopx7C096fUEiCA0Bv2NizGSVoMgcOLhPOScmL38vVlSHK2nCOrXBz_pBIFE2yiXv-iiXGXjObH4eznq4S9lmXOnqAPr8_lUsZ0nftMiL7VAStUk8FRsYCZIYge6TA_gzO2ijgfXcWIP30rSEbCs2Dp078gWnlz_EvjDg-jLSHvyGVUXdphy5ZX7XpnYu7gz6pnhp9LzBryrEkXTc4GbDCBQkVbUmWYO2q33pTnyEGkHNUewOxvI-4zOM4uN5CCVImHbgOkdfQArkltCwxMNkYPFKmsDJ1_WqiRVxXEatn0EJIS1Mt8yQdC6Fh0lqacPIEDoIqDPH0C8SDvDIVbxz-vKf2vjF5wtacybrUtBJtzA5o6KkDpx1KOCzKBUL9NH8Nbe15LZW8zGK6GlakVN6_kJv1lMXgKwbH0diohTabgssLcc8Ng_qcR3TYAHGwgdZPlspT5sc3unbLhVaqotMqgccI_ciuCJY2LKm94S-B4mmf2P7z4NAHSLtbsnLtEc_qzIMC2pNATX09uaZfogbgsTDHIuXPmCTQsbcPtC6dWwLlAmiOU_OvbWmBy579_OXmSj62r1snRq8d2jFb6HAmJVFGMZUH4VN9QbhKJwg7g-s0eBbQkINGVq1kp3H3HpqpPh2QhjQlvtKDgQr5oKucNNY820xPMMDfB3MjdVIJDoLPHQwmpUXiGW6j_br_LfaIDiK3KT542qJTnEnFhmDnAEsZBKLgNyjMjCk3mzSPy_6vE4hTLEM1DmMExkSp5MvUISP-d0Q17d_wLCvQ-QK-6VJz2rxF_ZMuqjLcg7f3Bfyoy7rzUY1apJHDyKG2wEFQHsE-Zh-wGQlsG0boPVbpAdLYp_RLSXqsmWAukNdt8YpRn915JLQrE9s9_XduMJKAJCIIblKLG5_Dz9EnuBhUwtOsMbMjzq83F7antebdkvVPdhOKxuKgPuZ6xehjEoFLzmy4DEBZ23Jh3l15116Rl5n8Ul7169_3Ex5gt1G-BQjAhmXtKyArrIOkKPSgrS1WgcB_fn6xv15NcIu7S5qFXRUicoiryTx3-y0mQUgIC9BnFregU1OOEQo5C-S6PuJ6SmWQhKgd4iUeoLUS4oEADkyjbqTGFrbvHXwtG0G4UQLD0SqCwThXTvXmbI0WlPuYHbO6EKdfg5wpze5tkAivmxDQRbf5H6zlq84ZXS8Zt53WmlEVo1KV0GHnBVub2UUvOD7A5_Ddmsm_aNjRlK2AxPYdqh0ytK-u7pHsRr4AcKee8igUtfbAUXj1b-n9I9cTjmhjpWX8sKtpsp3socrSL2Q26FbvUZHw0zzwhKIRetezncHCtcuWLkqDLMT0KyNxV3DsRCCSeJMLxBEt6urd0KOBcF4QWCC1I_78lO2k3NxXzUjUl4QqbJiTKCUf2e9XXKRvRNq49wmzPn4U73b3_iF-N33YuwmQAOYFQ421RVTbeyovnUeby64jPluiXPD-n92-v43ZLWF_M0QfDBfOZypQq06b4g6HfNyoRdFn0fQQEQZegZAEhctPGPsNdh06D4Kd0FZ6pbKp7cduaz5iVYc3xv9WgjPVbOXH6iB7UkQKzpet5dwxnfo66sareXBB-O5BxLQ91VQLEK7wLOb4iBVaVqgjTvacAU4ggw936P6LdUoUIHrgaJjtDRw9NKeousVh7oIwW2iqPZKMu59Zb2ALctJe7DTGfLBsIRlPp32u5acW4rjJjZEW74OFMQt09arLdl2y-1PCwY3E-3cdP18S-80H0Cemu6yKhpk0TzQKNTfs15k0NIvEXfyqRyM8PNX6b1U88jPzkDRb7FXvJu-YLJqCs_kb5V3NvnvpOwEbMm3SEpsQq8Rt5x6hit6494qsroZ4MDqJyRN4uWmFL6O8s7yZq2E42EPi_pOvwKDcbFKUAYTWe2aeuF7rEDSd6kX-nn3XjzChamdl2GacDK84TXzch8A0qh9gsHekLIbTVsvpVS6cyK6mAIeoTup12_FZp0PPw-yvzqKIIN0zVg_ordNpgNxlMutoF6tCQeCBrl0N5lV_vrylCHrK6zCKqOhNykwbo1-buB9bPVeU6MnH-fiZsGdQiDCBjCrbEBwj2OZL7jkaC87kT36XxxDKacfvyCaALtU3yFWYAO-XZGoX9rWc_5WdWzjkORPGeIg7Tq9f9DnAaQGaTJSjDwfMuU3Yd_t6xW60E68LBpGyNK3JmOdIcLYYzl3lWX-s06Si6fWhjl97UJHWBs8Bh24m4B1h6qGgzyaEW9JDAjZVsea0KJE-jTmsmgQ4D9cPj88OWc8SATFAC_tRFguP_b9L8FyZiUPs8v0jO1mc3IK0tZTIITUvLOBNdN_-p1KRjZhLljkTq9iP2MsYbn67s1GdYN6-5mTvL2phIxcOot4zEZ-BPOAa7RiVHOzaGLX3mmGJh8Wyx4mm_sJI0vo-emtQEhofjDduCtm7oUl13EvQY-Q-jpV5kffOB-QIwdr7eXK8QjKR56kZ4XDWiz_zhizl5umEVTJ1rVR-xb1TONIM10KNtkJau1yVbWBZ1KZZkzQaxq8YAn6rLGPK08rtUDS97wri8xy0Sy_VOHABnRK19-zHXms3sKa77v17_OQuuj_FG5cload_a5MdNKGS7dhMPT57xfcqmoNGHA6Tqnzs4qSEHV_Ej7OJnP1wRhvlsXNNOp1qxgQXzrpGieS36KJBXwqcC73tKIq2DfzeR2H1He2bzEeofENEdcpo6Dotm0nKXKJx1wDplTTwYecSAF_v_VOuXDLMVGoyDxvqrzUxZdpzwMuXL6RgiI0WIVLzRpJK7po1qClJpXmST_hxUYbvAA-Q42i-wcfw4FGDEDUHdUbcR5XJmYBl_n2SFj3aMwM8WAqWV_Y225aNdROJNLV5uQboi6DkS2XxovRhhldlRMdNhnfb2vzkx-1XAeHZuep02EQUYn6CO_Iou39OmjnEFe9Dy7Stl5fIUWmxNJJch7IkTJqi-6TLepFSc8FfxK6uKgGybOPaXJOYF-HVmy6R7YsWemrNooor9vmNfzY9QWGwhkJXWWY4SiqxYF-uHgse8mxlycEB7VfapvGc39ohD3MMXaRp-qAomNJ2sPNGFpr6wy2USQ6CbCmV4s0RQrzo9bl1dxlQf-5fpadlKAufrYJQxRQ5hzqcJCFmSLusnNrcaFNaXej_-kizrtDorzKJrNnbPY9pjq-sSj3-JvtM0SOBjxiM25xXZNvxog1KgqfpTotr2WIGS022UU7V8peg_Ctfj05bcgQR2k8OTVabjDB0KgT47WWjxBqcYsMITm0_cU7L3jX8qkGsMZ5r3UlPX4TbRZkfBl46yJkqhGsb1ZumH2NHL2JgLEdW_qPvl1fMZmGqI_9rLrb9amIoGbXfQzsV2pragHda4cpWygop0f6lrCNXK_0eQ0Td2ec76LQ==",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": {
+        "citations": [
+          {
+            "end_index": 2381,
+            "license": "",
+            "publication_date": null,
+            "start_index": 2128,
+            "title": null,
+            "uri": "https://github.com/hyotaime/autofl_defects4j_data"
+          },
+          {
+            "end_index": 2708,
+            "license": "",
+            "publication_date": null,
+            "start_index": 2262,
+            "title": null,
+            "uri": "https://github.com/hyotaime/autofl_defects4j_data"
+          }
+        ]
+      },
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "BDlDaqfYLeLUz7IP6cTruQ8",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 1130,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 1075,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1075
+      }
+    ],
+    "thoughts_token_count": 1332,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 3537,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\npackage org.apache.commons.math3.ode.nonstiff;\n\nimport org.apache.commons.math3.ode.sampling.StepInterpolator;\n\n/**\n * This class implements a linear interpolator for step.\n *\n * <p>This interpolator computes dense output inside the last\n * step computed. The interpolation equation is consistent with the\n * integration scheme :\n * <ul>\n *   <li>Using reference point at step start:<br>\n *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub>) + &theta; h y'\n *   </li>\n *   <li>Using reference point at step end:<br>\n *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub> + h) - (1-&theta;) h y'\n *   </li>\n * </ul>\n * </p>\n *\n * where &theta; belongs to [0 ; 1] and where y' is the evaluation of\n * the derivatives already computed during the step.</p>\n *\n * @see EulerIntegrator\n * @version $Id$\n * @since 1.2\n */\n\nclass EulerStepInterpolator\n  extends RungeKuttaStepInterpolator {\n\n  /** Serializable version identifier. */\n  private static final long serialVersionUID = 20111120L;\n\n  /** Threshold for choosing reference point (step start or step end). */\n  private static final double THETA_THRESHOLD = 0.5;\n\n  /** Index for the Euler derivative evaluation stage in yDotK. */\n  private static final int EULER_STAGE_INDEX = 0;\n\n  /** Simple constructor.\n   * This constructor builds an instance that is not usable yet, the\n   * {@link\n   * org.apache.commons.math3.ode.sampling.AbstractStepInterpolator#reinitialize}\n   * method should be called before using the instance in order to\n   * initialize the internal arrays. This constructor is used only\n   * in order to delay the initialization in some cases. The {@link\n   * RungeKuttaIntegrator} class uses the prototyping design pattern\n   * to create the step interpolators by cloning an uninitialized model\n   * and later initializing the copy.\n   */\n  public EulerStepInterpolator() {\n  }\n\n  /** Copy constructor.\n   * @param interpolator interpolator to copy from. The copy is a deep\n   * copy: its arrays are separated from the original arrays of the\n   * instance\n   */\n  public EulerStepInterpolator(final EulerStepInterpolator interpolator) {\n    super(interpolator);\n  }\n\n  /** {@inheritDoc} */\n  @Override\n  protected StepInterpolator doCopy() {\n    return new EulerStepInterpolator(this);\n  }\n\n  /** {@inheritDoc} */\n  @Override\n  protected void computeInterpolatedStateAndDerivatives(final double theta,\n                                          final double oneMinusThetaH) {\n      if ((previousState != null) && (theta <= THETA_THRESHOLD)) {\n          for (int i = 0; i < interpolatedState.length; ++i) {\n              interpolatedState[i] = previousState[i] + theta * h * yDotK[EULER_STAGE_INDEX][i];\n          }\n          System.arraycopy(yDotK[EULER_STAGE_INDEX], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);\n      } else {\n          for (int i = 0; i < interpolatedState.length; ++i) {\n              interpolatedState[i] = currentState[i] - oneMinusThetaH * yDotK[EULER_STAGE_INDEX][i];\n          }\n          System.arraycopy(yDotK[EULER_STAGE_INDEX], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);\n      }\n  }\n\n}"
+  }
+}

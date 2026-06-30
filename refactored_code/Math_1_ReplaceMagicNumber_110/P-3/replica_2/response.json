@@ -1,0 +1,116 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:26:37 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=10363",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\npackage org.apache.commons.math3.analysis.interpolation;\\n\\nimport org.apache.commons.math3.analysis.polynomials.PolynomialFunction;\\nimport org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;\\nimport org.apache.commons.math3.util.MathArrays;\\nimport org.apache.commons.math3.exception.DimensionMismatchException;\\nimport org.apache.commons.math3.exception.NumberIsTooSmallException;\\nimport org.apache.commons.math3.exception.NonMonotonicSequenceException;\\nimport org.apache.commons.math3.exception.util.LocalizedFormats;\\n\\n/**\\n * Implements a linear function for interpolation of real univariate functions.\\n *\\n * @version $Id$\\n */\\npublic class LinearInterpolator implements UnivariateInterpolator {\\n    /** Minimum number of points required for linear interpolation. */\\n    private static final int MIN_POINTS = 2;\\n\\n    /** Number of coefficients for a linear polynomial (constant and linear terms). */\\n    private static final int LINEAR_COEFFICIENTS_COUNT = 2;\\n\\n    /** Index of the constant term (intercept) in the polynomial coefficients array. */\\n    private static final int INTERCEPT_INDEX = 0;\\n\\n    /** Index of the linear term (slope) in the polynomial coefficients array. */\\n    private static final int SLOPE_INDEX = 1;\\n\\n    /**\\n     * Computes a linear interpolating function for the data set.\\n     *\\n     * @param x the arguments for the interpolation points\\n     * @param y the values for the interpolation points\\n     * @return a function which interpolates the data set\\n     * @throws DimensionMismatchException if {@code x} and {@code y}\\n     * have different sizes.\\n     * @throws NonMonotonicSequenceException if {@code x} is not sorted in\\n     * strict increasing order.\\n     * @throws NumberIsTooSmallException if the size of {@code x} is smaller\\n     * than 2.\\n     */\\n    public PolynomialSplineFunction interpolate(double x[], double y[])\\n        throws DimensionMismatchException,\\n               NumberIsTooSmallException,\\n               NonMonotonicSequenceException {\\n        if (x.length != y.length) {\\n            throw new DimensionMismatchException(x.length, y.length);\\n        }\\n\\n        if (x.length < MIN_POINTS) {\\n            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,\\n                                                x.length, MIN_POINTS, true);\\n        }\\n\\n        // Number of intervals.  The number of data points is n + 1.\\n        int n = x.length - 1;\\n\\n        MathArrays.checkOrder(x);\\n\\n        // Slope of the lines between the datapoints.\\n        final double m[] = new double[n];\\n        for (int i = 0; i < n; i++) {\\n            m[i] = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);\\n        }\\n\\n        final PolynomialFunction polynomials[] = new PolynomialFunction[n];\\n        final double coefficients[] = new double[LINEAR_COEFFICIENTS_COUNT];\\n        for (int i = 0; i < n; i++) {\\n            coefficients[INTERCEPT_INDEX] = y[i];\\n            coefficients[SLOPE_INDEX] = m[i];\\n            polynomials[i] = new PolynomialFunction(coefficients);\\n        }\\n\\n        return new PolynomialSplineFunction(x, polynomials);\\n    }\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "EpsqCpgqAQw51sdRANljwMZV1nwjjaz-YvgdwPx-cq1NrI8GQmkp1XrHcPRz2w0eQjJXsock9SRt71TAOtwHa8FfWoU38RgAJQgiGQSuawbKzV2_Cd2KkQOnNs9wXzHZqeegFxCDN6YdhUwWNC1X-0MeBtrjd_bi_bMNMQdZECHbnkOxxdc-hykV7NCH5AE9iJBq-Ja3ffwT79h8A4MAYA-EwRVf6XliYusq-dHIH0s53y0GSt-b_j4w1jfsdMdD5V_mw80RqoI6rFXo8Pn1fKhRWJjnmZYnzkQClin_5HsV26pc7skWZBxI9o6RqfRc_Zv5Yej9tP8f6d4bDS8gnXjLTmiHlVHa9DsH0xjj3U8H4abW_zgXPluJV3Lij6N0FBGHNkFVFigDSgfbb2M2-HttAy-U8UVtMn_NsmZm26GDXzbP9Gmq7lN7ago01QqfL_AijBXrXiiTtYQzp7sRAE_xVt9CKVE7es_6QMkDQvsucVd_rDDX8tWqqhl2FEHuCC5DIeVyVCFJbvBtEMTC4OIoOLOpXj3s0tqmxdULcR64raWCM5DLj2UWfHqEQaIaHBVnYAv3vBqwrcfOxo6HRkonDKc_w1Rm9GWvh7UDOKJ_AiXDjamQtbL_sxUU4jsm9IkcJ7GnG_7kpx2H60bqYHe_ud7gannIg5iDa8pruMVk_F5m_cWFkI-IIcxVm3pzRfTgjIznWZnF8fUTJVJ6_1c1OKqeRGhDJ_Rt07MEd4p8Aa9ryJODQEgviKMQX0BbqW5FPz6l5P2p7pPZefEsVfM88h2HQMxuFi4-Hy_pUGIyvBlR3Zmj-eWG0tw-vLM-8XJOOAaMjTpmIAVO9Ql15dQm0CCKc00MYUgfr0Bg81_30ojqJVjgli96DO1QoI1MvVnTajhJWsW7w4giG8BgeP0yCJLRHEZmXUxLYv7URPhj9q15iNL9idFnMeUyvD1R9KkI1KKDQMcyQg3cqhg99-Gf-Xiw97GWMwdTNZZnawZcAudBAYV7qFMrxsWDzLpcfe7LEhFT4lqoRJqgKjCUdfGSK8olt5O8jxm5I0KePpj_97HAgg2rGubRGYiqZgFTBwr9kvFE7VPal56lgx1gYPLP4jCBJ7pGUPrzUb2YTv0hpJkY1azvxq04VOaREcVmI4sn10DcNUyPG_TsiP1WSvFK1AnYO_HPV4v3Gbwm95pOz5WQgATSQiEv2U6bsD88Pp8JC1Px7GYekVrymrNE7if1BwK2hOs_FnVKdshZsmMPrBi0dh8ExfCdRfXQ6nDTNPRgNOhc_VzUYtkKDBSWEkaAYVyEepJf3Ex34yCb477mWIgIxWYPKc_F2W93f0HYDgGYLljJQZ4eqI9RPjRh7WzLbniXqQHZ-imaJfl8-G2T7qOgrkThpT5QkxE9rZIsH3mjy63AsB4Ng1QscMp0ZIH_Vz5C31PfA0WP5ZStX3cUQbt4rvBtBHPYh61Xq8rF1EhEVfs2jNCpQoYO83I1TP2E1Id_G5uZO0We4U8D_n9MZONjQ38pus40XBTYcgiAaQynUwHJ-DuLwzSJOk83rjWs2UaZgGyMp1Mkxi3tkOlieoBEfelUa8MRaMVhe-PE5rH8OYQnFbO3Q-B_6tSX_SAuwVg1ppC5cGUG_adnGOMhiCpDlJos4n5XcgaWHP_hQGaIEotwmJAkJER9LrwskFqwEX3hAxcJhxmB0M51SOO0olE4RtaOEvUYLdem0S1W85-iEl9qUhlUiYkt6YiZMzXFNI_ctO42K6TfoloCg65KagtyJAnv6lwUjPjIbGCSLVxoCmYkAEMHOrYJMbQOMcWX1hUZrEH9uMBnYMhY1-5Lh8y_iznXUnbbkk8H8el8HxgtXAKC6dgpYttU9n3MyMDnWWlBdzZ81S-i_m65VDE3kky01tUMuLl3pvm2-D9XBEWz7cr-p5cbIgWD5N3sb9KpTMwBw7LeTM2RcYwWNVrM2z3FhIo8gaoawjhph2drxtbVKlsP_ICu0db5XNTC-IeEXCcUhZzxTstwpU35Khndl5VSf352qWdga8sr6FdfHnBq7-ecUXpFiwj25BmKEIg5Nh6gPZ8EEqSWoquDh6NMVUz_YPRx2LsWtlMXISuBjrxQO1qdYxMFsnuJiaScl2W3EqhyFxwnX5jTXiX5TezfIOZW0EyLDKUIN-APdlJccl1RCvGyjNKg7Afa_vK1pK3sU-b-mNm7xKO_OtyK7grsKLQBZlQsp-P_XVx_2Ji6D8BOPsUCk4PfvFAy81GEtDKIXjVMoTogu43L249vP_xVA9rZ9lbkRiJBtiL-IbVv81MARzs3CVRvW1iFNz4-1rSLskaF4Gkg0AqsWqhWRCYgAkqpjk_4Lam__jhVy7ydxRF9SvRb_0F5Gt13C-4h858VlnnLXu3OuGWj4LsdnNLZ0jb68TNz5Cic4mHm4JAi5z0JPf4cuCyPR72KIYiViygZk7yJmAVSnoZAVJWADx8Fo5jSveXnX7DwkYWSBunwoQdQ_5s_BgK3CGGvMsyrQT8N4SqPHZ3SdVtDkOXzguHO6dskTGGC8Bt1WyDUjhP_VJyvxVKZYZqRhFV2Rr_ChS_2Rdh54gbbpLmnAOAPnhf9Mtm2mBFNSNsNwIrVnhB25JHh5pskxY2Nsf5DG6ENIAY_-2vjXKqmC93j61042gWarieGtDXJLlpGkWhdN6xpbO3j-_kZxHmNYGc5qFQ4tg4l1SqRZt-QwhCd-KwFTt2qwkvEejX16M6-g3zs7Fv41uETsuy_FSBwSOVRsNGf6so1MjIUq1Fv7XRDLYi3xNmXRZPpDTFoDVaIfx_McGrxxd3ynQZDUtY1D7WQ7RsrpwLkoR6AHXvsuPvuV3DK7uDKOIUAGXz2-L0AYagwtMdZH_PbB77DDTAkz5y3PDezeC1JNefhDXIbFVoJ-9iGD0crJgMnwnpCBOPCDVz6KOBk-sAUck8qfw_qE_6t6YxsNSAA3hd7AeIIvmscjYO5aQWe0-GUcDZfr5JSAH0VIFrWzNBydqhciW4odnI9VwMZoYvzruokm5iUpRLKOTS3xZzWFfkYOmTCozsoA-HbggJoqyDe3HXEOMsFBMvwpgj8kPOkon7W-f3RBpUuuQhS5RfPlFcfL3Q4DMkPD9KFJIRT1iOGmIDeDInsOdKjYnp_CAtMPFoos0BDOz97-0pdOGjd3e_INY0s-yVBitVULFSqrXVNmNY5w-nuzvQjzjz0Qsp3BgzKD8w3EP8Smpq4xfhgN4olUJ0-865xGGHQd_6FTkSsOihCEojc7wHFlSQg-27h9tusQCT92w8lLkHQZfqdk8cYPxCgZLF9w7XvhiTkSlS4XuiTzzv11anpmfDD46cloE3k3Cnulh0Xud55unV492isRcHYsjsjNnVPFv-aFxDpT7NJZBMnAT-yusQtJ0V2lUh6ySlzI6-emWHjH0jK6zlw9MKVdIGI6U-tVT6aOqmNtgPbq8Raz6zwZ-sTZ0n_Pf37QvSI5yMinQDH8zXlDT7UcEmccbnYsUkoiIaPXCAUOX99vGunnP4BHIHGAr-rqBakrDx-1EBeBs1TwwijGKcFneogxpT44UfBBAsfcLQbWh9ZtxYawb0fyuohKe81vRRt4QWVBirvbsBxZCe4r00nWO38y3dJLGpiqoeNc-wmmUuthmjXjmVzx5t0FTe-S_xhbxSFOAYT9cfLx2_LT8V2obMTa6tmqeuNkQGGaSdkG_l6viZQqIEqs_AFYMCGvfo1MIfRy6pyowztbtVzmpYainus22pDeBpmXrC8gQVxSlitzXdQ974zBmt0H2rz9v2FrcTf8sB4wXNC9zqGgcpVMkbEHRZ7kHjrifXjV1zOFEP-QLCDzyDsaPsyGWIfP3iAoksyS2xVh4LiFivn_1ZJ2FNiKJh1hdUyHt40aSuNnpwdrVKW1cHJgUFQt5mw1W9Y05mjrcq8XvErx6mRoLv4CNHIqt-cCsWQs2PRPOJkrk7m20fMwHj6yUi_7wlti3Rfva6Ir0WtmQ1bUIIIA1kMI71zX0jQ5YcwSj3v__uiE4vX_ald_Z511TVW05VJ7lf2ozAAVzHNyWVD9TU2Wd_qzX9_bEVcuvRist_xk02vd-qVFtAO2l6e_iexGjRH6vg7jqoslqOph1bStnFcPxuOIDHInEr9hsERnC-qouWDhHy7S0cXwEKLxjfcJQ1GHqiJk4bDgW3B11KONR5kDpl02Q8sElMvk8tob2zsS02BNAe9Ji4XSQu8gKpL1qFUSjv_VtwXewKDEF4CEU4Lxw2QGk_YE7ExHTc3KrmXFQuzak0M20mju8EpToxYBvfrV3JECpm0d8qHMJSbu0nI3Qc2Qx7pDXDFRhS8YGYUWLDfhDeEl2ta5UWTKFIVeJbvemoy1AFzdJVFwZJoJvrddBZmttM_kITIUrVHWwY0FIETKUmYSgX7y7uWS3OmhmyXGct2w-hnLQTD4OsW8qN0modOUqane3Ood1aF8HXXsRBN8sx6pmg9B8ls0rVFrRfEPKiYlQLLxptWRvDtGU-tYaTWqXxvVcVsF7o_xBKOd1mAi3ZflrwU5SqZ5eGKekxeVa2LTXL5OF8k2GBWZu5Jv1aFRlbNgakjWQkEXTloauWxIKvlE1pw92LZjUy-iqWq9cAho7qCItG-ksY1_KV3QFZPUo_v5xvYkFgeJfh8l_oqDrKKTOCVlneCH-AAgpBQFPTew7mOhDs6pjLIRPUijpcIBOW-xLz5pioWoKWDYuAA9SitRYdQ6cJBKiuHVISng7zPPynUymdQGlXzmdzhd1kC-NuMDCFlZ5cJZTKXU3O3WVEKw4q2pmhaATzF4lpl5CXmgyKUPhMrJzbzVN8eBKpdYZqk4t0q6dclH6PpGUbm1NOlT83oPumci37yuj1wrnvJEYtGuatwgdzt4VbwtDkV96aK3HYMoFG5QZtOzVsbt9YPnVY2rhuZc1oFgJHoTC5cC4aLyRQmMOYPPwkUP5lyWZ9TRcVSTfldVP00jhO-kB3daeQecCg6AmdtcW2XnbVBYGql4pktV_siu_JUckVAmGMrRPsOGfVBpcxOqLacywLoyZg8Du8WODsFMM9zJdVGU6o3P4dwvqVwgLwzSwECuQITv__J3YBRIfAdINuM2PU3Ovqs89eEPi3LTZLKSAWSFuLPS3YswgN26VLz9YEXV5vINE7N3mGWwfXLHc_drUQS5B1u1MS4Cfws8lwxVcYH0T8unFgPXzipJv2hibPYivC0yPBAYHxN5oLkIuBtsrykwsrSsdgWVFPrbsbJWSLYRe2j2R3W14CcN5lwwWVM0LgSV0Hea9CD2XkMoH3_BvJrywr1xQ1o4SaxHSrwI16SqMxpvNB4ZVWmjYGJl9hzEsqPI7ibSyG8t6OG0keeQl74D6QlSSmLvUXFdji2y7HMvclltqxow7k7pZ_4vaASj01xd9eWmSeAibf9xQgijESNVfKyIFCarAoGQz1bGYlsGGYH1CDafqAnrdSEgaGz_IkirDrQ2xQtxdLTAvDdcfkjaz0qThvbEjndgCBfNRfwU1uI-ATnGdyozwyhGaIzyQi7lcpYRXQ0L4b-fydDzr9cxwHGaaHjrKHsOzFyAubwVLtu8_Dvjmr-cJiDScHZJj_CpOwvL2EHhqKQUFGD4axRBehNQJpoYqlK1woHn9uswkdNJQDoeZd9eEfZ3Av0qz9dxlcuNERRpcHPEZJFKK7w5RHlaU2u1-fbpRNhEUCRKeXNycIcKQAm8U5OiWdfwVJHEuJhtkFPNM2K-GJpfhYggfrfO7UtDOhAhZDvBAb4jfpJA81lJcCi1NB1IsG7Clh1kHgBQOCMMA8o5o1ZvlFCx9CtvACj0tGkiDsuyopknkuqgc2VeoRaFd1LysfrpDhshghh46ylNelfotwxRkIE4WvUz6g-8yoBmV6RsW8WFKXP3ocJ_AwuysZ7BdyiLFJayikgrgOYGTNG2uVZL_iqFsAYonAHCRLeQwyJWti3GEvmCiuew3VW26nPqcqAjGW_opr9YzigMH2z-ZAd6Ovx3fuaWOtnjnkTWgy7JYExum-eCJDOJMk0V4mtnlHhzJ8uPJUPRKt6Vjgi8AQoUgiTxksKvVMENhIxLRswjHd8SQHsKlQWOpDae4ibiaE17M5S9fS4UtGdScWT4X7C-t4rbe6b6IxhE_d516Gobjh4RbgLQuAx8e3B-h-gJ0s9ZLdeGCn-p0FVGO9WXlDmDmAQKnTFymG6VZ-CpHjonhZprw-fZ6egiksSQ35CUON944JKx9MB8lbmWOvtVsMh6F4ZXKyRdxj0umtBYAHtR0cEGX09b5I81bd4WLmSIJYtK3TJbMdFSXqMgHgcNw0V_Bj5nC0iX_d6ZH7OAjcQ3wBD2Cnh1sOkvC4Q36AUy-_ytrkCDbsSqYdKf2ArkI0J3EbJvKMfz0MMAGNwN9qGQ8Dt1wn41n579nfFo9Rl02Y4YW8Y3dGX3HVF98rNrI32fclJ51z6XeecdranWbQYS_p3bKY8D9LXX8CswZDMqrgf29wwqo22cuNVXacTUX24e4JKpsHL8f1N_EMR5k9I7hTTpRDk9B2cTZjkPRYHLeqXsMBYzgc5QAw8wCO3QCJdpx1Zo5EnGNvrijHHo_A9kd3TZ9Fqy-9-qSuqA9iynybdImWa6KGuIIOwtgqyYwWjM98nKBANfDTONaQxq8adlFCZKJEqj3CRPB20fa4fs15f3-OXWAvWGxzLGErkfC6I83hqIjkZ56B-wjcqnNslHT6bBf6Z2I89A5_-KsmMr0um7F5_YEApawc_9haC0DXvoHU0Xr_NZtUQqZOs7EKzyCCUOTY2dq74-wcM0e6LtpCs3i2afawVd8ecF4clP2zXrc0nlS93loU4kXkj3IWKsFufrTzGGzRCuDibOsygB56-Wz--HehMKoNMgsofnmvForDqOCVFpFJDlam-gWNAMm8El7ZIlo1pWeYS0nwJjZQSw4t8Jfi9m9-uMCNy8f5UPuNXVPw5qklfU9f9lrLQOQpJq29O1q7tlCkl4dnaZQ2GypHuIk9tc4zu_G4ksJtIDbLrJwa3PE9p9VaH_DM5GroKzmMPwiK2glsRtxjOqV9qALeq7-sdYdoE3qiqk96kWuZ2zDicznJ-RD9dapAXnunhIWi7UlUYUHpJXPHQjkg7AFdozJWIE_CThC4lS0Z2nNTQ1iw6-4zuHqdbmjz6Az0Fd16ooAaAfXaO",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": {
+        "citations": [
+          {
+            "end_index": 2437,
+            "license": "",
+            "publication_date": null,
+            "start_index": 2204,
+            "title": null,
+            "uri": "https://github.com/gokepler/RandomSamplingInExtractVariables"
+          },
+          {
+            "end_index": 3035,
+            "license": "",
+            "publication_date": null,
+            "start_index": 2697,
+            "title": null,
+            "uri": ""
+          },
+          {
+            "end_index": 3563,
+            "license": "",
+            "publication_date": null,
+            "start_index": 3214,
+            "title": null,
+            "uri": ""
+          },
+          {
+            "end_index": 3709,
+            "license": "",
+            "publication_date": null,
+            "start_index": 3392,
+            "title": null,
+            "uri": ""
+          }
+        ]
+      },
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "YzdDarTwMq_Xz7IPtJnr4QM",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 1050,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 930,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 930
+      }
+    ],
+    "thoughts_token_count": 1412,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 3392,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.math3.analysis.interpolation;\n\nimport org.apache.commons.math3.analysis.polynomials.PolynomialFunction;\nimport org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;\nimport org.apache.commons.math3.util.MathArrays;\nimport org.apache.commons.math3.exception.DimensionMismatchException;\nimport org.apache.commons.math3.exception.NumberIsTooSmallException;\nimport org.apache.commons.math3.exception.NonMonotonicSequenceException;\nimport org.apache.commons.math3.exception.util.LocalizedFormats;\n\n/**\n * Implements a linear function for interpolation of real univariate functions.\n *\n * @version $Id$\n */\npublic class LinearInterpolator implements UnivariateInterpolator {\n    /** Minimum number of points required for linear interpolation. */\n    private static final int MIN_POINTS = 2;\n\n    /** Number of coefficients for a linear polynomial (constant and linear terms). */\n    private static final int LINEAR_COEFFICIENTS_COUNT = 2;\n\n    /** Index of the constant term (intercept) in the polynomial coefficients array. */\n    private static final int INTERCEPT_INDEX = 0;\n\n    /** Index of the linear term (slope) in the polynomial coefficients array. */\n    private static final int SLOPE_INDEX = 1;\n\n    /**\n     * Computes a linear interpolating function for the data set.\n     *\n     * @param x the arguments for the interpolation points\n     * @param y the values for the interpolation points\n     * @return a function which interpolates the data set\n     * @throws DimensionMismatchException if {@code x} and {@code y}\n     * have different sizes.\n     * @throws NonMonotonicSequenceException if {@code x} is not sorted in\n     * strict increasing order.\n     * @throws NumberIsTooSmallException if the size of {@code x} is smaller\n     * than 2.\n     */\n    public PolynomialSplineFunction interpolate(double x[], double y[])\n        throws DimensionMismatchException,\n               NumberIsTooSmallException,\n               NonMonotonicSequenceException {\n        if (x.length != y.length) {\n            throw new DimensionMismatchException(x.length, y.length);\n        }\n\n        if (x.length < MIN_POINTS) {\n            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,\n                                                x.length, MIN_POINTS, true);\n        }\n\n        // Number of intervals.  The number of data points is n + 1.\n        int n = x.length - 1;\n\n        MathArrays.checkOrder(x);\n\n        // Slope of the lines between the datapoints.\n        final double m[] = new double[n];\n        for (int i = 0; i < n; i++) {\n            m[i] = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);\n        }\n\n        final PolynomialFunction polynomials[] = new PolynomialFunction[n];\n        final double coefficients[] = new double[LINEAR_COEFFICIENTS_COUNT];\n        for (int i = 0; i < n; i++) {\n            coefficients[INTERCEPT_INDEX] = y[i];\n            coefficients[SLOPE_INDEX] = m[i];\n            polynomials[i] = new PolynomialFunction(coefficients);\n        }\n\n        return new PolynomialSplineFunction(x, polynomials);\n    }\n}"
+  }
+}

@@ -1,0 +1,195 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.math3.primes;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.math3.util.FastMath;
+
+/**
+ * Implementation of the Pollard's rho factorization algorithm.
+ * Refactored through the lens of a master baker: breaking down complex loaves
+ * into raw fundamental ingredients (prime factors) via slow kneading and fermentation.
+ * 
+ * @version $Id$
+ * @since 3.2
+ */
+class PollardRho {
+
+    /**
+     * Hide utility class. Keep the kitchen counter clean.
+     */
+    private PollardRho() {
+    }
+
+    /**
+     * Factorization using Pollard's rho algorithm.
+     * @param n number to factors, must be &gt; 0
+     * @return the list of prime factors of n.
+     */
+    public static List<Integer> primeFactors(int n) {
+        final List<Integer> factors = new ArrayList<Integer>();
+
+        n = SmallPrimes.smallTrialDivision(n, factors);
+        if (1 == n) {
+            return factors;
+        }
+
+        if (SmallPrimes.millerRabinPrimeTest(n)) {
+            factors.add(n);
+            return factors;
+        }
+
+        return factorSemiPrime(n, factors);
+    }
+
+    /**
+     * Splits a semi-prime loaf into its two fundamental prime ingredients.
+     */
+    private static List<Integer> factorSemiPrime(int n, List<Integer> factors) {
+        int divisor = rhoBrent(n);
+        factors.add(divisor);
+        factors.add(n / divisor);
+        return factors;
+    }
+
+    /**
+     * Implementation of the Pollard's rho factorization algorithm.
+     * <p>
+     * This implementation follows the paper "An improved Monte Carlo factorization algorithm"
+     * by Richard P. Brent. This avoids the triple computation of f(x) typically found in Pollard's
+     * rho implementations. It also batches several gcd computation into 1.
+     * <p>
+     * The backtracking is not implemented as we deal only with semi-primes.
+     *
+     * @param n number to factor, must be semi-prime.
+     * @return a prime factor of n.
+     */
+    static int rhoBrent(final int n) {
+        final int x0 = 2;
+        final int m = 25;
+        int cst = SmallPrimes.PRIMES_LAST;
+        int y = x0;
+        int r = 1;
+        do {
+            int x = y;
+            y = kneadRepeatedly(y, cst, n, r);
+            int k = 0;
+            do {
+                final int bound = FastMath.min(m, r - k);
+                int q = 1;
+                for (int i = -3; i < bound; i++) { //start at -3 to ensure we enter this loop at least 3 times
+                    y = foldDough(y, cst, n);
+                    final long divisor = FastMath.abs(x - y);
+                    if (0 == divisor) {
+                        cst += SmallPrimes.PRIMES_LAST;
+                        k = -m;
+                        y = x0;
+                        r = 1;
+                        break;
+                    }
+                    final long prod = divisor * q;
+                    q = (int) (prod % n);
+                    if (0 == q) {
+                        return gcdPositive(FastMath.abs((int) divisor), n);
+                    }
+                }
+                final int out = gcdPositive(FastMath.abs(q), n);
+                if (1 != out) {
+                    return out;
+                }
+                k = k + m;
+            } while (k < r);
+            r = 2 * r;
+        } while (true);
+    }
+
+    /**
+     * A single fold of our dough sequence (polynomial step calculation).
+     */
+    private static int foldDough(int y, int cst, int n) {
+        final long y2 = ((long) y) * y;
+        return (int) ((y2 + cst) % n);
+    }
+
+    /**
+     * Kneads the dough repeatedly by performing multiple fold steps in a cycle.
+     */
+    private static int kneadRepeatedly(int y, int cst, int n, int folds) {
+        for (int i = 0; i < folds; i++) {
+            y = foldDough(y, cst, n);
+        }
+        return y;
+    }
+
+    /**
+     * Gcd between two positive numbers.
+     * <p>
+     * Gets the greatest common divisor of two numbers, using the "binary gcd" method,
+     * which avoids division and modulo operations. See Knuth 4.5.2 algorithm B.
+     * This algorithm is due to Josef Stein (1961).
+     * </p>
+     * Special cases:
+     * <ul>
+     * <li>The result of {@code gcd(x, x)}, {@code gcd(0, x)} and {@code gcd(x, 0)} is the value of {@code x}.</li>
+     * <li>The invocation {@code gcd(0, 0)} is the only one which returns {@code 0}.</li>
+     * </ul>
+     *
+     * @param a first number, must be &ge; 0
+     * @param b second number, must be &ge; 0
+     * @return gcd(a,b)
+     */
+    static int gcdPositive(int a, int b){
+        // both a and b must be positive, it is not checked here
+        // gdc(a,0) = a
+        if (a == 0) {
+            return b;
+        } else if (b == 0) {
+            return a;
+        }
+
+        // make a and b odd, keep in mind the common power of twos (our sourdough starter base)
+        final int aTwos = Integer.numberOfTrailingZeros(a);
+        final int bTwos = Integer.numberOfTrailingZeros(b);
+        final int shift = FastMath.min(aTwos, bTwos);
+
+        a >>= aTwos;
+        b >>= bTwos;
+
+        // Knead the differences until the mixtures align
+        int oddGcd = kneadToCommonGcd(a, b);
+
+        // gcd(a,a) = a, just "add" the common power of twos back in
+        return oddGcd << shift;
+    }
+
+    /**
+     * Kneads two odd mixtures down to their greatest common divisor.
+     */
+    private static int kneadToCommonGcd(int a, int b) {
+        while (a != b) {
+            final int delta = a - b;
+            b = FastMath.min(a, b);
+            a = FastMath.abs(delta);
+            // for speed optimization:
+            // remove any power of two in a as b is guaranteed to be odd throughout all iterations
+            a >>= Integer.numberOfTrailingZeros(a);
+        }
+        return a;
+    }
+}

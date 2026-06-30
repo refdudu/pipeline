@@ -1,0 +1,92 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:13:37 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=11466",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\n\\npackage org.apache.commons.math3.random;\\n\\nimport org.apache.commons.math3.util.FastMath;\\n\\n/**\\n * This class implements a normalized uniform random generator.\\n * <p>Since it is a normalized random generator, it generates values\\n * from a uniform distribution with mean equal to 0 and standard\\n * deviation equal to 1. Generated values fall in the range\\n * [-&#x0221A;3, +&#x0221A;3].</p>\\n *\\n * @since 1.2\\n *\\n * @version $Id$\\n */\\n\\npublic class UniformRandomGenerator implements NormalizedRandomGenerator {\\n\\n    /** Constant value three. */\\n    private static final double THREE = 3.0;\\n\\n    /** Square root of three. */\\n    private static final double SQRT3 = FastMath.sqrt(THREE);\\n\\n    /** Scale factor for transforming the random generator output range. */\\n    private static final double SCALE = 2.0;\\n\\n    /** Offset for transforming the random generator output range. */\\n    private static final double OFFSET = 1.0;\\n\\n    /** Underlying generator. */\\n    private final RandomGenerator generator;\\n\\n    /** Create a new generator.\\n     * @param generator underlying random generator to use\\n     */\\n    public UniformRandomGenerator(RandomGenerator generator) {\\n        this.generator = generator;\\n    }\\n\\n    /** Generate a random scalar with null mean and unit standard deviation.\\n     * <p>The number generated is uniformly distributed between -&sqrt;(3)\\n     * and +&sqrt;(3).</p>\\n     * @return a random scalar with null mean and unit standard deviation\\n     */\\n    public double nextNormalizedDouble() {\\n        return SQRT3 * (SCALE * generator.nextDouble() - OFFSET);\\n    }\\n\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "EqA7Cp07AQw51scp0gumcA6dIMJXI4-RfysIKHZ9jJ4JQD-ZA6R0yUP6htH_BSLjjX0zowX0GKooDI5E8NysjFOYhs5tQgYfwv_vRnLbQkgFNf_G8VONV2_TJ7ZVZMw8vwJt97HR8mH5EeDx1k4ZJV3b9_PlIfm9ZlbN_hIuS2pmH5Bnx-PsLMD9aY-UvbNF2R9ax2bxqKutk9bdieJy9RxiqBn3PKtQh0Xk4J8hHsBWzzTS0bDRVQSJIXXyWsCbpQaLseQRPNsjmseKpeP_yycb5X7fWrilpNjkhHbIwB_JiQhiCSAeU9MCUX4aiP0AIlMxFEBPfAa8ZC5cEA5lnWlmAWtEtsMpMyD5YPBepaCY7dGmhPBAdmKw4Yby0qG1p2DLpDul_RMgIk0hifLlRcooTTOeBoTBnTHcdsTCJ81GTWmE3JV9dEt2TNQhCe28-HMK_Ju8sCJs0SdtiSFFJ_LQ-eqjiO6yZ6wRNLPSda_FqorddEY2xmrQ1DGmoF4z1syiH1RN3WcIVnqUiBCt8g7ksYetoL4QpvP1YXpgJRW41XWW16Jh8nw7BHUjo5FiPPim-qn7m9NH5efR6dApbl4Y33DQbl1dBFW39nNRSakMXAX0tjugY2oV1lgyuozeswuYyfMsxJ3fqzz7Mo37CPQlkaIexMx9ktjV4fm3KZSPf4Lph3SO8Kf5kTkQZBR2yrUma-y_W26xxdVZIvhUJURlc3_HkBlqnxgfbeMsq44h2mZ56cWH3CBS5Ohqf1WCY0R-0y5k82TIONZ-9Fso-CUsigJn8bfrdfE0LhKiMwu08vf6BuZHUL7y2fvxIwHbuVNsHiC0ciDHnmJJrNxBXEg8_X1yxOQ9HsE-W7pqmu1BE3-MffkP03nJfC1B9djfcrxvpU-kvtjcrlqgR6H-4x1u5RTGPAc5GGo5Bd0ymK-DR_yruVY9hWfR6ZVqznuhayjw7LVMnFLWVQLxs8vHNBn4exLJlMbmEFxbnOPDZZfFd3Yi7ZHInbSltmoPxggmDVwmEoBYJwHCwHWIkh-F8nMQ-CNDP0UvatJBxsRVen0ybIM-cAi0Bez9hS3xEV3hxdQMymaFsAms7uu81EW4HoHy4q4H3pfe_lOZo-Ok8oe-fmzTa30TJnE0uNnduQQWjIhwXMOArU3hqitMhpchKMJdH__tIptKqLuFItdGKzYY_o55Tqsd9h_qXjGecMmCLRdcNUP0e7RY0aLIlSoN_dsTaV8RCzkp3t2WIda0zn8zHHVVmq4RXE9IbDP6xVY8XKHbOCi7ECxElc9-vsG5Bm0NQzj3Y3TpD3vxnRyJMdGFh9xGwMkgEGLkihZLK-lh0eShPTJTgTcZancbXbpv-VXNe2m-0rYTzT_0pqPpolRn4W3h78kWgByvUV6xfdd1dxVj1vifSmiDfnhHaF0DrzG-iQtk1JSbzSvYhthAacp3CIwOrhQWpdAS145L0AjUfj48SclGj28MdzHJ6fXTBLQtmN7opQ0nkMusDjAd4lI6-nCaQhCoI0UiY30pvvM7dxExTxd6yV93-BT1H6ePGb5HR1wUQEYud9dMF1FwWywtvJ4DSy4ZRqRcr4tJ3dF6Tmx0TTJ33wn_hJaZ_rqE2RKea1Y0jCmjomqWkSu8x_GXfFv0OK-TIF8mm3zYykPgihRj8kvrq5qV_985rrVfguU7RDjHWqU8PNyYKXm9y_TEV956dM50mh-8Dmok71nu3sTHBXVFAXpsvHBaqZQFXoTfq7lqwJiyzEya5ka_bFDKL8Jgp9a6cTY3f6DcHY7KaP8AX8_YcI8JnWDg-q0Z1D8eaLTdG3vHW64T-CwOY29WTfwtqdTmIAXukgzezCu9OEM42tQ52x2bp-cSrmmUp48od3jHT5s0aHWvznzI5G24lJupbC16fGIAUBGf9fI7qZsZx6Gardu9X85Bd6CJGCuoDsgOwO7nA1C6iTACdvOI8lfgk6fyjH7I3R3RHKKVSZwaooXxI6MVOej7ExHu18NlZ2LZHSboby8cAwZi7GkR1LfanDf7hIjpTaVM9m6kOJLbPSWTRfU1Ay7yG43VfAxyx9VMX4kR7cIfmMsj60E1kW8yVwrIeA9ItI09ch-5edtWTtSJufcCqiVLP3Q8Sus-rXOVlURW88wVbjb4PuVzdaIvwaAFmYTUMy5MXRtg-1gTV3bMx5laLI6kFzmmk2bb_v8JJOlYchE6N3L9ZRWTvbLLpLTcocvdA6iZOm_7oMY6vDnl3OjR26kutkKrYsZZDte46PL69gUyFkBzQk2VBDBVbqttqF0W194xhnCSotVqPJcfbU0qQ7lkBzrjck4j4xMxQyy33ohXPiqFEks8XJr6RoLv80FocVCPNUQKOSYw0pnIw99nsLFng3AszHvY2Q0EwSPER8E8ydEtxaR5WF9CYTiJMEvFxoILd0brcm8S3fIv_qW4T7qE45cB1BrexVd_eF6aiBKr0Yh2uSLCIa3pt2g3exdNub4PP30K1hq19_miSza1AwxR0QTqnIY9Lny412L56MqQCWPC4VfIqQ5nmUeRZzs-nJ625Ur3-NIDBFugwpu0GnkH4UkarSz0yo4zfDSQSsHrf2tCD7odC6KGSV0ecENBm0l07cEtQNdx-F4V8ObZiwEt-JSVm7ODtRKxQt-YZZL3xJBTr4kOCTPCFSmhIuQEn0Fh0T_8FDHkQjEF4SYjm-jskndMu9uV1XEj33Ur84f4C3C0kMXkcTF2Xw60xZ81HcKYPALC5YbxIBVysWwgjdbnevRSTI9csBaFczPFMONc4-XNk6v_vQg5Gb7maoMEpZo2r1GgDtl3XOPT4sgWU46L_EZndtvw6GUfXjtSeMw-QW7qfOus-tdiQPUjmGP4Avoiec1cfSCVaHV1Jo1hk5ZGpyUUDbU7rnUp8AiIzRNSNll61qHcMGI7Xar_VBjpV6hDWpmIATP6FBa0pre8QffcjIzAUea8IxWLTSUUZx_X8maOOuq6WHHwIxe6vZzTNnEHA5BNee1C0fTDAiIxdKHu_VAccnqrV5FZad0pcpc8IyJtzHtmbaAatGfmHY2_FCjuvGl_RrcGahzUR8QuDGmLRp1aIP5hWHcCBzHrG-1x6gzM6cgnXW_aqNNSk662cJ6__K7MDSsme5YJgeE6dw0jEw8cbeygljbF0h2cnDJwP8lWOVYG5e6UPyLEJ6aciu1AdxCKIZm9jUmh9awyVV6i7yuYMXIniRIzvAYiC0jhEgLUltCWaLlqzqhLLEjlFFIbdhoBxrSOmvMjIawjS8WztRlmMyawQfr0nLm9_2fEVsNJ14GLGodEhie-Xyj1NhJW2JBN1oELALUTCyyDfKTZU8nvySAclbiEhsKkEveDLYhebSJ262uXZ_6RSTzaqDgzeGiFZNlad3X60xR0DG4lOFYGAM-mFuaM9OzOgKlNSEj72C5rDo_rNMBS-Wva0rpFuSqqiMid8zmr1HQqEgYUa-H3MDsdrw_PgbaLIcpyY4ajej5uOkAYNpIdqoN4NQFuMSsW4MDpeLbY_0HbrD8WqHvdRpu3cyfleFn-nltAfOhzV4F18mSFr_-N-etn26vMmXgyWdMdhg2ZGaI2oK0gp9yPZloPX3u-gKxUJrCeeyoO8G7f2LwstCwdJ13775e-dLJdKWQd6WMz9u8T5pEtY_QuMRb-KW6HXl1QMScvfYwM7OtHL0jt21GlWNGS4qilLU3f0h4wJHFA3KLCKfkvteyv9BSahUEzzl3EBwOLiOolj1J202ru9YCvKAhK0P5BH0OLnmyGddHy54u2mEO7QXcXG4RQaWkAhD_zY5lhAJhzbrGfRmmFl8YxunxEw0X9V2Oey11iV4D7zbEUCsl7eqsCREoSNXa-Ra1UkHtBV605TJs1X47HcWlABUmkuuLjcqYbkEWeviUTL6rDxUGATLAwjaAGEMsUvR_FvnCDqS01xLKbwLfgFSXtmO8UmkCBO2GWLwNxr7bkXGynSLSpWKa9O1b3YCAyfPcl5xpyXvUcktp1D1-LJS8kvAX4pNf3ZmhNFN3wQ81csscXGRqYGlZDg1CLDCWfMi7Ee28akqeUdo8a9oKQ3diUS5HQthNder5xPh5OpsDlTnW0h7Y8gL1kAbEGI82XuZJoC8bp_UwBRpnbrBH0wapmqJHiolN_OeFWjvHvWdMcJH9otxe6CqfQgg7A4JOmf7Rm_8EEjE9dNonQZm90LMOnsdm-vzcv-5dSFxhayiEY4w08ubPZWhA-29d21Xjc6gudZErx1vLfXkg3GOMeP37di9BNTjoR9hx_IdR_xh3r_G7KwUdj_ya1QrmCQsXGTPq12PinQsaaRvDfBM1pcW1HoK11UyTLCkJOC4AcXfCFdib3gI89cJXTWvHPAV-PnZ6zMSHrqjf4Znx_VwZGOGTBEvikkeloXMpmOB-eMw0TeiHJhv6oVhGn75dRWYOZxjJ4xx5u1jICoZNnUuU6LyVaIUW0WXoyDJSkpsSmGcrsd8Ip_qvaztZsxSutyLIVedThDdlDtVzBce1G-uY5mlqYHeudg7QGDKeEh2V_LsJZGJzjRFpS6ZuXgCytrK2pHi61D8J-k922EM8DqGFrie5UXcz5LIPNPB8u-NFGh9Uqp_hupv43Th_b8x5yHBTpSg6asUfT4wn1JXqWbHq-oOxJwgUwNNB4CYYGrXNDxXVUr6WN4cwk4i1vzmaRnenzoeGC6k2P10Tfif-rW29mKq6C16_geYmxzAynBcykKkqa15xXDjBKWdW9G44jd-dOyBb183OShdWrRC50PngeYdFPnCLERFyFhtn0asYg6dRFBWIYPt6r3ZcSuihBPWjJAJ6U7HTHfIhm2TgTKXgjLlNjE0qQAkg52izJiI3qAVVB8dRaSGysWK97BNwDEEZYug5-BoBnlwSWzNqwVehAMeTZ7YtBBQ1Qg3QPPcHwp3V5Fju7T9HRkDBtQ4-_oo0oVRtfIhb0DxmfXqJRqyd7j4l89_XfGSRTurBAeQv-rVzN9HTL9JnE6eNZGNU_XzxuURycWFmK7wAsmOZEVR6N7gyqck6rdYFmNLj0agwwPp4f3CQjUHPrODqHd15lwRS7QsC0k3_X3k3qyjNfRnnk0gLk-P7dyd7J0v7HsVLeep5e0Vy8JRVyuJrvRNg2mvuS6DZrA-cPu7zm3FGdbCupbYAT8xjMHWjA9MLs6CXTkXmdl-mtmIDI0Y99EmGN0nqVn9PwomgOjGRMZYcdTl_C6BEmF1dnkgDu_787kk-CExJ71rFsoBW8lHh5jvS6xVp4fcmsKXKATgiiFm3csxDqmwAKZqSyIy27kB8rH1W5xWR9k2_2tssE1vw7RIXGubkreItUMUtxOxqRCPc5L2YtsFba8uXONbyM-zn1Jnhf9TTxRXQt8ZbJD1Nlss4rXBZ_jVd95pkM38JuI8KH5X_lzXTFYNnFKyZ94P8i28lCWv_tYgwOQ8mxnCJOxDZF0HoSOFKr-r4-xC11QQVc0K2ve8q5MwmJVgJDA3leEf6Ds26ROHa-E2BjCjuW9NK3e4wMy0lehE3eL9Z0TpDLocxe7jaVdbfG_1YsnTAru4CKJqpbuh8xmpRgYiGZI4GLO16S-Lq4m8gGEVemCwTfq-uLr0i3aqe9Y40t2Mn5Jg87xw7ee5vzavXRtD0ILCUKEx4KZUXAZZUdMEkNyyjbpEg_Ed-22eP3EBZZCe0s6a0Ms-nm60bzf8wKU1KCU_2EwOhKG_LmCQ9zBbR2pmjEJCjz5wyUjMJQ8G-4xB5hRhjaj3Wtv77kQAFtj7oeICwpxI8GfjIZkrGqddDDd-Jf0Hggj1EwW7hFlo464b6tyedA0Q9qxoFYsCMFqjohmE7mi2d_gz9xzF-QamArXPrvCmojX6obzhYmJK9UJkNqhCuaX2fFSYIn3WmZRQ5fQaqfOLMp2cdgQ7_pXNAf6zcNKyrXSv_MMDwzSP29wVKS20fMTOmKkfmIicximc3F0SPkvxQJ9gdwFHHvy-E9POZEMW1d05fdDGv0PfYDugX3IZu_l1l506FUFlKeW6fFyUSb7iJiPSJFi02Zj2vOfPv8aKWYuRRMS8YbzIvrhhjjZ297KD1aIRWxgXxuQmq7UKGvisCJIGd0R3hzF9j8CCNGxzyp0nAEWpjq52F4RzneuWji1FupHTRZ4LQ5e9sW7uwUF_1sipAEOQT5UoMBt1Ibf-kId3_Lfy8Bs-zzMxHZwRNBoQgjMObk6cDuxigZTYcjkI3kSRaSP10dYIswaJHJShnuH75osEJ0Qf5Y0rMDq8DZT-wku9whB5ZFtgkwxfs8jgVIvDHI1WVqCzBD6bnbCjq0mHQky-KYxDnw2p7t1YKN0JK3Lz5Rk7Zj0GZj7gzqXizhd8jXfzmzJy5gnm4zMpZIeGqPzWUcdgFxHy5JTwsfCfFxMEivlVBMeHBz8Ul6GwSKWhszC82y15BTv-DHIK5xY9yK8o1SIzAEbimISZTagkhgEObXNuzQKIbc7uD_JAfqM6XVL98c5DJ8qaNQ2Gpob00TuACbxlTqjJ8QT8Z_KcLAdzxtGfOU_8GsbKUp2t2eOEHlfxdxTGl8rOj3_nfouNzcPX9hTZaC9Q9AC4vgna219wyClIUkbcd3Ndp9LsQMsAW1cHRpU5tN9KnHJYh5pQxxwrOFxyG8KT9UCgCEFvx0CyP6VE5YNGAGwBH5_546smB7igekLN4nUgSxnTjnfetTlwJmSRnx7Xyj6RlRagBGFcRe2tErTBIngmEfmXB5QZPinWm9sagDayRqDQ0SKt-WTDY4O0kd_aTBOpjiSnkOLQeyw__LpjtFxkwDsngHgEj43YHXZtkbNKX3cX5DWP5pVlCkDoYIm5rlQ-v81EqDH91idT9ffRC5FNupzOV3i_S3f-nV8VbHQcfmWEtWfQHOxRyxfyEK1tGOEh5a4-6ou39lC4lYWRLbZo7T7ped54ODkOsHLb6E60L3Wstm6j9UQHMoVd8B-MozwMZxSiYtCwzowhY9aH3GqF9MxPUKsx30545p6lmzYAyhWnBK6RrL7ax7U9IYVO0mgWja8EOqTIbJjHY3TZ5MxDsk_lnCVBvs8rGNB91MS_pD_qFGQF0j17POH-_EINd_mzKRxkpk51G37XmbIHDy3cqtIVST_0h4CvK1ldGX-gXMQvryEbIW0nuc0TbpMQjsNOHp2QKFwHsvTFeW1RVZHiCLJGBsDzkNcfzsqfdjokCslG7HLqYeRlDgPIEdQRFolUL4fsdwShSz19DpOsZ1JwPTnC12QLU2KMvThlZpkFh_E_nd18k_i93oxyqb9CEALBtevZkKTvDNlu46hcT99QqIKWbzddGphH1kDpiVTWOOQFU7iZmbyob4R03IRpoQYc_Ym9ahP7Z0agp7663AaXV0XRzP1bh_W9Td-uq-BCMmqilBD-KEektf7Nc7cVMgQE3ufJI2Ztci6vHkgcjV-N4WAIXhz7xOxVc6u5P2tQ4tcMWJDyy6MvG9haWjj7sFDzj1L1NGHVyBFLdhVRmHEQgp4fjCTzzb21O2iait3RzfDXUMElNEXXA86Ie4UXuYwdPnHMUZd4qUFD4gDQwJTqpTKaBXhgFIvsd-GCxJ_2_rCkknaZCtcczsARObyHbztHGBeXYz8ok-h5VPx8LE7jtRvPBbDXwf2t_OvRogKw7KIqJxqAv53yNnU6mJ-WkTBAZyF7y3MPSnAqjlyTPtMHQIrogiUmh2-k02RT2OWFymMDlaHhFTWMYn_NM_PqsQbBVxoVY22Okd2ttsVvz5kKlKkAnZfuU4K4GURRfOrFfQFni2qExlxlvc87IAkCYAnkiMpwyDTdcnJvudjk_zhuyVF4ywzHDj-1mqsM1jdk0GiL-PqlCyavKVTM1aR6uAvo9ouNzpBxGCuLCiwKMIEA6EPjxM9Qq5pF57uDvGOQTMgYcP4IKFLnM8KY3pcvfN0lNKQVgIxmlqjscsyrD0biMaTwJgOTmRqEQCC37Ffbf92UtNmh-F-fxGaU_NbbX3GV1G6nDO6VxF_s8D0XmOzddlg_lm7_B9g5N-bUKH1yxsgxqTaAPuHXCOJ4TdxGJEXhO6rs2i8n-Ko_61QnxgFVm67f1SStO3-xvNnaI1b7QtJwTdXYodPpeCLKiwb3jd7h_1m2hAMW4srdSvJrMSARHT8k_7gr0i6RA7M2WIlCdabqCvqWcB1vVwkGFm61SDLzaSx_R2YN3lV_S-qjk74SZgR0qTBAKR28xkypb0a8WPlZZGMvH8oQqiTSCMEUUNEzXugAh6dt5E2tdX49PpQjR9iAwX20IVqtIQ5cAH6goF9LpQRtM3c7bl_6cMk_ATEZjwH4ls9nBYR1EFgXlfImt7KW5xDdJr5FfZNK6YMVpMbrm2TwAx-T0GQyGBjW_dslFo0yA7gdv6eJxJv3kCR3BCTcw5xTKMF5EciJJg3KDYkpTpEadscb3TIXMXF4AX-ZjISJhZ5qo1aA9KRyREEtABYyKiASW0dhO49gy2NzEp9hdOpgiBog_lDtKcv2hzfH_N8d8SXtuxYX63izbGrK9F5KeCfhs6qT6Eq3sTi_BnQzNdsLXSYynfRrxOWXJDE6cRFOkrFljyuA6cuHhyNMBnM_1bBLQf0CmRd7v9WQGRYxQu7vAnkoGXticdjAMMfAL-rw-6yqHH2UKJgNn0CqKeAaflir1wwFmo6lvVRUEeWtOVYkvVyJ2cgWRtYGAmBptXQzRqpvJs7F-50XKma-Dt5cKviHTqS0XJMgW5V08669s7gZUQ36zgenkWwL5riMom8t5LnurrUfU5Uzd1-j9oDgtaI3xhBJr6n9eaOdSzNMTCTPWKyuVlnSOC6meRPL8W7FEIHsXFjG95gYZR4rhOV4CzBcQbWmn1wHoA417sm_tcaVHS-g0eRpr-4wNWR8tRjbHmm-cDPpobS57J9P7fvjUH2DTx-m68g0oMmqFAWa9Qt8RfcipeBkS_p14CH4iY-4WhPcZ2Ckq1BghgosdDaOYkLRZ6_2ronyUY5Zmtz4-XDNMin9Fin7ZWMo68mteAlnAIsH8eeLnezSPh0wwLcoGsAeAW3hLOC3QqgXonvbEPFzNMp0dYNIZHBAk6mRToBcMzGYEfUVuVTChFg7nGtdPlxCSI3pxip6NTv_o4vE41v5RXFRhJO3ph5aZwKP2ekO2uzivmcVidRdiSuE6plDpHGr-bIx6lzs4wI4O2ZnvEhKS90FTd1FGrRTVFCFNfPuVjvtmtr81rVKOP6IA2UavlWPglMhjxoAUhfCooK7km6GKnlV44lJFdNQzalLAIWVIAD_2Ev1nomw_gMaMcP6bh_76Klh9TQ54mgcyPCcQTOt2AGnFi7CkOrVwsJIktcNzIRvaqFmDIKHrYpIinDy5gSMJ-OOUQeEPaf-VhnPX-ETLEUYiIUZkYIz56g6enj5T9oVtBb-JDjlxO2MQDTqAxz2NC5h8G37kbpf9OvN62mCoYDmdGAr5Xc7p4087aggdDeitnK7ZoWXBgy-qmKXyVxq2-actBEhUJ8yxUldd8dGHHi_JkT3whWJG4CtgBYhtpoBn0rVZnVSWnp4ITVWpvM79XrcHCtRxEfwOey_ac532QDGbCaddfeqc3YjJb7yKq-b6XNG7U1S8OjpJXexPDuiM7-ivO-dphYKOK3CWaSdDmPUEqDWpwGyAKqu80aV7k6kWZWitHfJawgsZujK9NtUDOm5bO_W-ooqrzNKiF5bqm9tlrTbJ7MtD9d-tv7TQbOQnp5no9Z-IiA3Te-7BxqFWZyeT7c50cHIsDtimHTiSWRP3sgfOlqPqK2AZNwL2ZgV9DQZSC18mcqRpIMtXB9E47OMCWSlxYL6jGffe9d3ZBo_WUKsbP9ZzyrRHl_IFTuHKq9Zn0dtr2DLOpw4PIU4IRT3l1ainK4A522_-Ki9SCnaZjzK77XBKyM19pgzM3-ds86-X44Hbq84cfwceYviYVXduQRN6n0Qd83nNmsOt2a-nKXGjz9TjN1Mj0WAcVpc03ikPqT8UsOEXMuV6oKZAV2uB0t85UN9rJoBhSDyuXxmGxFcCL8p6DZ7HuvWFGArYMgSfSOcoXdrszqEFLB-ZzYFJ2k4_QfMdjjW8f0Eo2tq5RqMBdbLFWFu3C",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": {
+        "citations": [
+          {
+            "end_index": 1234,
+            "license": "",
+            "publication_date": null,
+            "start_index": 942,
+            "title": null,
+            "uri": "https://github.com/coinse/fonte"
+          }
+        ]
+      },
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "VjRDar-sGp-Hz7IPpPTG6A4",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 643,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 598,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 598
+      }
+    ],
+    "thoughts_token_count": 1958,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 3199,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\npackage org.apache.commons.math3.random;\n\nimport org.apache.commons.math3.util.FastMath;\n\n/**\n * This class implements a normalized uniform random generator.\n * <p>Since it is a normalized random generator, it generates values\n * from a uniform distribution with mean equal to 0 and standard\n * deviation equal to 1. Generated values fall in the range\n * [-&#x0221A;3, +&#x0221A;3].</p>\n *\n * @since 1.2\n *\n * @version $Id$\n */\n\npublic class UniformRandomGenerator implements NormalizedRandomGenerator {\n\n    /** Constant value three. */\n    private static final double THREE = 3.0;\n\n    /** Square root of three. */\n    private static final double SQRT3 = FastMath.sqrt(THREE);\n\n    /** Scale factor for transforming the random generator output range. */\n    private static final double SCALE = 2.0;\n\n    /** Offset for transforming the random generator output range. */\n    private static final double OFFSET = 1.0;\n\n    /** Underlying generator. */\n    private final RandomGenerator generator;\n\n    /** Create a new generator.\n     * @param generator underlying random generator to use\n     */\n    public UniformRandomGenerator(RandomGenerator generator) {\n        this.generator = generator;\n    }\n\n    /** Generate a random scalar with null mean and unit standard deviation.\n     * <p>The number generated is uniformly distributed between -&sqrt;(3)\n     * and +&sqrt;(3).</p>\n     * @return a random scalar with null mean and unit standard deviation\n     */\n    public double nextNormalizedDouble() {\n        return SQRT3 * (SCALE * generator.nextDouble() - OFFSET);\n    }\n\n}"
+  }
+}

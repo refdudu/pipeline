@@ -1,0 +1,81 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:44:27 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=11904",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\npackage org.apache.commons.math3.random;\\n\\n/** This class implements the WELL1024a pseudo-random number generator\\n * from Fran&ccedil;ois Panneton, Pierre L'Ecuyer and Makoto Matsumoto.\\n *\\n * <p>This generator is described in a paper by Fran&ccedil;ois Panneton,\\n * Pierre L'Ecuyer and Makoto Matsumoto <a\\n * href=\\\"http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng.pdf\\\">Improved\\n * Long-Period Generators Based on Linear Recurrences Modulo 2</a> ACM\\n * Transactions on Mathematical Software, 32, 1 (2006). The errata for the paper\\n * are in <a href=\\\"http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng-errata.txt\\\">wellrng-errata.txt</a>.</p>\\n *\\n * @see <a href=\\\"http://www.iro.umontreal.ca/~panneton/WELLRNG.html\\\">WELL Random number generator</a>\\n * @version $Id$\\n * @since 2.2\\n */\\npublic class Well1024a extends AbstractWell {\\n\\n    /** Serializable version identifier. */\\n    private static final long serialVersionUID = 5680173464174485492L;\\n\\n    /** Number of bits in the pool. */\\n    private static final int K = 1024;\\n\\n    /** First parameter of the algorithm. */\\n    private static final int M1 = 3;\\n\\n    /** Second parameter of the algorithm. */\\n    private static final int M2 = 24;\\n\\n    /** Third parameter of the algorithm. */\\n    private static final int M3 = 10;\\n\\n    /** Number of bits in an integer. */\\n    private static final int BITS_PER_INT = 32;\\n\\n    /** Shift parameter for z1 calculation. */\\n    private static final int SHIFT_Z1 = 8;\\n\\n    /** First shift parameter for z2 calculation. */\\n    private static final int SHIFT_Z2_1 = 19;\\n\\n    /** Second shift parameter for z2 calculation. */\\n    private static final int SHIFT_Z2_2 = 14;\\n\\n    /** First shift parameter for z4 calculation. */\\n    private static final int SHIFT_Z4_1 = 11;\\n\\n    /** Second shift parameter for z4 calculation. */\\n    private static final int SHIFT_Z4_2 = 7;\\n\\n    /** Third shift parameter for z4 calculation. */\\n    private static final int SHIFT_Z4_3 = 13;\\n\\n    /** Creates a new random number generator.\\n     * <p>The instance is initialized using the current time as the\\n     * seed.</p>\\n     */\\n    public Well1024a() {\\n        super(K, M1, M2, M3);\\n    }\\n\\n    /** Creates a new random number generator using a single int seed.\\n     * @param seed the initial seed (32 bits integer)\\n     */\\n    public Well1024a(int seed) {\\n        super(K, M1, M2, M3, seed);\\n    }\\n\\n    /** Creates a new random number generator using an int array seed.\\n     * @param seed the initial seed (32 bits integers array), if null\\n     * the seed of the generator will be related to the current time\\n     */\\n    public Well1024a(int[] seed) {\\n        super(K, M1, M2, M3, seed);\\n    }\\n\\n    /** Creates a new random number generator using a single long seed.\\n     * @param seed the initial seed (64 bits integer)\\n     */\\n    public Well1024a(long seed) {\\n        super(K, M1, M2, M3, seed);\\n    }\\n\\n    /** {@inheritDoc} */\\n    @Override\\n    protected int next(final int bits) {\\n\\n        final int indexRm1 = iRm1[index];\\n\\n        final int v0       = v[index];\\n        final int vM1      = v[i1[index]];\\n        final int vM2      = v[i2[index]];\\n        final int vM3      = v[i3[index]];\\n\\n        final int z0 = v[indexRm1];\\n        final int z1 = v0  ^ (vM1 ^ (vM1 >>> SHIFT_Z1));\\n        final int z2 = (vM2 ^ (vM2 << SHIFT_Z2_1)) ^ (vM3 ^ (vM3 << SHIFT_Z2_2));\\n        final int z3 = z1      ^ z2;\\n        final int z4 = (z0 ^ (z0 << SHIFT_Z4_1)) ^ (z1 ^ (z1 << SHIFT_Z4_2)) ^ (z2 ^ (z2 << SHIFT_Z4_3));\\n\\n        v[index]     = z3;\\n        v[indexRm1]  = z4;\\n        index        = indexRm1;\\n\\n        return z4 >>> (BITS_PER_INT - bits);\\n\\n    }\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "EvgXCvUXAQw51sd5x4v5hrUs53ZD409g60fCo9vslx_ak8a0LrD4XJtKge8mvun1yL5behl8adc9M80PkUryvQF-wsvi1G73oWLhMB2QOfO6o-iw9GLGGNFdI7Tohlefsx9nHihqEK_qRYlMbTWtDnmTaV379Im-L2329eo6q13H9v7NIjo10yYqRlGn42e4h_z28KdblMNh6MFyr7ce0TGNr_CvPCgjWq0uT8XcBYt6gyEKBhRQeyjzbC0LaKm8aLa7LDyQS2N_wgauSlrq9ux8WB2gg3pRyjXELLM2yLRjTudtw-qrTmzOaQI6s6wHJfGL8IpaIm-maq4bNlZH0eK96fbZ96dvbppnPBK6tahxaY6mSiydvOQD22qqpWc4qqTYHomiXiCO5S8dufdNpD-0dbIJ6Z_Tum4F7J-2F3qlvqzvY-64BXiOT5UdErXn97ElgfyjssAb6yOpjllV7VU2H-UdDKgNlxsMkHC1TNa-IakxSx69209HDlzJYx7XpIrGZN7gpqMDxYNOpkWr0rcpFgej_b9BXqBxC_PvUh2FbdAhPnKMKKLpKHvNcpCGRcEqW-3-uVvsr_tQhdhnP2qBmpMffGINFg_CWk-PJSYdho0mDwKvXT8YXa3N3ZcP1cwmqWu71SxFbDLTZWFgSznq8-vruBgIBNnQkIv4TFrvxNXQSJ70MF3SOI37fkys24tSg1FRc0WqTtBbgne0MmBzjmyKPKXMeHPKrJKJYCdBfmEwrEMt-dc2xv0cTwXrgxlOfngWZT6WL7QbtYI_2Fk5qi12CGnhiqykEC9UNc2M_SsFdCMQJDu07ReQ_etWHy1jhHGht42B2-wEOhbu9Bf1kAHxh7itQKEgBMHphgbmqPyBnbWffKdctBWNjVPjF91IuUem3ew-vJaGCIEHAtlFSRPhHjQ7-EihdE5Iuw17X2C5DjyAJK6uCUIntobCc5DOiLSSphk7iFeqH-CvXz_2Zf25-4pVvIRwOVRqxR2OE9KiqeGc1uekCLe9Xjc6B5Bm8Y_Ejzr49iNXgO4edsz64_5BA1DmnKjIilsVvjShvzZT-ldmMRl1tPGmqnSQTWwkDAKkLdVGN4ERt1sHziJFwbHGure3pg-ib9uqgOpZAfaZyYUoxiYoF0inhUS_6gi3KhQBLRqsWdzWl0bqJlW2Yx-SavdcXWMtolko-2-QQ0U-x4PXHIgVmv_Wi2UHufnPi5TLox6xfyfw29kX2KdyeK5UPfHm27rs_aIi9-4GlltjE994DJPYYjwUtu0zRwkmf1fgk6fHI4mV_4_1mm6DuGwV5nSohm1BCENy7txRBw_XJJFtBOz32sn3ezY_9DSUwE6Vv3sHH482h7LlCfbz___FJNbjH8pD4aPu8dnh63US-mXLKKdDGTgSWqs0z2vjW7i-c5EsSg7Jx-s0zWtlyeP9I1MjLIw1x1XdDIlnbGNDyZG9yeLVIf_vqf-qDyaO6zdjS0LMk9kWzX45P7UBVy0J-PUo1JE0JHkky0B-wiX10XHWAJEraDBW84O04TG-tEOqn7ID6YrLNRaZKVA3NJ_MyoRhdVmUDaBBBYAdunXMSSYwSJPXtFPC5beSeXjnwqWlG8wATS2ZRa-O5McMCzlCLAHvBedRBUb1WhqWiEK60wZ6EiIwQmEw3ew4InXsQlbutlzsha0tmwWuxLodPDTqYm3neFFfTwSo0EiNLQOc6oWM9YE1DqqSgOC0rsEx5wsbUIaottrxw2aViykVTp2Pnej2JU_eca-3ong5wCc3qRRiMkVO1JORRdD8H7S5NmdUJPwHQ09oVco1ksbzFmhEw4s9qak5dz5gI8EYGnsLndHisMKnSkBgN4zEN3iQMly-MEeTWG5Uddmq8boGM6hT3Qq29HjMrBw-0xMAp8NmXQM9DIsH-s76hUjI839vq3QMSclICk-KiMfVVij7tCsipgufyAUxNhks21-3CXscMRtKsjeqN8_ZO_bCvazK1FDFQcyOCRHwOGN3Frhm_hc23w87kYY2tXmHicbIAeG3qdTmEFecWoaKuIn-eQHOSvaUEVf0fKuEoSa70Dy2DeIUphAeyliHQeUQV6f4ciPO30dGewqUkiDo8FlK8D07ujN4NmHnOYucdr3qDKkT3vOSXUeOCQ1zb-FN9szqOAoT9JCTG4Mw777lFKoN_vdXusubHHWOPqgOeCi2lZMGvjUnHx82kfNCNT_WzC7YrmEfaa6Pz4fOSZwQ5nuOTT6V1GH_nVrVnj9fKGTNVH-vyVi-lT-RoBQUXcipz3cSNtuI7sFfZ8ujFQuOds-VDkibzEGo4arwd-hNTq95Mt12KTHXLOfXlBKvUVEuWJaA6o-vXz4Pj-rvQBMGvkkgMcY4sxZjw0AarpvhBL5y6sGFgyUF2MFstLLdAs47wfpxQuiEf4oIhQ9j1FVrQPFlVC0GQ-QmCMt18oS3SrTumvXGHAhGYrLHWg6n0DVy7_tCIiskX3nCzxs52nOokDCUU7NSlx2QSPrNSACTN3cfzV1hZcJjHWQrW4cIbzkwY-67LiNiSAGzLOpaU-zwxF4LOIRU8AiCPutuuJHC2CK1k_DnKoLvk7_Jr4shb9g9bDBWp39VH4fJG_HNJLEiQm95IU1rwYrLXw4dIfc7-O9ibprP7kag0RFdO4puDO5qLbyE23I8cUNfWhxFDEuSjhNxyrWjVY1QVRBkCOaMq6MIgp3UpPpT7i8rYMU0vLFpyZi5JM8ws5P1n4om4QuqCAg8SdBmQU7XwOnwte8mmxOyk1HSvTu50umqfFsdnFz4ei0SuaI7GhaxXetLr-iEmX4TvZJd_EeuQGDoutCzEIq28bHI9zcOVy8yCBT0hNtuOeynQDFyI5huEc5Jim8r0Lm0en6zvb_xOjbuT5RzTW0VPVTjQwEMJQE-VoPk_tW2s7iH701z7IT5Fc6FzzBET7yM87LYnbAJQEJpkE9_SBFuXbx4sTcSiqrMeF4b0CKPZPc6e30OxHWQLaKosVrEPBHK97v9WCCHPIXlS9ZE2Nf3pLTrW3XfCtmw2oSnUYw1ZZbT7kBOAmBL-eRuWKZUJKDtkvFasW3f4lCgGzY2ZtU3kW3UpSOcsKeMTHmCFNV6DdBFOtVs2ZufYUkYXlM4UunOObvT-3ORTm9ojEBP2N8oJ0bO3EegeOgQeSzumPW7v5USRjAKtFLU1jyCluMm8-sttrRe0nWzPSzDcI8rvqxgyTl3ukXATpJJrXkXrg343dUvsztwYgmzUUkKZqHtY-5bobf9NkDq6gIhWnYSP7H-3ObWj9yzE3m2nrOuZo4FHVzlrFKotZWqAosZUazbcysXPRIOQdijG9_2wGMMZYX9LPapvyYj50JVDNw-fJ88iAy_bcvJHsYHqIYqQIN5njM3irolRPMBYn6SDDdSWEah8xJQNthPgilP1aFPuPSvu9U2TilU9EFjAhTK4z0MMXBBWNViRv6Qg2qEekmKTr3dHhb-R0T13vsIk5he-f66kkzbO4L-olF_FzDabjMOlPnmOreN8Y8J30u9SZ3y--QNmghyuHLX-tB4jdlV6QYODSrfQJ8S4vyhElJ5yXBEJL8KMoB9qqcsGPSUZnoePaLVaW-vY9I3Mzpj-eupNdBPmh5RGKl6uRGeE-OsqraIKwnvUj02ihOrU0l1u8-cZBs9EpZornhP_vKhz2uB1XCbrRFI1tObkkvQ5uME_Vu0m62j_CkeXNZ05Yj8iCDrNa0ZPgTSkEqK5DeG2P_7Yur3cmr1NAamt-RSPZ9WnI-ATnuQp_tqnH8mtL0hvxMezWB4Znr0cQatIRowd802PmPHU9in-baJG2137a093xPQqqSM4_ryPn3pOLIhXOQZLpgGerBVm5D3yXYKR_G7J8mfc71Qcr3FbCaZu8-e6MFgSjpZRCJqNIzyGfTYlLlVZWjZK5231cvDQIfNeM6aTggMA5Mzj81nAApt5-G39Gb7EvAup_iGgIvpVNl84aly10i7W2YFHJsClxB6Rukh3nbrbwssqh50zRs7yv7ciBaUtHyq8x6WPZcfkmrJAtAfoL8kqtf1yV2g1hC3GOdSQbjJdKGQCN-Jx5o4Eu76nQ==",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": null,
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "kDtDauTgA_OIz7IPrYj_oAM",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 1491,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 1238,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1238
+      }
+    ],
+    "thoughts_token_count": 1098,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 3827,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.math3.random;\n\n/** This class implements the WELL1024a pseudo-random number generator\n * from Fran&ccedil;ois Panneton, Pierre L'Ecuyer and Makoto Matsumoto.\n *\n * <p>This generator is described in a paper by Fran&ccedil;ois Panneton,\n * Pierre L'Ecuyer and Makoto Matsumoto <a\n * href=\"http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng.pdf\">Improved\n * Long-Period Generators Based on Linear Recurrences Modulo 2</a> ACM\n * Transactions on Mathematical Software, 32, 1 (2006). The errata for the paper\n * are in <a href=\"http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng-errata.txt\">wellrng-errata.txt</a>.</p>\n *\n * @see <a href=\"http://www.iro.umontreal.ca/~panneton/WELLRNG.html\">WELL Random number generator</a>\n * @version $Id$\n * @since 2.2\n */\npublic class Well1024a extends AbstractWell {\n\n    /** Serializable version identifier. */\n    private static final long serialVersionUID = 5680173464174485492L;\n\n    /** Number of bits in the pool. */\n    private static final int K = 1024;\n\n    /** First parameter of the algorithm. */\n    private static final int M1 = 3;\n\n    /** Second parameter of the algorithm. */\n    private static final int M2 = 24;\n\n    /** Third parameter of the algorithm. */\n    private static final int M3 = 10;\n\n    /** Number of bits in an integer. */\n    private static final int BITS_PER_INT = 32;\n\n    /** Shift parameter for z1 calculation. */\n    private static final int SHIFT_Z1 = 8;\n\n    /** First shift parameter for z2 calculation. */\n    private static final int SHIFT_Z2_1 = 19;\n\n    /** Second shift parameter for z2 calculation. */\n    private static final int SHIFT_Z2_2 = 14;\n\n    /** First shift parameter for z4 calculation. */\n    private static final int SHIFT_Z4_1 = 11;\n\n    /** Second shift parameter for z4 calculation. */\n    private static final int SHIFT_Z4_2 = 7;\n\n    /** Third shift parameter for z4 calculation. */\n    private static final int SHIFT_Z4_3 = 13;\n\n    /** Creates a new random number generator.\n     * <p>The instance is initialized using the current time as the\n     * seed.</p>\n     */\n    public Well1024a() {\n        super(K, M1, M2, M3);\n    }\n\n    /** Creates a new random number generator using a single int seed.\n     * @param seed the initial seed (32 bits integer)\n     */\n    public Well1024a(int seed) {\n        super(K, M1, M2, M3, seed);\n    }\n\n    /** Creates a new random number generator using an int array seed.\n     * @param seed the initial seed (32 bits integers array), if null\n     * the seed of the generator will be related to the current time\n     */\n    public Well1024a(int[] seed) {\n        super(K, M1, M2, M3, seed);\n    }\n\n    /** Creates a new random number generator using a single long seed.\n     * @param seed the initial seed (64 bits integer)\n     */\n    public Well1024a(long seed) {\n        super(K, M1, M2, M3, seed);\n    }\n\n    /** {@inheritDoc} */\n    @Override\n    protected int next(final int bits) {\n\n        final int indexRm1 = iRm1[index];\n\n        final int v0       = v[index];\n        final int vM1      = v[i1[index]];\n        final int vM2      = v[i2[index]];\n        final int vM3      = v[i3[index]];\n\n        final int z0 = v[indexRm1];\n        final int z1 = v0  ^ (vM1 ^ (vM1 >>> SHIFT_Z1));\n        final int z2 = (vM2 ^ (vM2 << SHIFT_Z2_1)) ^ (vM3 ^ (vM3 << SHIFT_Z2_2));\n        final int z3 = z1      ^ z2;\n        final int z4 = (z0 ^ (z0 << SHIFT_Z4_1)) ^ (z1 ^ (z1 << SHIFT_Z4_2)) ^ (z2 ^ (z2 << SHIFT_Z4_3));\n\n        v[index]     = z3;\n        v[indexRm1]  = z4;\n        index        = indexRm1;\n\n        return z4 >>> (BITS_PER_INT - bits);\n\n    }\n}"
+  }
+}

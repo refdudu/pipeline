@@ -1,0 +1,100 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:28:45 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=11051",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\npackage org.apache.commons.math3.genetics;\\n\\nimport java.util.ArrayList;\\nimport java.util.List;\\nimport org.apache.commons.math3.exception.util.LocalizedFormats;\\n\\n\\n/**\\n * Chromosome represented by a vector of 0s and 1s.\\n *\\n * @version $Id$\\n * @since 2.0\\n */\\npublic abstract class BinaryChromosome extends AbstractListChromosome<Integer> {\\n\\n    /** Minimum valid value for a binary digit. */\\n    private static final int MIN_BINARY_VALUE = 0;\\n\\n    /** Maximum valid value for a binary digit. */\\n    private static final int MAX_BINARY_VALUE = 1;\\n\\n    /** Exclusive bound for generating random binary digits. */\\n    private static final int RANDOM_BINARY_BOUND = 2;\\n\\n    /**\\n     * Constructor.\\n     * @param representation list of {0,1} values representing the chromosome\\n     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome\\n     */\\n    public BinaryChromosome(List<Integer> representation) throws InvalidRepresentationException {\\n        super(representation);\\n    }\\n\\n    /**\\n     * Constructor.\\n     * @param representation array of {0,1} values representing the chromosome\\n     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome\\n     */\\n    public BinaryChromosome(Integer[] representation) throws InvalidRepresentationException {\\n        super(representation);\\n    }\\n\\n    /**\\n     * {@inheritDoc}\\n     */\\n    @Override\\n    protected void checkValidity(List<Integer> chromosomeRepresentation) throws InvalidRepresentationException {\\n        for (int i : chromosomeRepresentation) {\\n            if (i < MIN_BINARY_VALUE || i > MAX_BINARY_VALUE) {\\n                throw new InvalidRepresentationException(LocalizedFormats.INVALID_BINARY_DIGIT,\\n                                                         i);\\n            }\\n        }\\n    }\\n\\n    /**\\n     * Returns a representation of a random binary array of length <code>length</code>.\\n     * @param length length of the array\\n     * @return a random binary array of length <code>length</code>\\n     */\\n    public static List<Integer> randomBinaryRepresentation(int length) {\\n        // random binary list\\n        List<Integer> rList= new ArrayList<Integer> (length);\\n        for (int j=0; j<length; j++) {\\n            rList.add(GeneticAlgorithm.getRandomGenerator().nextInt(RANDOM_BINARY_BOUND));\\n        }\\n        return rList;\\n    }\\n\\n    @Override\\n    protected boolean isSame(Chromosome another) {\\n        // type check\\n        if (! (another instanceof BinaryChromosome)) {\\n            return false;\\n        }\\n        BinaryChromosome anotherBc = (BinaryChromosome) another;\\n        // size check\\n        if (getLength() != anotherBc.getLength()) {\\n            return false;\\n        }\\n\\n        for (int i=0; i< getRepresentation().size(); i++) {\\n            if (!(getRepresentation().get(i).equals(anotherBc.getRepresentation().get(i)))) {\\n                return false;\\n            }\\n        }\\n        // all is ok\\n        return true;\\n    }\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "Es4sCsssAQw51sfEcHc2ZVCHK23FyrnYJ2Zii4--SNyBT2KgPmHBYKNLHAO-ZzUbUJrZ9ky3ftFmvXgvCH9ZVsDiILDzLZBpzsqLUReQREMKcfWfIp3peXyJl2fHil772tKtcs1yrLQoFKo7gvuO6h8VU6ZE9cCcjDV1WadsNBuJxFT3wnqd_r2KJXOXQl6FI-GYDj8HZjIm8FkZ5iJ-tyzHUUJnBcDHcHI5vGT-NgbWx5EClTLEUSSuf6LQzReggSIQtujHja8NyTYU6iO3pWAy_pTyqrrNuRgmF2lyUmABe63e0pY0NkohSCpHh9OG2nLQcS8sD34t6sOPuv8H0SARNdONUIqaXe_8ngQloE_IbWPNw2vkOMNkCTNjZ_tjbOdIWIUlrLGlF7l9Y_lCpfpqVKoafeClVNO38vmdd8K0gLl_veVkWLgSTDvpNONTl4SNsZvpjTgFZpnaHxmBYCUpybMaDwiIdxRbh1QdzxUBYTf0VaRztRdlb2fw7a-8qG1KD5gykekg08nkQpoCsoX5Pcrg8FDI5y_oYNiAjNxuvtkPNkdYzPZ1cl9bK1gcxyuAO8ZaciHqV2CpPPbF1B5-do2RBxjV-XvhvY9Au-fMcFVTRpJyrou5cgRZwcmxW-vlMpP_WpPktuaXmq_6Wis5TXgTOgn-po_ERd1qFSs3u0Js1WA5-f5fN0vDaa2qt8GC06AcJ08iWteq4AZGjz5AO-ddddiBP2tlSviXlzyCEoAMEklPTpnR5G2O-SAjuZQBv6m-d61XeGuMPfCALelhX1gk51FzEu57HTBiT54gyNRt6jSH-FDkLm0Qedzg-okHfk2MlNYWZnLUsJfOz8127Sfy_V-ex93PhU4mlhPkVYi_AYrwcJWeDw2K00SbNIrWdK67xxWt8SdVYgP3Zb2vu-MBIiTyoY45u6a0NUPlzh3YX598TySsFXQy3C9VbH3YtLn4gKEV7OOYGeyjZX0FDL9CL7T23Os6agcJNmaBxSH8y4KfqQJsN6Sy2m8q0rLEBK4Ta4UQCrdgz6UIlHKlKfTfKeBeFv6VUf8NRBoYiL_Uh70n5FV2nyNciTRwSHxVcAnHI_HxxBLd5mPGGqyHpfqxo5YbNW27QiSClYCSexVUmiEha371iJZ9SS78kI8Pb4Ui9egs2_G1omcX3J2W4sSq6xCQnInHAkFw2hSxBCD1Z9lukz_hZa3TcpP7iYyyu4vMvaR4iFjB-vYGgNauNxvn9KUtPUNw_Y_reekXdFjCr3QVDeOQ_5jZ6qthJaNghn64MUL5F31nhALMNgmuIBMGggfNVrzoLKUYw0RAIs_OZGF36SUN8xD0VoTEo5ChABXj_LU8SHFdJUI6t3Iyl0y95n85IDow86STnFBiH4KvDpuIikwvUlCHAtaEaDMr80FT8JqiTTTHBQyPrv_Fxv3o7Fc0lftPVlet_CNpClrFNRoTjvKWrU0HQ-gX3jXqsKdKGlEy1yGTFzh5_YgqCWqw5bND1WGVlnoP-S5i_bQhdY49jtAaASGhaGeWLbIivDQjNCa9rblkqj_L9YIgWV-lZSet-gZH0qCN01fgv6gv-5X8-UCju0BlZZN7dEuU5h35-0rBj0T2C-P2E5ik3FDq67xh3YnWl1zrtSeUNfTSJIeImAsCh2ZgDYf8rB5-G0C9VK6BFYbw6IET4GtvTUx3pbv-jPWCf8LPBJZ6IoOIe2jY8lOQpubm_D5YgFBAfMeBzW1xm9X1jj5cMd6XHJlAb-47N2MG-8kGRUJRXOlLgPKj7R3Do4hUVOjnUa4nzDnXJ1L4uoYdSxNLQlBsaecn0mPFRBPmYrtKqmzwzk0g6G_59R3mo-7UwJFdnrwg2JarRuKgRTolwBARU5gQzftUcXQWpofkBMgjwymI6OLYF-p7syFofoU0UPk1wXfyayxSSUuEEVu911GI6Cb12M4qNtKl8bkVYhgDhJGFolU5ClMtvD6W8nCRf5cQvN7-_KA61c9ZXEPO1nX4fmNID0mMlu-E9Gp8QM4Mwh8LSZ-d3J8X6ZQvR8MHEDMbklti00jzUt8kLlSccFgg-l2KvplEe2pe5QUDGReyPHW24utedRvfvlzJQk630Zybk_gihJNHjWQp5UscC0mhYz4iAczpSHrWu4exJInrdrv2_HqwLMuZ13QOEmbQcQv4vm8h5oEr7LHtcU9hIDlddG1ELEW6G1by9RT0e0XbULfl4dodB6KqfRS_hKwkogUeDX4iG19NMUOKy9FbnLlZU0HdTqxxKWSSasewNhVSKCtHbWt3iglfppz5ZwKc_E7VvzAZxOKF5qdoGnyP9-ZbBm9A5ICcYKoxVF15hmWyaNKd24mQDHd1Pq5YIDrvijA3tS51kuy1KKTi2lk-W1KgdAdB2XYTppYAumlbyj_aFlSkBl0iBi75FWn6_laOXJepfcwd9lLX306TkABzd3-aM2CU5JkpJHXzabHvJpuJjzICvt4ESf3j8tOKiRNOpR35qYqybRuUGuaHD_a7l_X3to9ihKoQmyS6fSWBGagH0YlcdBZI6P7Ka5k_hhmVBU8sgOqsVyCoZ-0m-C00Z33kww9IVJQ1Xxja2SCYHZBxcO845IR7rO6jk6KFEmLFzVx8v7xUeCiQIIgwOUk9Oifpnp2vyb-49ZmozAbasrNXGN6FTWt_cHprsQwOCYOklMvF9kQUSo3VJ7JECNHk0sxtY-ayZdqKS4gOqqLL--fsmX4PeXTjgQvSAGFoHVgA29Bw5jxrUyl0-HbEmRX9rCGey0UqAUTD9-aLrDgJb4FeZ35mCKCVsTbZFFoUWQ7BM2WFDKlzSW2H-VeyURrGem8m4eQJeEgP-h0QzI6Xs_was4ECcu-DnDD5hwS9jQNHpnIYf77irzaM1UVEwsJpuUhctnwhbkhv_5el7Hj3-HpVwY8l5GkK_A0ZE8CjCv3hLyk_4rWqkn_uo0XPiGu_IysryOxrCggD04uBfsiizILS_6nuG06iw8O6b1GKc9fi5SDQAHCophVpzUk1FxAQPHOD-4q-UpfK4HVnfpGvyy5XDpNux_vUYu705NKnwVSnYaAUqs8zGZjBGFszN7iNGBq1C1moJmFD1hrsMSN8wENykhXtTvcUVUvejd2qtquvA-3w8PZ2upJJaQmT5Z8D5Cxcuixygfs5ixOZ2msSgXphnwB5bfNhYQu8x11NsYORMaRg_MqaIoN-PAEy5yvXLXtWRaa6DAD650L3FKQcwLjlrFC9z5dZF-plOMIItdblj3JHlBfRRLPJoP7KcZF66WeKj2XOErLxWROqXmV_hqeKqdBav6SDIvicgTk_AdvNl0FdHGtdvWPXHp3H4sTm9LkjmpUtj4tBynBmMprHIGLLRTl-UNnO4ZGJCNskxMhXo06Kxt3XPn8h9Uzggf_Zb0-3rOX8hrEenrDChWHxDAw-wP9zOuFNMmhMq_Inifhzf7wgQP_iWcaHvBG4UNY-j5mF6IWq13LaqIFJ9G596eZQFPM7JZalQcpyowTPiqCsi1AT0MsCeYGDvqacjftrrgsZySrJuyhoiucMHtNb0IlM_m1W000QBQfsZ86to7x9XpPPXkHKubF7vJU-vDbK_IWWIvSZpMVUdUrfOZlEDvoKJyRgBGiQrulE6HrIm5g711hinHCbGdRq-sLt5HVmMbZGa9qrT-fkAEMvQ9kwhFwaev3pAmh8btIHbuRH2M6RdDh8OJbWtMQvE_PVRdzjEhhhHYWEXoBnvjHUxKYXnnbxIvQCS9s9HRUJ8zZrNhm0hUUMl_r7n_hwObAh1deDMqLIILVC088bzsP68Wr9l4xv2_6m31l17vhDXlvQb9rNhKDX3-mu7msPvw5YPU0PuJKBwP5WboNBL1I7hOvonii01kEb59nbQiTREWUwyv-iQJDCfNXxawtGa98Zw1j_uJi9gnR7RxIqnOoWux7Ca19nQcZAMMnwKhufPwJNLszyndLRqAO8uxuanyj0bBTlbx8OXCfOxfpmGs0uHrZEs0pT9wnWBFMxBUcQOCr78YEBUDu1A0KeRyxfnuJrpIjlHsGrov-qV8DomGxdWgjsmrbk5oHxqlmWw3cEgshVmBTw-gOLBB8vOyVZI_FUCe9j-Lm8jgfbHzRaKph4b1dtO1jH74MmGTfIaGb9XNH0emelkGJD2FwhfI89FVu-g3JwGldyYaANI1zYUBZLilimUC-p1G_Heu0MsimRKcwBSVOYLRFmixTP90bdmpEHh9Go5WYjcqmlAoyAMIp0040M5ODugAOGmT9s_Issuxlw6LTnfyRc0rft1qCQ2FyjMoJNx5mmEDqoRaLRB3UZUz2l6cRSk72ZRZTqPaLr6lbGMkWe6i8t2snYy7NssODxyAV24BbZIouE3xccagmk9kY-Q9RncFVfuT_FOQxmmOA2uuO8jKZg2tr4ltOauFA4JIR06ZpQPBpFTa8B17eMvJBvsJpL20qITwcdwE3OQ5pHJrVQmh2uX4nvtx_cpoYaK4NHw5eVr8OQjOqGs3rhY5PV6NFNS1cDLksZXShPQfh6A74-5WbsKaTuF2yVNvHBYrLbLLelSnnWvkuGif7fujdkshefZuPSSl4wcX1ICx0Ax1LBZfhu4LTRCJ8Ko2oW5JiCsXbdCoBtu55p6RxQBu0sqezspUd4IqfIZm8jjXmR5ctv2WeA1KAIpqb6SJlDESXyWrA0TY6lNWkmBhEAYIvPvfzxS3U9rwedWePje00U_6mZVDRB1x2BHmiS86WnsLDXO9JA6qmvCkhrG0p64Txue2mpbuqrBM1ocY2xW8pjn9cNnfTkIQy7NHqC4xpd6MczOCo0ZG5oyCrFhv52CbOX7EcxMY_tQeV5QF3KSH1nBxngl-ExlsJk3pNI819wf2nvgCXxBSkESdo72ftlXK6GSdA7kjecUU0xvJAFX82PT_wiEiX6l_r12O2cytqnd-Y5UYI-FG9hgVO3R-SfHjyfGKfSK51ea7i7m72Nr_fCZTzbDjdjxz9ta9-ss9yWVoFMKdJR29HVmXF0SR7RY8t3gzia6UlJg3OEpjWTT6oM-wX7UUo6Kr_mgCzQnkGAnALWT4O0rFiMc_y3koy8R_CN7e5a4k_sqGhVByJ9008Zvh6SAWbJKWo2Ok7a5Dd631Rvgd7f5b_j6NVuz-NApARLxOeYrM_Ea29-bpEOO14QtC3cKuLy2aNUeM9JoCGJoj0ULbc9c4A8tJ9NsFumMehGbaPAjnTwfwJTAuRkaWGjAHBGOcxzto4UrV63s1kad-jbADo234tuYlUPIIXBHgNqSQaTfvFq8EXS2bILlnI_4akDpYkXJzxX0-mCvRgGy6qwCp6vMmLS0tYFd1bNtq-gdQ6bIRmCdEvPgs_kn0Isngz2W11Os7wNKKyYlZX_y7pb7qZ9S6xUyjAfcd0HW7NKEqPEjZxLtpbXllezixRZqx8qUX8b-GBW27yes-9Y8wd51cTEMMQ0vyq5VE8jgagV3Gc14yHPNfj3I5vA_MXMeql-dVZnYIkU8bqNecGvofx0JnW9OH3I5dfFs8V-jpydhpQG9P9q-4Z_2fyGH9eCe5fQgJRnEUyfJPSAn-_apKQVQdsFX8vu5tjFV838681T7VaiUvrdionT3bM3GsRHp4eiy8vXNXWs7hrWrMsCK4OUDyNyPmdgtelAPjMJaHQ1pd6cEh8mrFU3D5I49lED0D-jD-uXz17DgZJfFTo8A5QSn2F3Cmu5gS6o8oHpKYvUi7iLw6KRfPLArxRovcCv698HjxzkdHA_6i3-xzfaiirGanzAodBGh3tb5bpIdlvDd1NBrKXcYf9Ai1oXvfPQfKrCf4RvPwm7XGOUko3AKOWCUQbx1j4azuq82oNkel01qRdPYv4yW7k2nu7T1rV76ryFzXaZaO-ilVhWMCw_ZZNWjVMwc1FnJpDnogkPPzR2M9g_Fqndbu81NyhmtPoVFT1tkjubTOSp7n9edvpSwnNFI0ZE2ftIj3ZX8B70qsblfMf_pceQU3LImY78YPqgsdUg9KcTArgfoUtZ6aJ04UN2x0ELettfiU2hBYK7Q0MzNiisa0Xt1TbMpIypB4PZUkHAdBGCqnactEkflVeaVPUtiWpjE_AWJ21LG_oE8pdoOpS2SFBZhjD0bv8rZb1molcVa3FsLwRCaHipwlaozJNsTw0E6oItIKdBhTP5Ih2fZc62fy0ol-YHaNFX9IDde76Py4DYkE7Y98VjC8h5jPudVr4OP9Aml_eTAmIcymLtGiWEZMbkSprzVgBzKs4N8uRl21rys8jEKuwV4Q3Z-uhQGqUJQCa8Ho58syEeUlYnTmpEnQMqvM_9xovzxm_a-t6eCnrGg0KIcxXiGPPWocKjX6bq_bltz5ZPFnScGjHMhxPD-hqLY_cjU3Bh5HQyqeB6-4OVHafCw3CVdj24WCQ_ALXcOMBue7EVkyuu7JJvLFjjXPTgpWeKJh-oikCNh0-SlyeTftQ_TRafvrLTrcyhshpltMhwEG7c2f_ebC1OeLeqItdnzh4WW7gDUActjXmAS01073XR7BA5mmkEF6gzeGstjtxsD1t07l8q-4QaJYaMbghLIIjh9EWwJK7-lblNTiEu1bUhnJ8YpONPZUBTKM2a1YyfBbGO9gn8p5YsG0riJV5cJUivofckGFI8-TAHb0vx76dfZivUJNhxvdRY9CcuLytOGzyHhv2YKGLlVA1jQH-p6Diom7rBGfbZXqQM0fTKBaiYwu_pklMIHAp-B9jn2wfHxNFkkEVFQW-derpXjw32Yvr6uotm_PrSeNKnwq9l9Sp5I5-Luo5wL3iZPNzwgZMkpnq4HuUFYSFztL1gPIApGBCvZ8R0zwfvXXKiEcJ8pawZ1jFUfxpeKXi4GwPfndokwGKvte4FsXBCTAM_ShfmDXz20T9Kz27PrJsd4gNB43W4bANDgsi_K2kxp4DQ0nvGMDbIP-SHlb1K1YWRvyXU2zkfoUdHt1bXLykaiZoQdXGiQm6pYkor_DM_2fyjW_UUEaMpIMpEHnXfjS3QypfbW_C2IQWg84Yugi0BRZanl0gM82YHZ5NVrv5RnVEZXLBLhiy03-LnwYOiQk4GDZ_ens60WJgts-uylEi2dYh3F4i-aDvbIXbder7OZswbvamhTnGSAKKNmRtK_Rt4GUw2onUE2pcMPlkbK5YB8aTXFAUmjrFPwEpHrq3iwMczcntREIpdwcknbA2ksN5Uc2yvrAiYu44L5_8dCXMgL5Nhnw2X7A70U06Jb7iuMOC92IQrGQvMpc0J-kbh0lcVg3DtKpQUAfVYJThgGHJQWyEvAyJ72OoBHCkBFfCV2cuOJMV3I6VLBfg420dCxpVmeSqRmH8ZBLiHLY9yDL3M3NtFAtP4DC1hUjwEN733orbRNf1A7mCK1ho186-3gF2WC25826qDJF9_5PhPEZp2p2WYdB28Fa5K6Ewji5uV4OMnT2wj8aBBo9XsN0IpEEEP1SJI8q-Wf82CqP7AAc3-RLxBSsJfwKgjUvRLYusVYaTXqOSUd9-grNt-8UXSj-eXCzbCKYQ-95YS1UcekDxPwAwWSmqLYx0mn4Q1Rf7S81V2N9K1lRJ7RxE4FCU-Bv9K1LTCVmtegNn263dwqHFh_QLX8g==",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": {
+        "citations": [
+          {
+            "end_index": 3254,
+            "license": "",
+            "publication_date": null,
+            "start_index": 2993,
+            "title": null,
+            "uri": ""
+          },
+          {
+            "end_index": 3944,
+            "license": "",
+            "publication_date": null,
+            "start_index": 3330,
+            "title": null,
+            "uri": ""
+          }
+        ]
+      },
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "4jdDap2DOvmfz7IPsq6QyAM",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 971,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 887,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 887
+      }
+    ],
+    "thoughts_token_count": 1406,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 3264,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.math3.genetics;\n\nimport java.util.ArrayList;\nimport java.util.List;\nimport org.apache.commons.math3.exception.util.LocalizedFormats;\n\n\n/**\n * Chromosome represented by a vector of 0s and 1s.\n *\n * @version $Id$\n * @since 2.0\n */\npublic abstract class BinaryChromosome extends AbstractListChromosome<Integer> {\n\n    /** Minimum valid value for a binary digit. */\n    private static final int MIN_BINARY_VALUE = 0;\n\n    /** Maximum valid value for a binary digit. */\n    private static final int MAX_BINARY_VALUE = 1;\n\n    /** Exclusive bound for generating random binary digits. */\n    private static final int RANDOM_BINARY_BOUND = 2;\n\n    /**\n     * Constructor.\n     * @param representation list of {0,1} values representing the chromosome\n     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome\n     */\n    public BinaryChromosome(List<Integer> representation) throws InvalidRepresentationException {\n        super(representation);\n    }\n\n    /**\n     * Constructor.\n     * @param representation array of {0,1} values representing the chromosome\n     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome\n     */\n    public BinaryChromosome(Integer[] representation) throws InvalidRepresentationException {\n        super(representation);\n    }\n\n    /**\n     * {@inheritDoc}\n     */\n    @Override\n    protected void checkValidity(List<Integer> chromosomeRepresentation) throws InvalidRepresentationException {\n        for (int i : chromosomeRepresentation) {\n            if (i < MIN_BINARY_VALUE || i > MAX_BINARY_VALUE) {\n                throw new InvalidRepresentationException(LocalizedFormats.INVALID_BINARY_DIGIT,\n                                                         i);\n            }\n        }\n    }\n\n    /**\n     * Returns a representation of a random binary array of length <code>length</code>.\n     * @param length length of the array\n     * @return a random binary array of length <code>length</code>\n     */\n    public static List<Integer> randomBinaryRepresentation(int length) {\n        // random binary list\n        List<Integer> rList= new ArrayList<Integer> (length);\n        for (int j=0; j<length; j++) {\n            rList.add(GeneticAlgorithm.getRandomGenerator().nextInt(RANDOM_BINARY_BOUND));\n        }\n        return rList;\n    }\n\n    @Override\n    protected boolean isSame(Chromosome another) {\n        // type check\n        if (! (another instanceof BinaryChromosome)) {\n            return false;\n        }\n        BinaryChromosome anotherBc = (BinaryChromosome) another;\n        // size check\n        if (getLength() != anotherBc.getLength()) {\n            return false;\n        }\n\n        for (int i=0; i< getRepresentation().size(); i++) {\n            if (!(getRepresentation().get(i).equals(anotherBc.getRepresentation().get(i)))) {\n                return false;\n            }\n        }\n        // all is ok\n        return true;\n    }\n}"
+  }
+}

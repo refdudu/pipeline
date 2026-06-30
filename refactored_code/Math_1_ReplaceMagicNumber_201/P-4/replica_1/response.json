@@ -1,0 +1,92 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:15:46 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=8432",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\npackage org.apache.commons.math3.stat.descriptive.rank;\\n\\nimport java.io.Serializable;\\n\\nimport org.apache.commons.math3.exception.NullArgumentException;\\n\\n\\n/**\\n * Returns the median of the available values.  This is the same as the 50th percentile.\\n * See {@link Percentile} for a description of the algorithm used.\\n * <p>\\n * <strong>Note that this implementation is not synchronized.</strong> If\\n * multiple threads access an instance of this class concurrently, and at least\\n * one of the threads invokes the <code>increment()</code> or\\n * <code>clear()</code> method, it must be synchronized externally.</p>\\n *\\n * @version $Id$\\n */\\npublic class Median extends Percentile implements Serializable {\\n\\n    /** Serializable version identifier */\\n    private static final long serialVersionUID = -3961477041290915687L;\\n\\n    /** The percentile value used for calculating the median. */\\n    private static final double MEDIAN_PERCENTILE = 50.0;\\n\\n    /**\\n     * Default constructor.\\n     */\\n    public Median() {\\n        // No try-catch or advertised exception - arg is valid\\n        super(MEDIAN_PERCENTILE);\\n    }\\n\\n    /**\\n     * Copy constructor, creates a new {@code Median} identical\\n     * to the {@code original}\\n     *\\n     * @param original the {@code Median} instance to copy\\n     * @throws NullArgumentException if original is null\\n     */\\n    public Median(Median original) throws NullArgumentException {\\n        super(original);\\n    }\\n\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "EtYmCtMmAQw51sfPUgvBFavmM9Od0z1EDXo5_RNI0zRm0Xs3RhLtH4GT-z7K-jGk79pRn-s_3TYDvk6fbMFMfH5rkIJD7x_5LMTGI7U3A8DBwF93TOwiZEYM-XWiH5t1DW006I4dZ4DXKu1kVrpLAdxHMw_xhnMaSpJtzAXP0QEDNyHJiZc8HVyqmmGC1ZL-LNRdibfnSjE4mpXp_Iw3bRd3IpyrLlEJFI7yTbAND8tyr2vWY0ZcAOh2N6N6lK_2l2FhryLHmU895hTFBHbNbvk0mnocpHe6ZBcSd_EaxzJhpe0F8PknmT5l6PMcWypc4YrJCvX14s6qUKOOGNlgVSuPPxKrTxyK70HGeSgoycCPm9bIBHNX8fRFrvJfvqixYbeVvj7TkWoa07gDN1zby2H7lLEQ5i_jg-JCg5jYbyF29AnzWaldAadWQcpJQH5zvMcpgfm9Ffjm1XjifdubV-3iD3QEMwiukM1BHL9kpmRKGY8ADoqCzUmm2o3ka9xnDiwGK9yHpZ6VmEu1WFuSkw0mIkfY6M0rDXo6Nc4cOJlOeIC5y45XpcENrOBa9EfdcB-UnqnmG_cCKVGRiRWsj6djB6f83p0CNdT3At4dxmXVYSq3h_c4Sm1ZVl9ASNVnHl5ciXkxsF7HIM5OTa_UVfPtmQPOrcTCbh25DZNa3gmAvTsrmeFCKTaurPQTjWM6nbJx4eDn_JtA08nJctSVdD5r_y_e4gURxJ5hLpZ32qNAccbeq383AEchOtn1uRvz1z7cioC1L0BIvfjZgrf4VUIbNki6yKmhxz0nRHaSLpx6VoteLihVvy6F9pLIuWDq1wq7VoGWbw8FVTEKAL1Rsgfl2v7oZ52CIKmJ5SNoa50UdohjMBWIkwAmawVYvmhxdIkIZdSKbqcCkQgUiqss1k1ms2WGOQPcO7wmwiZ740qGDVcbByTQtVMkv7Nf2Btg25EcpqW1m9Psun3nzmXvNBFhSpf_RuVOgn5GT91xFQYxHuYoykgqv4A6U0sB2QzGmF-1Did_swMef9GYpSIbIFVlkSA-ltNXqb1dZFCZWxeRr61IChWqQny3KC1jrUy7mZU5Yjyh81t2QZV14Geq_FpIc6Hcnt56_UulAIrhfwoSl9SyqEIwPqtTpTTTM5TF4v0Fq4j3Lzm3nUtWA4LHfihDVt6_-feo9qdNcVlBc026PBm4DqrAUkXHT16gDeyXSFZbBGSqo4jI7SBji-EWtFi9V7qTg-1Ewuesec2ugHSp-PXcnaUMxEU1-iXG9A8imBRP32xlaSc4d5OzqInZyoDqsOGXskGcHMAEfrZILwvo_YOoNT6aQSQ8veUxv3_E6o8Tmzgbdo4dsI-VZkmO4jx_em10xSh4LhMqGnMFjds4P1xuZNfj5jGVjgjVOE7k3XfrUdYsPgoaeXaWVDLRSrIre4Z0WCUedwRJWc8hYNnfzarg0iJgLkulHXRd8-1MP17J6S40ZUwRmhXhhQCKEWKmI1MEOyuNQWoA__vsRPbSjadE0nFr-yjkjzeEnNaO5qKBehKZyHb07PwwSkGh8szZvqdDG4iXPs4agWzuXSNGQklG7q6LIQucj3A-I0L2fjvWoflHjv1bZIla_vRTTwIx_nq75fCOVnfRVUzRe6QQK_CdEZuRT6zyjyjhRMVsuWy_sTKmxwGhXjtcLv9cI8EbNsghKFqxm8ZzAol-mBBh8lHYLG9AdY_qWbN0OcmEeFqKT5Nv6IUreBhs6Arr1EgQV5FM0guwuPRHE0jG35uvbEY2_fDODHiLzLU1OhN0EkT3xGsSxH9xJQJXHoeYHt0e9qCaFTSLAd2b9cTsspaCRugcl_Huv-ZD0M5ctcOTToNzUzsIFjnR6n--mc2GdpcOo_T6cf7Fey8b63POXXdkJ2_2-a8htC6bmKVGDv3G88Qgb7sJog2TqksudV5oShxTk9NpNpg_9CeTqLjhsxOrXy37W9piH00lGzkY2Iaz626ck8O2XYUWa8Tek32pZdsxGJquBlWpjiELqfQGViupk6xd7f1hKuHyVfXQULHc3RwBXc43L-GaamwhgOkbKpc564FHcPjmYDhDLc7CMnQPb2Mxp_PXsmNleA19yiDJ5MEJWmXeFiwEOJAZZcVLuokJKk3wgQj7-D9fDH53IzuNA-f16lcLnSFne7ejd-woWgyrVorBSBcGqANpmLjT5sqvCh-_88VnOGHo3YUTDYmKwOfbNOythlksYIc6GfIgZQe3XsdYt9TALlhWJF5PG2wMLQ-QgW0V6pIY7_4VnzjKgtZGzL-SycJs5GhiMVZV8qEcJwJ9B2WyIrsojVCX-ZKl0AJo9_glYuzUvQKhQIMks70YITcl1QDuEcwh1cBLa_QrtpHH3jHgccaywfeOZSwUzqFeTeIvrx4Qg0_Y3gU1Y0sxKMM2yRb4BBJ0AtYwT6GPZ5psEm1pH5AciGIkMiTNpGCp9LMQt85wpcfZOozcPihIJKqZ_LgXAmSmuF8YSP0mysLgMp3np9ueZ_GdkeiLHpscsKrfIUlPuov8JSyuq-rYZCbTh4nNH2YE68iU7NT4TzAVaTDstGNLeAMM5Kgngsiu4EsitPlxAma4qgmlfZjfKa8NRQHH3VBXFGeNetenqLjeZGegvyEM3N04AOZoUjinrfXJ1dWdR4bu7yHx6twVMfrmZN2HDrgWgytZWsqEzVqYrdgpDCuNLRE74jbEMOAZB6WIS9S9xHJUYLqSr3G9mRkopdQ6hXlk1SFsx1xapvtZ7_RUSK1h2gaNTqOfG2itIxeW50RDnaAafw3mQ7IqkAMNm9olumE6SuV0Ze7qANJyOVExr4_EjhgZUkajUWNXt3N66_aa0Pmf3bpOpRS7reo7hQ_IRfbTRPsi6IDiiOdVMjnX8B2Idp3M4ba9d9k3a1RhfkVMLfIQIcbiGQNsktldGjedhAP7kjKXt9nIn3kDWtViw3zyXjQkRAd5wQZxGTvvkTXxGFfDi8pRIoj7rOol8oxJozb2eLWulSAoRofiaOoNpxLqgqA5SVAptyC43jMacx_C0WFjLpscouEH-vtXjlwk2F-rV8k66fNy_73CeBlDKywmhfiJStf7htc7R_dY-OH5q850KC5UeCBv93rGb8tJH1TNt2TAExRq15auZs5NhOshHq6dHzNPf3rGY2yswTTmlHAvnxeBZzf2BLJe-5qVKed1BE8PYDTzjq0T-4iF-pnUTFJTSqu7QRL6XyLQsPUXAsUNHiHdgWVUWQjO5pGkf1JSg-3jB9PqyB-Uc0TTh8Jr2-KSj7KYOdqECdFzPhuIwxcpFttLWtbiugw71Y1Va2jDN0dCLaxqRlmDfXJ1txQHvcybI2v2xe2Q9ze2ozXhpOSxL8KuEOxCCVGSJq3OCQrvdaeoHJfb_2TApUOqMMCk7CpBPLwJmn1hXMIA6LcVxc4-vYQXWIndRjsYwCs0NG7g0ChRvRAKWJ8G4ns6zhXBxwdIIHVFm0lyLNTEDUTJ30Iprhxx_C38A1x5kHGJ7zVk--9xewmBkTN6R7-LMAQJY8zMQgMFpYTrjBgwahXYJUvmlTpCX83sBzU95_arpAu5oMLlryVw-K5facRmGRz8tfewtWbNOvgwFp9nvb3hmWE0SlG2Q2mt0M20LLb9k22_KT00hWsDntmXzuwCUVGdzazhyWFZXcnwywQ2akt_GteHo1lVpFsBerEfB7Raks7nTE4JhKHTbY29z6h_3kvvBCO5_gYwGuqjiiex6y8PJ3qBEhwGQsd_e69Fk4AGXVrj3SeialSHaSQmb9dGo7_A0MFpxIbnPngeMLYKRbfzGNlf2hSJ32Y86o38pd5uh3fDhFEu3LtWRmfDqZ3AhN_i2jxp-CPrtJxH_qgx6Y6TF-KwUWCFpvp_vjZ0XOk2Z7_TzP6s3meEKmgygthyvylsE2LELOCW0OCuYdt3xwX1xII59Xv9_Rtpg5gXzweUPrunEgaQzwoPhofPedqtHkHqEM34ypBFsOlp7-Q5ThiGT4_wLoLjKK6rDxFUlXbATB7KQ3OH25KYr4fScdvWWXoGayVi-qiYS79WUV36EHS4ZTuuIO8XSyoZI35HYdKCjJbUvuc4Sbf59SoX7FE5OIZugadO1ndXEIKFll6p1T-RKtxMDTckLFIHqULJ7C62wgEm5QS4Rfuc_DoUTEUgG4cKKOCQAm8Y1lL5h7YVQnPZ0JxoiqAXVTHCQJOR4JSTMTT3KrY0CoAVr1h6r0vtayK6id9u1yX5TSAk8oTeaY1TpoVx9BzDlXR3adrs6WWX4ma3xb-jhjdifc6KlvkbGTZNgZYlmF7wmpPS-aQN8BYxxqmWVvtNf5Qqw3xtaq_q_1AwAde62geYmYAap4_bx8WLSaDU1x23VtNXC7dugqaH3m4IQmdxBPx8-hXbqttWTj7IT7-ExuT3l_3a0Ye0g15pEqT4JpUd0suQMJt-1V1JsQt0yFa4rYZcsy-cx5-eOrO-VXJKzGO_pVoc801izdO_JZQgV3w_CtOnR2ENXHNJjIdhgwDUT1m4-p_SpjPJvMMd_XnKPu7jw3r2cambkkSHcL3v1HzARAYIYUWhlZit8wNUCHhlE6xptonM-wtKMKrBFdBSpdQyCasVvEf-7LGj12M8-kY0eQyBLs3p0Sg4_Btgg5AKUD4HvuDrPnY7dxSLPPnf6ZToMYjcswi7R6fcP3mQLZ2bLx217uRg7oqu12NOWXofDOUvB95S7E8fJ8HJjVeZAKqb5JRBbEKWCkYpitkaND6zF3EESKidiQmvyqBv61ZWVw0NF_DAT7ieEhkmu2ev3bTmSRtjcLObm94ylgTwT9WqBO22ds_jvatpvAXTmzVHf7iIig3yoXM_EEirMOVIoaZKk0Vj47LjL_g7YPeHkqlFtl72NFRDwqe-397pg2X8HFuDlkrRpKghpJlcrfUZ-kTrGUvzB63FfIWkshG8nrv7eSWMwYdpXhmnF_fyItyJCEIr4XIbKZvn-x_zNwJKJi6GuRZASb7RVDq_jXcgzbb9Qvoz9kVE2F4mLxpyp0w7hwHB0UscfpCKZJTQhWQGTqaxkvbLkP_y977ROKFFSpFSQceU--Uvvf-usuK0TnMiH_o8VHNpm2npFXzoMNDqzKSGaJAWMIXsbbvNq47jFh4iX3EtlU6F4H__lAFtpJahAHD_FCuM4B2hWNI3LyXZnhOHI6OWycgbHFqwYqOigjmnMv3vfgXhjpD-qhukOJ-NkXJeVMRpUZlp5JSmWL1d1nt-MToF-xbWgGnRHMkrLD3kRwPDB7PKYHBO16evdsgol7kO2hgbMUGmwEsLYbGhrdEqxKD0X8F0hXa7h5sIW8ea1Gp3zfeDXypCgtHqW2f00eWQUl34HfMc82lGGkcnQUQ6bbSCXRk9o4ie2XwZzYf9X_qQWLn-X0577zxxiOxv7wUvnFHe4sI9wIV21oyoqUn6tYIbFxf_JY6F69wjs8FAwdGvrvs_jbi9ITDxcQBlsH6mWNzggbUdhAE0S4rL4lNgDGbObUVydFpMdkNKj_tf5c8TFxgaSrwQbe8YyBP94fMM3kUX07HuHXrYnwn0FxRfX5Iiwz1lzX0pWlwKQ75KGpzrg1NSbPneorFYLQT6IuWGpAVqS3K4f0J4fpJbNCAdFiJBd0oAWJoEl3hn6-fBCyB-wIPkFAp_dO6NBhuLdxFWWEzBUzgJ3AvSvxQPM6G_R60o0vcxaa313HMAM3gKfaiC7fozejKVvhtvcd4WjYAzbpaikpajkneqntKLQ-aFjj8apJkzKca5fJaTeT3CmhzRmssp0W0NfhJZuNF4q_DmqEPTbux7zN7mfNSePSFTQHsJYsJf6G2IGbn95iTtT7EXDZyYJB-d9Fbb6qgpSaX8pFRD9bHoTXjKJU6a0dVXxOWqG_BvhuOx2fF_04s4J7NlfdPjn0iMOIJcpoYHMYGcLkZpdCjFy8_RZ-csDE5CBrYQvYS6-YRdfTzARUiwyOIkQToSP3_YCTlJsDsy4qCsD6fwzE5EU9aYJuOC7G_dATXXNnxEkcIArVA3ppF4Cb29PzVNQemRtP37yX4wEYu4vwD2GhsQtVwx-Xmqjz6V972E72nMNlhe1FUlUWakQi5uSCkARyhJBgJo8T9tTsbAgWZdjMTbL7W7MByCFjBnVSMfpVLQwcmJHN4O4VgcGOZmP9h2_cCBfJ4lZ4SuqSJai3NG4_bqb8c3Rv2GI0Q3Jp2jFH9Ds1BnwlDPJ9Aupm5GqRIqMiTz8A_-7AAKSNk5lpbdLB1vjuNCW7BZXWPTpxEufdqA6HATQcignyQta4vrcLDxw5moXv1Uy1FJJ5ffJaDwHVRIE43oN3zIY6ZcOMaq94efqTQK47rAC_RFLY7QUxXSZoFaGp2i8JZq44h_sezzl1ffM2S24xqu2ZMprPVkd54boSbt213nQg_DSgCBwSwlw5argyBSZe8jRDkFbqHGOdVivwzZI4SENMQ9FfIiID0C7gCoIKJqiXBMSbv8A33s1jRohH731zgSaYnZTz35QoMBxW5AnzGIbBtF189WD94-fFF7QB3GoIY_D3H2JO4KNE-4uW37Ezv3r0lJhxccoVXvuueDNrjuZxxJCntD7UKd",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": {
+        "citations": [
+          {
+            "end_index": 1463,
+            "license": "",
+            "publication_date": null,
+            "start_index": 1170,
+            "title": null,
+            "uri": "https://github.com/coinse/fonte"
+          }
+        ]
+      },
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "2zRDavzwB4GTqtsPrMOj2Q0",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 604,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 630,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 630
+      }
+    ],
+    "thoughts_token_count": 1230,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 2464,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.math3.stat.descriptive.rank;\n\nimport java.io.Serializable;\n\nimport org.apache.commons.math3.exception.NullArgumentException;\n\n\n/**\n * Returns the median of the available values.  This is the same as the 50th percentile.\n * See {@link Percentile} for a description of the algorithm used.\n * <p>\n * <strong>Note that this implementation is not synchronized.</strong> If\n * multiple threads access an instance of this class concurrently, and at least\n * one of the threads invokes the <code>increment()</code> or\n * <code>clear()</code> method, it must be synchronized externally.</p>\n *\n * @version $Id$\n */\npublic class Median extends Percentile implements Serializable {\n\n    /** Serializable version identifier */\n    private static final long serialVersionUID = -3961477041290915687L;\n\n    /** The percentile value used for calculating the median. */\n    private static final double MEDIAN_PERCENTILE = 50.0;\n\n    /**\n     * Default constructor.\n     */\n    public Median() {\n        // No try-catch or advertised exception - arg is valid\n        super(MEDIAN_PERCENTILE);\n    }\n\n    /**\n     * Copy constructor, creates a new {@code Median} identical\n     * to the {@code original}\n     *\n     * @param original the {@code Median} instance to copy\n     * @throws NullArgumentException if original is null\n     */\n    public Median(Median original) throws NullArgumentException {\n        super(original);\n    }\n\n}"
+  }
+}

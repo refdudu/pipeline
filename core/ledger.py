@@ -16,7 +16,9 @@ class LedgerManager:
         "smells_pos",
         "smells_delta",
         "tempo_execucao_seg",
-        "token_count"
+        "token_count",
+        "prompt_tokens",
+        "candidates_tokens"
     ]
 
     def __init__(self, filepath: str = "checkpoint_ledger.csv"):

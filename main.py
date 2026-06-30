@@ -130,9 +130,9 @@ def run_pipeline(
     completed_ids = ledger_mgr.get_completed_ids()
     logger.info(f"Loaded {len(completed_ids)} completed rounds from ledger.")
 
-    # Define personas and replicas loops
+    # Define personas and replicas loops (defaulting to 3 repetitions)
     personas = personas_override if personas_override is not None else PERSONAS
-    replicas_limit = 5 if replicas_override is None else replicas_override
+    replicas_limit = 3 if replicas_override is None else replicas_override
     replicas = list(range(1, replicas_limit + 1))
 
     # Build full list of rounds
@@ -162,7 +162,6 @@ def run_pipeline(
     # Initialize Gemini client
     api_key = settings.get("api_key") or os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        # Check .env manually
         if os.path.exists(".env"):
             with open(".env", "r") as f:
                 for line in f:
@@ -174,6 +173,8 @@ def run_pipeline(
         sys.exit(1)
         
     client = genai.Client(api_key=api_key)
+
+    checkout_dir = os.path.join(settings["workspace_root"], "test_checkout")
 
     for round_info in rounds_metadata:
         rid = round_info["id_rodada"]
@@ -199,14 +200,16 @@ def run_pipeline(
             logger.info(f"Refactoring for Round {rid} already generated. Skipping API call.")
             continue
 
-        logger.info(f"Generating Refactoring for Round {rid}/{total_rounds} (Snippet: {snippet['trecho']}, Persona: {persona_key})")
+        logger.info(f"Generating Refactoring for Round {rid}/{total_rounds} (Snippet: {snippet['trecho']}, Persona: {persona_key}, Replica: {replica})")
 
-        # Checkout workspace to read source code
-        temp_round_dir = os.path.join(settings["workspace_root"], f"round_refac_{rid}")
+        # Read source code directly from the single checkout dir (avoid defects4j checkout!)
         try:
-            d4j_mgr.checkout(snippet["project"], snippet["version"], temp_round_dir)
-            source_file_path = os.path.join(temp_round_dir, snippet["file_path"])
+            rel_path = snippet["file_path"].replace("temp_workspace/finder_Math_1/", "")
+            source_file_path = os.path.join(checkout_dir, rel_path)
             
+            if not os.path.exists(source_file_path):
+                raise FileNotFoundError(f"Source file not found at {source_file_path}. Run defects4j checkout in {checkout_dir} first!")
+                
             with open(source_file_path, "r", encoding="utf-8") as f:
                 original_code = f.read()
 
@@ -242,20 +245,26 @@ def run_pipeline(
             with open(refac_file, "w", encoding="utf-8") as f_out:
                 f_out.write(refactored_code)
 
-            logger.info(f"Saved refactored code to: {refac_file}")
+            # Save simple tokens info to refactored_code folder
+            tokens_file = os.path.join(refac_dir, "tokens.json")
+            usage = response.usage_metadata
+            tokens_data = {
+                "prompt_tokens": usage.prompt_token_count if usage else 0,
+                "candidates_tokens": usage.candidates_token_count if usage else 0,
+                "total_tokens": usage.total_token_count if usage else 0
+            }
+            with open(tokens_file, "w", encoding="utf-8") as f_tok:
+                json.dump(tokens_data, f_tok, indent=2)
+
+            logger.info(f"Saved refactored code and tokens to: {refac_dir}")
 
         except Exception as e:
             logger.error(f"Error generating refactoring for Round {rid}: {e}")
-            # Save a dummy error marker so we don't try again
             with open(refac_file + ".error", "w", encoding="utf-8") as f_err:
                 f_err.write(str(e))
-        finally:
-            # Cleanup temp checkout
-            if os.path.exists(temp_round_dir):
-                shutil.rmtree(temp_round_dir, ignore_errors=True)
 
         # Sleep to avoid rate limits
-        time.sleep(15)
+        time.sleep(5)
 
     # --- PHASE 2: Validation, Tests & SonarQube Metrics ---
     logger.info("\n=========================================")
@@ -291,12 +300,13 @@ def run_pipeline(
         smells_base = None
         smells_pos = None
         token_count = 0
+        prompt_tokens = 0
+        candidates_tokens = 0
 
         # Check if refactoring failed in Phase 1
         if os.path.exists(refac_file + ".error") or not os.path.exists(refac_file):
             status = "FALHA_API"
             logger.warning(f"Skipping round {rid}: Refactoring failed during Phase 1.")
-            # Record failed run
             ledger_mgr.write_row({
                 "id_rodada": rid,
                 "trecho": snippet["trecho"],
@@ -311,7 +321,9 @@ def run_pipeline(
                 "smells_pos": "",
                 "smells_delta": "",
                 "tempo_execucao_seg": 0,
-                "token_count": 0
+                "token_count": 0,
+                "prompt_tokens": 0,
+                "candidates_tokens": 0
             })
             continue
 
@@ -321,27 +333,23 @@ def run_pipeline(
                 resp_data = json.load(f_raw)
             usage = resp_data.get("usage_metadata", {})
             token_count = usage.get("total_token_count", 0)
+            prompt_tokens = usage.get("prompt_token_count", 0)
+            candidates_tokens = usage.get("candidates_token_count", 0)
         except Exception:
             token_count = 0
+            prompt_tokens = 0
+            candidates_tokens = 0
 
-        round_dir = os.path.join(settings["workspace_root"], f"round_{rid}")
+        rel_path = snippet["file_path"].replace("temp_workspace/finder_Math_1/", "")
+        abs_source_file = os.path.join(checkout_dir, rel_path)
 
         try:
-            # Checkout workspace
-            d4j_mgr.checkout(snippet["project"], snippet["version"], round_dir)
+            # 1. Clean file using git checkout before baseline scan
+            subprocess.run(["git", "-C", checkout_dir, "checkout", rel_path], capture_output=True, shell=True, stdin=subprocess.DEVNULL)
 
-            # Export class directories
-            d4j_mgr.compile(round_dir)
-            classes_dir = d4j_mgr.export_classes_dir(round_dir)
-            # Correct classes directory relative to workdir (using target/classes)
-            abs_classes_dir = os.path.abspath(os.path.join(round_dir, classes_dir))
-
-            # Original file details
-            java_file_path = os.path.join(round_dir, snippet["file_path"])
-            abs_source_file = os.path.abspath(java_file_path)
-
-            if not os.path.exists(abs_source_file):
-                raise FileNotFoundError(f"Source file not found at {abs_source_file}")
+            # Export classes directory
+            classes_dir = "target/classes"
+            abs_classes_dir = os.path.abspath(os.path.join(checkout_dir, classes_dir))
 
             # Run SonarScanner baseline
             project_key_base = f"{snippet['trecho']}_P{persona_key.replace('-', '')}_R{replica}_base"
@@ -361,23 +369,23 @@ def run_pipeline(
             # Delete temporary baseline project
             call_sonar_with_retry(sonar_mgr, sonar_mgr.delete_project, project_key_base)
 
-            # Read and apply refactored code
+            # 2. Overwrite source file with refactored code
             with open(refac_file, "r", encoding="utf-8") as f_ref:
                 refactored_code = f_ref.read()
 
             with open(abs_source_file, "w", encoding="utf-8") as f:
                 f.write(refactored_code)
 
-            # Compile refactored project
+            # Compile refactored project in the single checkout directory
             logger.info("Compiling refactored code.")
-            compile_ok = d4j_mgr.compile(round_dir)
+            compile_ok = d4j_mgr.compile(checkout_dir)
             if not compile_ok:
                 status = "FALHA_COMPILACAO"
                 logger.error("Compilation failed after refactoring.")
             else:
-                # Run tests
+                # Run tests in the single checkout directory
                 logger.info("Running test suite.")
-                test_result = d4j_mgr.test(round_dir, timeout=180)
+                test_result = d4j_mgr.test(checkout_dir, timeout=180)
                 if test_result != "PASS":
                     status = test_result  # FALHA_TESTES_COMPORTAMENTO or FALHA_TESTES_TIMEOUT
                     logger.error(f"Tests failed with result: {test_result}")
@@ -408,6 +416,9 @@ def run_pipeline(
             status = "ERRO_SISTEMA"
             logger.error(f"Unexpected system error during round: {e}")
         finally:
+            # 3. Clean and restore file after round metrics are computed
+            subprocess.run(["git", "-C", checkout_dir, "checkout", rel_path], capture_output=True, shell=True, stdin=subprocess.DEVNULL)
+
             # Record to ledger
             tempo_execucao_seg = time.time() - round_start_time
             complexity_delta = ""
@@ -432,7 +443,9 @@ def run_pipeline(
                 "smells_pos": smells_pos if smells_pos is not None else "",
                 "smells_delta": smells_delta,
                 "tempo_execucao_seg": round(tempo_execucao_seg, 2),
-                "token_count": token_count
+                "token_count": token_count,
+                "prompt_tokens": prompt_tokens,
+                "candidates_tokens": candidates_tokens
             }
             ledger_mgr.write_row(row_data)
 
@@ -442,7 +455,6 @@ def run_pipeline(
 
             # Keep track of durations for ETA
             round_times.append(tempo_execucao_seg)
-            # Update last failure
             if status != "VALIDO":
                 last_failure = f"Rodada {rid} ({status})"
             
@@ -467,10 +479,6 @@ def run_pipeline(
             logger.info(f"Média p/ Rodada: {avg_time:.2f}s | ETA: {eta_str}")
             logger.info(f"Última Falha Mapeada: {last_failure}")
             logger.info("=========================================")
-
-            # Clean up temporary round workspace
-            if os.path.exists(round_dir):
-                shutil.rmtree(round_dir, ignore_errors=True)
 
             # Every 30 rounds cleanup projects
             if rid % 30 == 0:

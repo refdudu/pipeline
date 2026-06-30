@@ -11,9 +11,8 @@ from pydantic import BaseModel
 
 # Gemini 3.x model. Sampling params (temperature/top_p/top_k) are discouraged on
 # 3.x; reasoning depth is controlled via thinking_level instead.
-MODEL = "gemini-3.1-flash-lite"
-THINKING_LEVEL = "high"
-
+# MODEL = "gemini-3.1-flash-lite"
+MODEL = "gemini-3.5-flash"
 
 class GeminiAPIError(Exception):
     """Base exception for Gemini API errors."""
@@ -85,9 +84,6 @@ def generate_refactoring(
         response_mime_type="application/json",
         response_schema=RefactorResult,
         system_instruction=persona_preamble or None,
-        # Give the model room for a full-file rewrite. Without this, large source
-        # files truncate at the default cap, yielding MAX_TOKENS → unparseable JSON
-        # (parsed=None) → spurious FALHA_API. 65536 is gemini-2.5-flash's output max.
         max_output_tokens=65536,
     )
     contents = f"{base_instruction}\n\n{code_snippet}"

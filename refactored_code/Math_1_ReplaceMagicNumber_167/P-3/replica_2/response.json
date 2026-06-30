@@ -1,0 +1,81 @@
+{
+  "sdk_http_response": {
+    "headers": {
+      "x-gemini-service-tier": "standard",
+      "content-type": "application/json; charset=UTF-8",
+      "vary": "Origin, X-Origin, Referer",
+      "content-encoding": "gzip",
+      "date": "Tue, 30 Jun 2026 03:20:37 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=8776",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "transfer-encoding": "chunked"
+    },
+    "body": null
+  },
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "{\n  \"refactored_code\": \"/*\\n * Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements.  See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License.  You may obtain a copy of the License at\\n *\\n *      http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\n\\npackage org.apache.commons.math3.geometry.euclidean.threed;\\n\\nimport java.io.Serializable;\\n\\nimport org.apache.commons.math3.geometry.Space;\\nimport org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;\\n\\n/**\\n * This class implements a three-dimensional space.\\n * @version $Id$\\n * @since 3.0\\n */\\npublic class Euclidean3D implements Serializable, Space {\\n\\n    /** Serializable version identifier. */\\n    private static final long serialVersionUID = 6249091865814886817L;\\n\\n    /** Dimension of the space. */\\n    private static final int DIMENSION = 3;\\n\\n    /** Private constructor for the singleton.\\n     */\\n    private Euclidean3D() {\\n    }\\n\\n    /** Get the unique instance.\\n     * @return the unique instance\\n     */\\n    public static Euclidean3D getInstance() {\\n        return LazyHolder.INSTANCE;\\n    }\\n\\n    /** {@inheritDoc} */\\n    public int getDimension() {\\n        return DIMENSION;\\n    }\\n\\n    /** {@inheritDoc} */\\n    public Euclidean2D getSubSpace() {\\n        return Euclidean2D.getInstance();\\n    }\\n\\n    // CHECKSTYLE: stop HideUtilityClassConstructor\\n    /** Holder for the instance.\\n     * <p>We use here the Initialization On Demand Holder Idiom.</p>\\n     */\\n    private static class LazyHolder {\\n        /** Cached field instance. */\\n        private static final Euclidean3D INSTANCE = new Euclidean3D();\\n    }\\n    // CHECKSTYLE: resume HideUtilityClassConstructor\\n\\n    /** Handle deserialization of the singleton.\\n     * @return the singleton instance\\n     */\\n    private Object readResolve() {\\n        // return the singleton instance\\n        return LazyHolder.INSTANCE;\\n    }\\n\\n}\"\n}",
+            "thought": null,
+            "thought_signature": "ErsoCrgoAQw51seAwl_Vqjo-oOirNkuXeM2No2bbsK_pNIxFrxCHzY9TRiKQ-zvksZpVfwR3fxJSpz1oOBlan9XzlQtBLVP5CA2oy37YhekL1rSjzK2uJax9dTOJDpxdkkRn-LeLCfj4cYwoCFWgUeSUCUfIKDxxiJRjLQCfjsgsF6-2uabNOIZeKgH09LKVrOB4rxjO14NCLqwMAXE9u9CR6ZdSmHfk2tDmRLwm87JvNjiiOGaDBtQ0W2pzvGsdmiXwbaDhJL9tAeMso2oU-r2QSdhnxcBxJuh4mg0Y3q0a3Q2Ure46g64igNwvZ_K2aQN8xEhjFWauE8axMgEIrtkRSXtARt0bkpWEmA7E72GSxEyXaCzVCRzIJi9k7z_RRRKttVVHrhn591ThlbV0lNeBa5FUAFeG-bkHhwhAATfTwfcvQZnHYXPWiPKvYG9Uwfk7FVD4Z-hYanXxhUuLDS97TfcR53EtKNdFkkU7ziWuaHrLZH-9Q6OZ4FpdJEazecmHxA2HbXx4m_-zmXXp_g-XS2kj2tfgX8mQQKhJPOrsBoAKa4fZ-fOVHv-iqtORjES9oCAz8ucUpx-Q776Hx5Bkav2Tn7g3keBwOTukb4CicoPlRZ73zKqQokDmdmSEUgHNy8SDsMl2rgyArwGxWVelLIQ6O9WAtzRERagOXwc0F5IjVCa8pNMbolynvcysqzMkztwzCeOO0kaIiSKaMeJKmGybZf9OqpHAIuDYS0_HkxC8PUO2xUCI0mP6pbt2KsstbPAbN2k45VcagOFaHmCWIxWOdfCKuBWWcGEt1bAHucwZ8jcoHTwXudG0hKmYwBH4W4oWTcPLnZT36-L4a3umdVAiSP-OKzLhlxE0juDzf9NjuTDIkwWV3a3FFnY7Sfqk0ZMkQ4mrvR2wvEvjcG0MDhyI9tEh5b9X6DpHSL3hCjWF9mceza4W-wdVLeLV4oWJBPveFcxvnQSdOHgsNm7HpTdecI-PfrCJMnTQr4WdwE0YmRK4JSE3roBLXNIsXoKaWpiRWtd7HNVlVBEk_cKwZl9LCCiIVt3yJTXBdfi-Xp04pEpUXgxcEyXdIdIQANc0kCWvJk6EIXD64SgPHeroPxDykOm_2HJs9U6-3KAAcPxFIY6qcoCLVBRWLHKlgoeluyIm9hKfiAxbDnqKTosNp56aNAaYrKIcomUNoSYfGx57AdagyXI5QDOdlq0u9UiNgFr7MA0SYiSNOgN4HahH7rWanuded800MsFiaeibbRZ6QlvcHHHBkyWi89WmhWEaSRlbvvnRoaPaYxEpQ54DUQ7bsp5Db7P8aP6p9b4McWQNjBXNDNPKR2EKyMtXk3pQjcXBx62Gfw0Kk1-vsX3lRf2dld_kApHZFCp7MlNrcU7DNanLKVSjsJANwFVKm9pmxms0FNfb7nzOFA-R0pyC6J1TnrBzhY3lW0IfPbbtg2ZlFjCsfmH28ckWjcGe1AUHlLvXvkcHGSTZUNSkAwedEaN05u5QL3AIYozOP7MWM4RbH859JXhfcgeS2qqHcICAmifMIp1AW8CVB65i3tQDX5VNdBfKd0UJbLAodiVS9uleVJwd0pXJ3F8EF7cABMgLqPLtCWuymd3JaOxdKDSHJaF908W_XX6rHkjSv4g76w6Y7Yc33YJc8tKGYJalEUU7gpfdW5ExY26YiOylUk6MXV1V8LPztswBXUkCYn38xuVkPfZ3IdDftBRg9AG9JI12dxivOaEnxIEQfpf7ubh5BHYLLiuyTKYGNNFFi3pYN0JIcfonOdHD_YPpzsowgGMV608k91FKIw41tAxeagu9GJ2BWoNtOPzG4bQgkc7kTiVLBLXYPhvXow28f9Wqe_ufrI-o5bYMoKVk9ClVNmkogZ8Fxpi7LTS6RuHfGSut2bodAlL_ymcU1IDqkYRFmYAhfhKEQybFpqdXYJMzl7WlXwa2C0HGpOaqBoCwjQ6afqK_SpAlgyEA61hrb7AGPGUPgJeXDVktpHT5EIg9FNoFeXkosO1VM5WzAFE2BXw19uf6us8PLt2pkhiX05n4Q9RZyjeQr6TGzxYOX-8v809maZDQ-jl5DO--y_mA4G9kgHhaXgRbFmR2Hw81eDQH_Ip9e_DXYvjg_HB5DvSYBJG5FpQmZhL_xu-h_-b1P0304If-yhGSOxetmZN2uqde12jSepe67rWXQA2TSUMaLoyLeNTyLEL1KJEtaTEpTxjAlUikthMLMWwHYk5uzqtE8vio02RAXq3Ml1UqwtwuRivhdxzGyUzyGSxLhB_-Eli8NIrWH2Z1Xkk-41ek8nUb9X1qXU4-0S28yAFcFMJXvAQdIESzG8Kv2hqa3D-F5sy-z2hUA8YaK4hPR3JmLCtJO6_q1dZKDlwB5_YZJ5yVyAm6Zxe9n-_8dxfy9uwZobHc8Ev7RaSQDhl_7l_ElitYxZa7U_YqpbJ-18gAKTnv0e77sIinFCWX5AG4eDVCG7vYIr0vHM98d82U0va7Lejo6d8xVu9wy1XsTk0-gBAamh6wG9vJPMt1fI1GULneYr9OndcZDBg6TgdQvHCIsZQi4xbZg_g_hhc5T4LYT_Gu4cwbuC2Sq_o-VoL_jBQTmsVNygtQZ32GbkJQIzqiaSl1qVvvvjG81yoYC7C5f60oazIFZ1ujpTvPziStw_3NLlt1-xoZsoCddeTKFl6nA5rWbLU0mK3R_8FnIb5Z4tHutY-74jQSxF9FvOakyoE9NKYaUJiUYE5wnJ-TH-Cg6VBiML_n_lla27t_IAfENKjyfYDAymF5qw48yTTPw0GPK2w6Bbv6ZJ6oomfRvwDCIjo2gJuUjOFJxt-5WoecCc8Pbwue_RNFcODhdozROQhjWdGZ3R5AKNo6slLn4ApRovxTMImPWBub57H4prZ864slBZkQbigYxkj5dy29vfAYx6w09fcvjuGtuPMgQ7dDyDydV8MGg1okojwv6poqiWli5Kh03G_RPEU3f9nDa1K76Mpw-0iDdGQKQPj_Wt3HDL429_4mbc77pMVjMhRVxro0rvN5U2mPTUQ_99j1c8riN0el1RC5y7rF69hgA2PI1Kz4w0tL2XTZIVMwI38mEJAg18KECFFfuiLvDVd1PBNGZpDCnjIdQB5ZtlpMy5ZYw8GekW-5UTh1Yc9m64jD-eA0KWKZIcjaOk5TuQMAJlBAPHU4JTNI_oQEVZMuo7KrwEX0xNuTZnphB4dkJLUOBUS0OVWAV7ryPNVEnqb_yyhRagsJQMy1AhJodCE3B6XwCGyOGAaI9nyiq1yFe57PkoCwNkh4bfQdG9xWVqqQ9jPHVSYSXlvlza_KBQq4D4NmosCkRY3mY-ELdC3_YcXcCzqv8ECTNZ5s0IyAcaZRlDvlfkXVY06SxFYhZPssSkDisi6IYdRz7Gd0gQED6TjSPN0HSv6eDqAANMnI2pVZWGBnv2Jd5cayoEcqBSF6inrf71Y8PA_ml3m_pSaSzxRV8fJP_LKy6TpQBh7tGMZ95eMA80sKWRBaEDriKvGyg9fcuQz_Ztj9jdd3kxiA4G68uXkiwCcTA9V6N-eqVZNXovp9C5sqq_bAspsq1p9Wy2kNV8gV7XjHUax7Vhx2Ksecs6agv_kU5F65r0GzWiKq-zNJ1Sw-2ObpvfAWInyxSpEYTowd1sphCrYGoiGEnl5fBJTR6wR5g2zwMZNyeSbQNL5Y35J0jZCmeO88UT_lq8oidMcIKx7DRkrNvZh1eHERs6akauvk9K-Ns0w4pKOiz7ieX07UIDizV3rAkkl1vA-LKQYYA7ssu2FSFeHhq1h58DGRcBGKiwIGW64aTxGNztID182ZQZ2RWznuph8CvbWWJqKYi2Ey3wZ9wrfqOWGir6QrPDTRWaj5Attk94QNDRWBg7aJncwZNnv4q8_7tH2ZJeAc6TdgompGouRLdnRgrOBNV7xkoWrR02tHYp-_SKuy9JI1Fvlh0nTFRh2hTq0o8LG-9mdgL_UvXobeb3-iB6BahvaytGle9051jCgftL8Mge870ofR3ayJE5U5APE_tJeJB4HFPEhprfeRBIKnidptWUW5NpSdrwWS-1xC9h4z3xZOkyF873qKSsU6VU4JEUfTlqi65ooVpBiGSYwAk8w9ZER9qBu_5iYarKyBXGijvBkd24zWO9dTpPxDMlMg0DWhp6v-dskTKmkzzsRyjI_2o-zDdY7mE2NQpPImuKbajsY9qChkgWo3pJxCIiTZPf100BHQcA8oI9ea9_oHKuzBugMalNkFmfaQzi0RP9tWnoVkt_Pzt6Wg3W-rtYOuITov8yWXYAtV6X6xC03I1XnivaanaOVV8E2Cyyt3XUds5E4s7bFBciyTCnBFIaM-jgMXgP4njN1IHaiz9DMBopB1XFolTzuEvlBt8msJYLR7mE_6jWF8JqczX2fHAdejr-FfPI5hqV_kdeJSJqJhjrFJPHD3qC5Ke_yYwZrfyocwqwvy5Ax25M86voPvGNPed6acw4j_QbzNDtYUcsqdbgpv0O22hmPMvsJIXQUQ4VsNpvbGL6tKiyphYVbgSr_dWHbo8purtRhx9X79I6_mZaGdz0FmOkUtv_PfOc-nAyXPTmhKILxO82mwjou-V1E7y8mXjqh1C6I3zfgilpJxy_0caj0U44V_-QTEup64KOqZfxUXkHrxrEYD5j8wRvBbf3zDTCdNyVM1ueVsmlVCH8NuOKEDOqVJiE6YP-YfNey6_DrjI4bkP9PPynZ_yhzo68qZba1GQvvXy07hnSebujEzvHkLd68NRmwtP3XwXy5RsIER7wTM0bss4DCRMnu-arloI9IrlYQfA9qhBr4qLnHdIsDjnKbUIGEJ1Sj6vbZb8Ibx5dWmJgHDLIo0dCZMy_fycZWk52oDyyrTccZYjS-zdGwuKM9ZJjPiA20DU-LIGxMOlE4gnFItvB4RV8APGsalYGHommFN4-YyHGI3n0smntAL2KgfPGUi0AJg-_3u7a_EMRerBtKjNDDjFyEwRaDcYkfSFeUYAsurJRaL2pbgz88wSCAuV1nbopLegNedCRyhAUKks5yTNnUuD5AGEzFf1U4bl4fdeYU3SQChlQ-L_xMr-SaAXgHOkXezRB3PL-n6cfR_d8VWFBCH5s4QwdZsgIaBYt184EBhrl18Gb59KdlB1Th_Krhf9KflILRn5UkTe5QMC09_DdhaAmblus8wzyViNZpmEWNVIU1du6TMnWOBZPfp0BF-6Om_Cbs0f2ebCAhm0DOTGArpDZnQ-x4UTExD-qqp65x_7nGx4Bp3bfO4Ry-ILXlMmTe_bq9cWpQHtMIHql-FNr8yqGUBMRqXwwrnKbnAMCbWxBpBigNEWFaFNZjNzrwjXp7G60SJaf34iTmVhGxcV2bs7nPVczftcGfgLms7MvtaHvV0fFvRC4Hblcii1sP55Vvz01pyGXjF2Yg7IJzCIT8EHw_3NjZOIUYQJklyF4ChohFoBmq0Lr0nXBXASqoCdzItOCCsMN9IKvWwuQEmmvNq4EBkHRF0S5Il9pYhxxw_5nJ7G7kws5vOf22A-PShYPD3L1EXkPntNidv3cwWFuwGl93Lga0sHQ1Ox6fr78VEg2BiVPz99m28AsTRgMgdMClXquzf-La6j3tFYl0GuRMMa0km2L1F3PLdMzVPGXOU7Y7YbumQmBPCOWvoAWPbQXoGLdbMYBv8xoIIGG50m_Krm9VXx6gVx0xv1lV632N7HckBg-ysBXk_rK07bLgbp9xCanspCpzo1qXNN6IWeRJxDsNt_w0ayCQnD8kR519CKOuMGkUu6Xt_fKdZUMY4Y-9iZlCKMKTjkVKffmq2oAZoe0lw8gBR9-cqxQikV3_5lsYPUMCBBZpIZbLnMOeC27JUNpSy0pe2esGofLSUoIR_Yi7AyYKMeZe5M0IC-mK_013q4ivaUDGsXP1qHg54kVWBPUefepf5ZrV72W-Xz5r-FR4eE37GDBfJ3OxyOqaN1ZVrDhhQdr1IsN3cgrSbYNXaZH-n0dMFy9xjnlgFWoqPoWgRe_maIkmfAue824EuQSmcf-lqhCqQECzvwgEvcFtd-4aj07Hn_iQAZA6SjjnyR5nNQroxMEFfCyJq5ehMYqGo2EoJk1E9RDh4YgSroqWq7CvSdrHMm0uBXq9IrpX11fppLCocLlbZoWIdKbz-mjIaQhWzpOu2GWgrSdToNfO2n5Gw0tWW45ntmw_Ee9KjhQBdyq_aWjm4g1BxJuZV84H6hOumSYnf6wxxcIWe7UeETGGK4D9O-Y_CaiZa1_B8zNiIy7vVUmdboq6tBXHDt1Yu7canePr0vQFHoGTo1LKoPuxAUKqPf65A_QI6Mxr0OHjQdGboSHowLcOx6yKTFRSDYIlGCOHhK8e9IBiGpJJrN6w4jsS6prC30qulggnoueAwcASUfKbbqnlADkaUVWeOEZoP5EBDgQ8HC5PA7ROLhxvxwnX0QMiLGE4B_i-RpjRBUyzXsSSnfgX7lToMCULhjH3ImKh6iZZUHpf5G8dSh6Vl52eJVuubZ8kc2APm5rkzB1_EMcYSs9ljJXJgkmpeY30epvlc5LdhHj5rtrhnHZC_scjNsNa6goahypCTiMhjbHSd-D1GoRb79Pg8PdKQA55-_d3f_r5uMu7SoyI5oQt0emkD7is4XSCIbXPeepqNESciIYelNV7r0vUAgdKTXkBj4_WWF3zlFOjvcB9fXYucmueCIAhgZfZ3QYCD395dRPZ1ciVlkSq-2l3aPspmrowIKxib-dWBVJd3KcvAggvRcZDKSao2bkBNvzL_r7gmnfS2czk1SDZbsrJYUoGpcJ0s3qk92PKK_Gtyl_eyjHZKO2w8w3xLNnj3xR--iOp0WOPTaF9FLdxKgiA6-YvCjZJmuFu5lnMz4OnBmdc2o0wYYollC0qFMTDTNhuztM5KlA==",
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": "model"
+      },
+      "citation_metadata": null,
+      "finish_message": null,
+      "token_count": null,
+      "finish_reason": "STOP",
+      "grounding_metadata": null,
+      "avg_logprobs": null,
+      "index": 0,
+      "logprobs_result": null,
+      "safety_ratings": null,
+      "url_context_metadata": null
+    }
+  ],
+  "create_time": null,
+  "model_version": "gemini-3.5-flash",
+  "prompt_feedback": null,
+  "response_id": "_TVDaoDmEoGTqtsPrMOj2Q0",
+  "usage_metadata": {
+    "cache_tokens_details": null,
+    "cached_content_token_count": null,
+    "candidates_token_count": 670,
+    "candidates_tokens_details": null,
+    "prompt_token_count": 674,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 674
+      }
+    ],
+    "thoughts_token_count": 1336,
+    "tool_use_prompt_token_count": null,
+    "tool_use_prompt_tokens_details": null,
+    "total_token_count": 2680,
+    "traffic_type": null
+  },
+  "model_status": null,
+  "automatic_function_calling_history": [],
+  "parsed": {
+    "refactored_code": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\npackage org.apache.commons.math3.geometry.euclidean.threed;\n\nimport java.io.Serializable;\n\nimport org.apache.commons.math3.geometry.Space;\nimport org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;\n\n/**\n * This class implements a three-dimensional space.\n * @version $Id$\n * @since 3.0\n */\npublic class Euclidean3D implements Serializable, Space {\n\n    /** Serializable version identifier. */\n    private static final long serialVersionUID = 6249091865814886817L;\n\n    /** Dimension of the space. */\n    private static final int DIMENSION = 3;\n\n    /** Private constructor for the singleton.\n     */\n    private Euclidean3D() {\n    }\n\n    /** Get the unique instance.\n     * @return the unique instance\n     */\n    public static Euclidean3D getInstance() {\n        return LazyHolder.INSTANCE;\n    }\n\n    /** {@inheritDoc} */\n    public int getDimension() {\n        return DIMENSION;\n    }\n\n    /** {@inheritDoc} */\n    public Euclidean2D getSubSpace() {\n        return Euclidean2D.getInstance();\n    }\n\n    // CHECKSTYLE: stop HideUtilityClassConstructor\n    /** Holder for the instance.\n     * <p>We use here the Initialization On Demand Holder Idiom.</p>\n     */\n    private static class LazyHolder {\n        /** Cached field instance. */\n        private static final Euclidean3D INSTANCE = new Euclidean3D();\n    }\n    // CHECKSTYLE: resume HideUtilityClassConstructor\n\n    /** Handle deserialization of the singleton.\n     * @return the singleton instance\n     */\n    private Object readResolve() {\n        // return the singleton instance\n        return LazyHolder.INSTANCE;\n    }\n\n}"
+  }
+}
