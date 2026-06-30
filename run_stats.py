@@ -441,7 +441,7 @@ def write_report(df, validity_tbl, cochran, friedman, art, tost, lmm, tokens_tbl
 # ----------------------------------------------------------------------------- main
 
 
-def main(ledger_path="checkpoint_ledger_phase2.csv", out_dir="results"):
+def main(ledger_path="checkpoint_ledger_phase2.csv", out_dir="results/python"):
     os.makedirs(out_dir, exist_ok=True)
     df = load_ledger(ledger_path)
     cells = aggregate_cells(df)
@@ -456,7 +456,7 @@ def main(ledger_path="checkpoint_ledger_phase2.csv", out_dir="results"):
     make_plots(cells, validity_tbl, tokens_tbl, out_dir)
 
     placebo = write_report(df, validity_tbl, cochran, friedman, art, tost, lmm,
-                           tokens_tbl, per_type, cells, "results_draft.md")
+                           tokens_tbl, per_type, cells, os.path.join(out_dir, "results_draft.md"))
 
     print("=== RESUMO ===")
     print(validity_tbl.to_string(index=False))
@@ -465,10 +465,10 @@ def main(ledger_path="checkpoint_ledger_phase2.csv", out_dir="results"):
     print("\nART:", json.dumps(art, ensure_ascii=False))
     print("\nTOST:\n", tost.to_string(index=False))
     print(f"\nVEREDITO PLACEBO: {'SUSTENTADO' if placebo else 'NÃO totalmente sustentado'}")
-    print(f"\nSaídas em {out_dir}/ e results_draft.md")
+    print(f"\nSaídas em {out_dir}/ (inclui results_draft.md)")
 
 
 if __name__ == "__main__":
     ledger = sys.argv[1] if len(sys.argv) > 1 else "checkpoint_ledger_phase2.csv"
-    outd = sys.argv[2] if len(sys.argv) > 2 else "results"
+    outd = sys.argv[2] if len(sys.argv) > 2 else "results/python"
     main(ledger, outd)

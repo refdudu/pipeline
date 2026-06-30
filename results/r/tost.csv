@@ -1,0 +1,7 @@
+"metric","par","n","mean_diff","p_tost","equivalente"
+"complexity_delta","P-1 vs P2",20,-0.975,0.482790901511987,FALSE
+"complexity_delta","P0 vs P2",20,-0.85,0.41273750338053,FALSE
+"complexity_delta","P-1 vs P0",20,-0.125,0.0411342909849891,TRUE
+"smells_delta","P-1 vs P2",20,0.675,0.224458243018261,FALSE
+"smells_delta","P0 vs P2",20,0.625,0.211856610292696,FALSE
+"smells_delta","P-1 vs P0",20,0.05,0.00520762175018787,TRUE
