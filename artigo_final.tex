@@ -1,0 +1,344 @@
+\documentclass[10pt,conference,a4paper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage[a4paper,margin=0.75in,columnsep=0.25in]{geometry}
+\usepackage{titlesec}
+\usepackage{authblk}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{makecell}
+
+% Title and section formatting to mimic IEEEtran
+\titleformat{\section}{\normalfont\large\scshape\centering}{\Roman{section}.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\normalsize\itshape}{\Alph{subsection}.}{0.5em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\itshape}{\arabic{subsubsection})}{0.5em}{}
+
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+% Authors
+\renewcommand\Authands{, }
+\renewcommand\Affilfont{\itshape\small}
+
+\setlength{\columnsep}{0.25in}
+\setlength{\parindent}{1em}
+
+\title{\textbf{\LARGE Persona Prompting em Refatoração de Código: Um Efeito Placebo?\\ Um Estudo Experimental Fatorial}}
+
+\author[1]{Gabriel Just}
+\author[1]{Henrique Friske}
+\author[1]{Felipe Pisoni}
+\author[1]{Renan Fischer}
+\affil[1]{Programa de Engenharia de Software, Universidade Regional do Noroeste do Estado do Rio Grande do Sul (UNIJUÍ), Ijuí, Brasil}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{otherlanguage}{english}
+\begin{abstract}
+The adoption of Large Language Models (LLMs) in software development has popularized persona prompting, the practice of assigning an identity such as ``act as a senior developer'' to improve generated code. Empirical evidence, however, shows that personas yield null or inconsistent gains in question-answering and reasoning tasks, and their effect on code refactoring had not been tested. This work reports a controlled experiment measuring how persona specialization affects the structural quality of refactored Java code. It follows a $4 \times 3$ mixed factorial design that crosses four persona levels, ranging from an out-of-domain negative control to a specialized persona, with three refactoring tasks of increasing complexity (Extract Method, Replace Magic Number, and Replace Conditional with Polymorphism). Persona is a within-subject factor and refactoring type is a between-subject factor, with ten snippets per refactoring type. The four persona levels were applied to 30 Java code snippets from the Defects4J benchmark under two replications, for a total of 240 observations. Behavior preservation was checked through the benchmark unit-test suites and served as a validity criterion, so that only behavior-preserving refactorings reached the analysis. Structural quality was measured by McCabe cyclomatic complexity and SonarQube code smells, and assessed with the Friedman test, Aligned Rank Transform ANOVA for the persona-by-task interaction, an equivalence test (TOST), and a linear mixed-effects model as a robustness check. No statistically significant effect of persona specialization on refactoring quality was found (Friedman, all $p>0.25$), and equivalence could be positively established only between the negative control and the no-persona baseline. The results do not support the claimed benefit of persona specialization and are most consistent with a partial placebo effect, offering empirical guidelines for prompt engineering in software maintenance.
+\end{abstract}
+\end{otherlanguage}
+
+\section{Introdução}
+A manutenção é a fase mais cara do ciclo de vida de um software, e a refatoração desempenha nela um papel central, pois reestruturar o código internamente, sem alterar o comportamento observável, mantém a dívida técnica sob controle \cite{fowler}. Nos últimos anos, essa tarefa deixou de ser apenas humana. A adoção de Grandes Modelos de Linguagem (\textit{Large Language Models}, LLMs) no desenvolvimento avançou rapidamente. Em 2024, 62\% dos desenvolvedores já utilizavam assistentes de inteligência artificial no dia a dia, contra 44\% em 2023, e 76\% os utilizavam ou pretendem utilizar \cite{stackoverflow}. Boa parte do esforço rotineiro de manutenção, a refatoração inclusive, passou a esses assistentes.
+
+Para guiar o que esses modelos produzem, a engenharia de prompts firmou-se como prática, e entre seus padrões reutilizáveis está a atribuição de personas \cite{white2023}. A técnica consiste em instruir o modelo a assumir uma identidade, como ``Aja como um arquiteto de software sênior especialista em Clean Code'', na expectativa de que o papel melhore o estilo e a precisão do código \cite{white2023}. Convém ler esse comportamento como interpretação de papéis (\textit{role play}), e não como sinal de capacidades cognitivas reais do modelo, para não incorrer em antropomorfismo \cite{shanahan2023}.
+
+A heurística é popular, mas sua eficácia em tarefas técnicas restritas tem pouco respaldo empírico. Em pergunta-resposta e em raciocínio, atribuir personas não melhora o desempenho de forma consistente, e o resultado de cada papel aproxima-se do aleatório \cite{zheng2024}. Modelos grandes também se mostram sensíveis a atributos identitários sem relação com a tarefa, e perdem acurácia quando o contexto da persona é incongruente \cite{araujo2025}. Para refatoração, porém, não existia evidência que confirmasse ou descartasse o ganho de qualidade que se costuma atribuir às personas. Diante desse cenário, o problema de pesquisa abordado neste estudo reside na ausência de evidências empíricas que comprovem se a atribuição de personas altamente especializadas a LLMs gera ganhos mensuráveis na qualidade do código refatorado ou se constitui apenas um efeito placebo, sem impacto estatístico significativo. Na ausência dessa evidência, engenheiros de software despendem tokens de API e esforço cognitivo na elaboração de prompts artificialmente complexos, apoiados em impressões anedóticas e não em dados.
+
+Este estudo investiga o efeito do nível de especialização da persona sobre a qualidade da refatoração. A refatoração é o objeto manipulado no experimento, e a qualidade estrutural do código resultante é a variável dependente que mede o êxito da tarefa. A corretude comportamental, isto é, a preservação do comportamento observável que define toda refatoração \cite{fowler}, não entra como objeto de pesquisa, mas como critério de validade, de modo que apenas as refatorações que preservam o comportamento, confirmadas pela suíte de testes do benchmark, seguem para a análise de qualidade.
+
+Para isolar o efeito da persona, este trabalho conduziu um experimento controlado com desenho fatorial misto $4 \times 3$, em que a persona é fator intra-sujeito e o tipo de refatoração é fator entre-sujeitos, cruzando os quatro níveis de especialização da persona com três tipos de refatoração de complexidade crescente. Os objetos são trechos de código Java do benchmark Defects4J \cite{defects4j}; a suíte de testes do benchmark verificou a preservação do comportamento, e a qualidade estrutural, variável dependente, foi medida por análise estática. Os resultados não indicam ganho de qualidade estatisticamente significativo atribuível à especialização da persona, sustentando parcialmente a interpretação de efeito placebo.
+
+Com isso, este trabalho apresenta três contribuições principais. Primeiramente, propõe-se uma taxonomia operacional de personas de programação, organizada nos níveis $P_{-1}$ a $P_2$, que isola a variável identitária em prompts de código a partir das técnicas de \textit{role prompting} consolidadas na literatura \cite{white2023}, \cite{schulhoff2024}. Em seguida, produz-se evidência empírica pareada sobre a relação entre o nível de especialização da persona, a complexidade da tarefa de refatoração e a qualidade do código resultante. Por fim, derivam-se diretrizes práticas para a engenharia de prompts na manutenção de software, sustentadas por dados experimentais e não por suposições anedóticas.
+
+O restante do artigo organiza-se como segue. A Seção II apresenta a fundamentação teórica e os trabalhos relacionados; a Seção III define os objetivos e as questões de pesquisa; a Seção IV formula as hipóteses; a Seção V descreve o método e o desenho experimental; a Seção VI apresenta os resultados; a Seção VII os discute; a Seção VIII trata das ameaças à validade; e a Seção IX conclui.
+
+\section{Fundamentação Teórica e Trabalhos Relacionados}
+A avaliação experimental do \textit{persona prompting} em tarefas de refatoração apoia-se em dois corpos de conhecimento. Da engenharia de software, a refatoração define o objeto de estudo e as métricas de análise estática definem os instrumentos de medição \cite{fowler, mccabe1976}. Da engenharia de prompts, as técnicas de condicionamento de LLMs definem o tratamento manipulado no experimento \cite{white2023, schulhoff2024}. A revisão dos estudos que aproximam essas duas áreas mostra o que ainda não foi investigado e indica onde este trabalho se insere.
+
+\subsection{Refatoração e Qualidade de Software}
+Refatorar é alterar a estrutura interna de um software para torná-lo mais legível e mais fácil de manter, sem mexer no comportamento externo observável \cite{fowler}. Para avaliar essa melhoria de forma objetiva, recorre-se a métricas de qualidade estática. A complexidade ciclomática de McCabe, por exemplo, conta os caminhos linearmente independentes no fluxo de controle de um trecho de código \cite{mccabe1976} e funciona como indicador consolidado de testabilidade e de esforço de manutenção. Ferramentas de análise estática como o SonarQube põem esse e outros indicadores em prática, aplicando regras que apontam \textit{code smells}, os padrões estruturais ligados à perda de qualidade \cite{sonarqube}. Deste conjunto, o trabalho adota a complexidade ciclomática de McCabe e a contagem de \textit{code smells} como medidas da qualidade estrutural do código refatorado.
+
+\subsection{Engenharia de Prompts e Persona Prompting}
+A engenharia de prompts reúne as técnicas que condicionam a saída dos LLMs. Essa prática apoia-se na capacidade dos modelos de executar tarefas a partir de instruções e de poucos exemplos fornecidos no próprio prompt \cite{brown2020}, e a forma da instrução altera de modo mensurável o desempenho, como demonstra o encadeamento de raciocínio (\textit{chain-of-thought}) \cite{wei2022}. Catálogos de padrões registram soluções reutilizáveis, e entre elas está o padrão de persona, que dá ao modelo um papel ou identidade para influenciar o estilo e o conteúdo da resposta \cite{white2023}. Levantamentos sistemáticos da área tratam essa atribuição de papéis (\textit{role prompting}) como uma técnica própria dentro da taxonomia de prompting \cite{schulhoff2024}, e a literatura recomenda lê-la como interpretação de papéis, não como posse de traços humanos pelo modelo, justamente para evitar conclusões antropomórficas \cite{shanahan2023}. A escala de quatro níveis de persona ($P_{-1}$ a $P_2$) usada neste estudo é essa técnica de \textit{role prompting} \cite{white2023}, \cite{schulhoff2024} operacionalizada, e gradua o nível de especialização e de congruência identitária do prompt para permitir a manipulação experimental controlada.
+
+\subsection{Estudos Empíricos sobre Persona Prompting em LLMs}
+A eficácia das personas em tarefas técnicas vem sendo investigada empiricamente há pouco tempo. Em tarefas objetivas de pergunta-resposta, colocar uma persona no prompt de sistema não melhora o desempenho do LLM frente à ausência de persona, e o efeito aproxima-se do aleatório \cite{zheng2024}. Mais do que isso, atributos identitários sem relação com a tarefa reduzem a acurácia de modelos de grande porte \cite{araujo2025}. Resultados assim alimentam a suspeita de que boa parte do ganho creditado às personas seja, na verdade, um efeito placebo da engenharia de prompts. Essas investigações, porém, concentraram-se em pergunta-resposta e raciocínio; nenhuma abordou a manutenção de código.
+
+\subsection{LLMs Aplicados à Refatoração de Código}
+Na refatoração propriamente dita, há estudos empíricos que medem o que os LLMs conseguem fazer sobre código real. Ao refatorar código Java, esses modelos preservam o comportamento original só em parte e devolvem resultados diferentes para o mesmo prompt repetido, o que expõe seu caráter não-determinístico \cite{depalma2024}. A qualidade do que produzem depende muito do contexto dado no prompt, pois quanto mais detalhada a especificação, maior a taxa de refatorações bem-sucedidas \cite{liu2024}. Esses trabalhos confirmam que o conteúdo do prompt pesa no resultado, mas nenhum isola o efeito específico da identidade (a persona) atribuída ao modelo.
+
+\subsection{Lacuna de Pesquisa}
+Em resumo, a literatura mostra um efeito nulo ou inconsistente da persona em pergunta-resposta e raciocínio \cite{zheng2024}, \cite{araujo2025} e confirma que o resultado da refatoração é sensível ao conteúdo do prompt \cite{depalma2024}, \cite{liu2024}. Falta, no entanto, um estudo que isole e quantifique o efeito do nível de especialização da persona sobre a qualidade estrutural da refatoração. É essa lacuna que o experimento controlado deste trabalho preenche.
+
+\section{Objetivos e Questões de Pesquisa}
+Esta seção formaliza o objetivo geral, os objetivos específicos e as questões de pesquisa que decorrem do problema apresentado na Seção I.
+
+\subsection{Objetivo Geral}
+Avaliar empiricamente o impacto de diferentes níveis de especialização em \textit{persona prompting} sobre a qualidade estrutural do código produzido por LLMs em tarefas de refatoração.
+
+\subsection{Objetivos Específicos}
+\begin{enumerate}
+    \item Estabelecer os quatro níveis de prompts de persona ($P_{-1}$: controle negativo; $P_0$: neutro; $P_1$: genérico; $P_2$: especializado);
+    \item Definir um benchmark controlado de tarefas de refatoração extraídas de projetos Java reais;
+    \item Executar o experimento fatorial que cruza os níveis de persona com tarefas de complexidades variadas;
+    \item Verificar a preservação do comportamento das refatorações geradas por meio das suítes de testes dos projetos hospedeiros, excluindo da análise as refatorações que alteram o comportamento observável;
+    \item Medir a qualidade estrutural das refatorações válidas pela complexidade ciclomática de McCabe \cite{mccabe1976} e pela contagem de \textit{code smells} via SonarQube \cite{sonarqube}.
+\end{enumerate}
+
+\subsection{Questões de Pesquisa}
+\begin{itemize}
+    \item \textbf{RQ1:} O nível de especialização da persona produz melhorias estatisticamente significativas na qualidade do código refatorado (redução de \textit{code smells} e da complexidade ciclomática de McCabe)?
+    \item \textbf{RQ2:} Existe uma interação significativa entre a complexidade da tarefa de refatoração e o nível de especialização da persona?
+\end{itemize}
+
+\section{Hipóteses}
+Para cada questão de pesquisa, testam-se as hipóteses nula ($H_0$) e alternativa ($H_1$) com nível de significância $\alpha = 0{,}05$.
+
+\begin{itemize}
+    \item \textbf{$H1_0$:} A atribuição de personas não afeta as métricas de qualidade estrutural pós-refatoração.
+    \item \textbf{$H1_1$:} Personas especializadas ($P_2$) geram código com menor complexidade ciclomática de McCabe e menor incidência de \textit{code smells} em comparação com prompts neutros ou fora de domínio ($P_0$, $P_{-1}$).
+    \item \textbf{$H2_0$:} Não há efeito de interação entre o nível de especialização da persona e o tipo de refatoração aplicada.
+    \item \textbf{$H2_1$:} Há efeito de interação significativo, em que tarefas de refatoração de maior complexidade estrutural (Substituir Condicional por Polimorfismo) beneficiam-se mais do uso de personas especializadas, com maior redução de \textit{code smells} e de complexidade ciclomática de McCabe, do que tarefas estruturalmente simples.
+\end{itemize}
+
+A não rejeição de $H1_0$ (ausência de diferença de qualidade entre o controle negativo $P_{-1}$, o prompt neutro $P_0$ e a persona especializada $P_2$) caracteriza o cenário de efeito placebo investigado pelo estudo. Sua confirmação plena exigiria, conforme o protocolo da Seção V, taxas de validade semelhantes entre as personas e equivalência estatística positiva nas métricas de qualidade; a Seção VI mostra que apenas parte dessas condições se verifica.
+
+\section{Método e Desenho Experimental}
+O estudo segue as fases do processo de experimentação em engenharia de software de Wohlin \cite{wohlin}: definição, planejamento, operação, análise e interpretação, e apresentação. Esta seção detalha o protocolo executado.
+
+\subsection{Tipo de Estudo}
+O trabalho adota o paradigma experimental da Engenharia de Software Empírica \cite{wohlin}, isto é, um experimento controlado e quantitativo que manipula variáveis independentes e testa hipóteses sobre o seu efeito, em contraste com abordagens analíticas ou puramente observacionais. O desenho é fatorial misto. O fator persona foi manipulado de forma intra-sujeito, pois cada trecho de código passou por todos os quatro níveis de persona, o que permite a análise pareada e atenua a variância entre trechos. O fator tipo de refatoração foi manipulado entre sujeitos, pois cada trecho foi associado a um único tipo, conforme a oportunidade de refatoração que apresenta. Essa escolha preserva a validade de construto, já que cada trecho recebe a refatoração que de fato cabe ao seu código. Como cada chamada ao modelo é independente e sem memória entre execuções, não há efeito de ordem entre tratamentos a controlar, o que dispensa a aleatorização da sequência.
+
+\subsection{Desenho Fatorial 4×3}
+A estrutura fatorial segue o método de experimentação de Wohlin \cite{wohlin}, que recomenda o cruzamento de fatores para estimar efeitos principais e de interação. O desenho cruza dois fatores, o nível da persona (4 níveis) e o tipo de refatoração (3 níveis), o que forma 12 condições de tratamento (Tabela I).
+
+O fator persona origina-se da técnica de \textit{role prompting}, também chamada persona prompting. Essa técnica é documentada como um padrão de prompt reutilizável no catálogo de padrões de White et al. \cite{white2023} e classificada como uma técnica própria na taxonomia sistemática de prompting de Schulhoff et al. \cite{schulhoff2024}. Essas fontes, porém, documentam e classificam a técnica sem propor uma gradação de níveis de especialização. A contribuição metodológica deste estudo é operacionalizar a técnica em uma escala ordinal de quatro níveis, construída para isolar a variável identitária ao longo de um gradiente controlado de especialização e de congruência com a tarefa: P-1, identidade incongruente (controle negativo); P0, ausência de persona (condição de referência); P1, identidade genérica; e P2, identidade especializada. A presença de P0 (referência) ao lado de P-1 (controle negativo) permite separar o efeito da especialização do efeito da mera presença de uma persona.
+
+O fator tipo de refatoração deriva do catálogo de refatorações de Fowler \cite{fowler}, do qual se selecionam três refatorações que formam um gradiente de complexidade estrutural: Extrair Método (estrutural local), Substituir Número Mágico (semântica local) e Substituir Condicional por Polimorfismo (arquitetural). Esse gradiente é o que torna a hipótese de interação verificável, ou seja, permite testar se a especialização da persona pesa mais nas tarefas estruturalmente mais complexas.
+
+Como o tipo de refatoração é um fator entre-sujeitos, cada trecho foi exposto às quatro condições de persona da coluna correspondente ao seu tipo.
+ \begin{table}[htbp]
+\centering
+\caption{Condições de tratamento do desenho fatorial $4 \times 3$.}
+\label{tab:treatment_conditions}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+
+\begin{tabularx}{\columnwidth}{|
+>{\raggedright\arraybackslash}p{0.36\columnwidth}|
+>{\centering\arraybackslash}X|
+>{\centering\arraybackslash}X|
+>{\centering\arraybackslash}X|}
+\hline
+\textbf{Nível da persona} 
+& \textbf{\makecell{Extrair\\Método}} 
+& \textbf{\makecell{Subst.\\N. Mágico}} 
+& \textbf{\makecell{Subst. Cond.\\Polimorfismo}} \\
+\hline
+P-1 (controle negativo) & C1 & C2 & C3 \\
+\hline
+P0 (neutro) & C4 & C5 & C6 \\
+\hline
+P1 (genérico) & C7 & C8 & C9 \\
+\hline
+P2 (especializado) & C10 & C11 & C12 \\
+\hline
+
+\end{tabularx}
+\end{table}
+\subsection{Variáveis}
+
+\textbf{Variáveis independentes:}
+\begin{itemize}
+    \item Nível da persona (4 níveis), com os prompts fixados em inglês: P-1, controle negativo adversário (``You are an experienced artisan baker''); P0, neutro (sem persona); P1, genérico (``You are a developer''); P2, especializado (``You are a Senior Java Software Architect and Clean Code expert''). Em todas as condições, a instrução-base que solicita a refatoração é idêntica, e apenas o preâmbulo de persona varia, o que isola a variável identitária.
+    \item Tipo de refatoração (3 níveis), em complexidade crescente: Extrair Método (alteração estrutural local), Substituir Número Mágico (alteração semântica local) e Substituir Condicional por Polimorfismo (alteração arquitetural baseada em Orientação a Objetos).
+\end{itemize}
+
+\textbf{Variável dependente:} a qualidade estrutural do código refatorado, medida por dois indicadores: o delta da complexidade ciclomática de McCabe \cite{mccabe1976} (valor pós-refatoração menos o valor da linha de base) e o delta da contagem de \textit{code smells} apontados pelo SonarQube \cite{sonarqube}; valores negativos indicam melhoria estrutural.
+
+\textbf{Variáveis de controle:} o modelo de LLM, fixado no Gemini 3.5 Flash; o idioma do prompt (inglês); a instrução-base de refatoração; e o conjunto de regras de análise estática do SonarQube.
+
+\textbf{Critério de validade (não é variável dependente):} a corretude comportamental, verificada pela aprovação integral na suíte de testes unitários do projeto hospedeiro no Defects4J \cite{defects4j}. As refatorações que não preservam o comportamento foram excluídas da análise de qualidade.
+
+\subsection{Unidades Experimentais, Amostragem e Pipeline}
+A amostragem é estratificada e controlada: selecionaram-se 10 trechos de código para cada um dos 3 tipos de refatoração, totalizando 30 trechos extraídos das versões corrigidas (funcionais) dos projetos do Defects4J \cite{defects4j}. Cada trecho corresponde a um método ou classe que apresenta a oportunidade de refatoração. Os candidatos foram identificados por indicadores do SonarQube (métodos longos ou de alta complexidade cognitiva para Extrair Método; números mágicos para Substituir Número Mágico; cadeias condicionais extensas para Substituir Condicional por Polimorfismo) e confirmados manualmente quanto à pertinência. O Defects4J \cite{defects4j} fornece suítes de teste de alta cobertura, necessárias para a verificação de validade.
+
+Para conter o não-determinismo do modelo, aplicaram-se 2 réplicas a cada condição. O desenho gerou 240 observações (30 trechos $\times$ 4 níveis de persona $\times$ 2 réplicas).
+
+A operação seguiu um pipeline automatizado, alinhado às fases de Wohlin \cite{wohlin}:
+\begin{enumerate}
+    \item extração das unidades experimentais e coleta da linha de base (execução dos testes e análise estática do código original);
+    \item envio do trecho e do prompt correspondente ao modelo;
+    \item captura do código gerado e reinserção no projeto hospedeiro;
+    \item execução da suíte de testes do Defects4J, que atua como portão de validade, e na qual as refatorações que quebram o comportamento foram descartadas antes da etapa seguinte;
+    \item análise estática das refatorações válidas no SonarQube, com coleta da complexidade ciclomática e da contagem de \textit{code smells}.
+\end{enumerate}
+
+\subsubsection{Instrumentação}
+A execução foi conduzida por um script em Python que automatiza todo o pipeline. O script monta cada prompt pela concatenação do preâmbulo de persona com a instrução-base e o trecho de código, e envia a requisição à API do modelo com os parâmetros de controle fixados. A instrução-base exige que a resposta contenha apenas o código completo refatorado, em um único bloco e sem explicações, o que padroniza a extração automática do código gerado. Cada réplica recebeu um status de execução: falha de extração (resposta fora do formato), falha de compilação, falha na suíte de testes ou sucesso; os três primeiros classificam a réplica como inválida, com o motivo registrado. A verificação de validade executa a suíte de testes completa do projeto hospedeiro, o que captura inclusive regressões fora da classe alterada. Para cada réplica válida, a análise estática mede as métricas no escopo do arquivo alterado, e o script registra trecho, tipo de refatoração, persona, réplica, status, deltas de qualidade, contagem de tokens e latência em um conjunto de dados estruturado. O registro de tokens permite quantificar o custo adicional dos preâmbulos identitários, o que conecta os resultados à relevância prática do estudo.
+
+\subsection{Análise Estatística}
+Cada célula do desenho (a combinação de um trecho com uma persona) recebe, em cada métrica, a média das suas réplicas válidas, o que estabiliza a medida diante do não-determinismo do modelo; com duas réplicas, essa média coincide com a mediana e foi reportada o número de réplicas válidas por célula. A taxa de validade de cada persona, isto é, a proporção de refatorações que preservam o comportamento, é reportada como estatística descritiva e analisada pelo Teste Q de Cochran, que verifica se o atrito difere entre as personas.
+
+Dois ajustes garantem a validade da análise inferencial de qualidade. Primeiro, a refatoração Substituir Número Mágico foi excluída dos testes inferenciais de qualidade: como detalhado na Seção VI, ela produz delta nulo nas duas métricas agregadas para todas as personas, configurando um estrato de variância zero que não fornece informação de posto e viola os pressupostos dos testes; seu efeito é reportado descritivamente por meio da regra específica do SonarQube. Segundo, a complexidade ciclomática foi medida em escopo de arquivo, o que, como se discute na Seção VII, faz a métrica crescer por construção em refatorações que multiplicam unidades de código; por isso a inferência principal de qualidade apoia-se na contagem de \textit{code smells}, e a complexidade é interpretada com a devida ressalva. A análise de qualidade é conduzida em regime \textit{complete-case}, sobre os trechos cujas refatorações são válidas em todas as personas, o que preserva o pareamento intra-sujeito.
+
+A análise primária aplica o Teste de Friedman ao efeito principal da persona, separadamente para cada métrica de qualidade, com análise \textit{post-hoc} de Nemenyi para as comparações par a par. A escolha de testes não-paramétricos justifica-se pela natureza pareada dos dados e pela não-normalidade esperada das saídas do modelo. A análise da interação entre persona e tipo de refatoração emprega ANOVA sobre postos alinhados (\textit{Aligned Rank Transform}) \cite{wobbrock2011}, método não-paramétrico que admite desenhos fatoriais; seus resultados são exploratórios, dado o poder estatístico limitado da amostra estratificada. Adota-se nível de significância de $\alpha = 0{,}05$.
+
+Como a não rejeição de uma hipótese nula não constitui prova de ausência de efeito, a interpretação do efeito placebo apoia-se também em um teste de equivalência, o procedimento \textit{Two One-Sided Tests} (TOST) \cite{lakens2017}. A margem de equivalência foi fixada \textit{a priori} em $\pm 1$, definida como a menor diferença praticamente relevante: tanto a contagem de \textit{code smells} quanto a complexidade ciclomática são contagens inteiras, de modo que uma unidade é a menor variação que a ferramenta registra e que um desenvolvedor poderia acionar. Para tornar transparente a dependência do veredito em relação a essa escolha, reporta-se também uma análise de sensibilidade com margens mais amplas. Como verificação de robustez ao regime \textit{complete-case}, um modelo linear de efeitos mistos \cite{pinheiro2000} reestima o efeito da persona com o trecho como efeito aleatório e todas as réplicas válidas; a convergência entre as análises indica que a conclusão não é artefato do filtro de validade.
+
+\section{Resultados}
+Esta seção apresenta os resultados sobre as 240 observações coletadas. Dessas, 236 (98,3\%) preservaram o comportamento e 4 falharam por erro de compilação. A análise inferencial de qualidade incide sobre os dois tipos de refatoração mensuráveis (Extrair Método e Substituir Condicional por Polimorfismo), com 20 trechos válidos em todas as personas no regime \textit{complete-case}.
+
+\subsection{Validade e Custo por Persona}
+A Tabela II reporta a taxa de preservação de comportamento e o custo médio em tokens por persona. As taxas de validade são altas e próximas entre si, e o Teste Q de Cochran não detecta diferença de atrito entre as personas ($Q = 2{,}40$; $p = 0{,}494$). Ou seja, a persona de controle negativo (o padeiro, fora de domínio) não quebrou mais código do que a persona especializada. Quanto ao custo, a persona especializada consumiu, em média, praticamente os mesmos tokens que o prompt neutro (7665 contra 7646), ao passo que a persona de controle negativo foi a mais custosa (8267), por tender a acrescentar texto fora da tarefa.
+
+\begin{table}[htbp]
+\centering
+\caption{Validade e custo médio por persona (240 observações).}
+\label{tab:validity}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{|>{\raggedright\arraybackslash}p{0.30\columnwidth}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+\hline
+\textbf{Persona} & \textbf{Válidas/Total} & \textbf{Taxa} & \textbf{Tokens méd.} \\
+\hline
+P-1 (controle neg.) & 59/60 & 0,983 & 8267 \\
+\hline
+P0 (neutro) & 60/60 & 1,000 & 7646 \\
+\hline
+P1 (genérico) & 59/60 & 0,983 & 7605 \\
+\hline
+P2 (especializado) & 58/60 & 0,967 & 7665 \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{RQ1 --- Efeito Principal da Persona}
+O Teste de Friedman não encontra efeito significativo da persona em nenhuma das métricas de qualidade: complexidade ciclomática $\chi^2 = 4{,}02$ ($p = 0{,}260$) e \textit{code smells} $\chi^2 = 2{,}02$ ($p = 0{,}568$). Como o efeito principal não é significativo, a análise \textit{post-hoc} de Nemenyi não se aplica. O modelo linear de efeitos mistos, tomando o prompt neutro (P0) como referência, confirma o quadro: nenhum coeficiente de persona é significativo. Para a complexidade, $P_2$ apresenta $\beta = +0{,}84$ ($p = 0{,}143$); para \textit{code smells}, $P_2$ apresenta $\beta = -0{,}69$ ($p = 0{,}103$). A Tabela III resume os testes do efeito principal e da interação.
+
+Descritivamente, observa-se na contagem de \textit{code smells} uma tendência numérica pequena a favor da persona especializada (delta médio de $-0{,}40$ em $P_2$, contra $+0{,}28$ e $+0{,}23$ no controle e no neutro), que, no entanto, não alcança significância estatística em nenhum dos testes. Assim, os dados não permitem rejeitar $H1_0$: não há evidência de que a especialização da persona melhore a qualidade estrutural do código refatorado.
+
+\begin{table}[htbp]
+\centering
+\caption{Efeito principal (Friedman) e interação (ART) por métrica.}
+\label{tab:inferential}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\columnwidth}{|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{0.20\columnwidth}|>{\centering\arraybackslash}p{0.24\columnwidth}|}
+\hline
+\textbf{Métrica} & \textbf{Friedman $\chi^2$ ($p$)} & \textbf{ART interação $F$ ($p$)} \\
+\hline
+Complexidade & 4,02 (0,260) & 1,59 (0,203) \\
+\hline
+\textit{Code smells} & 2,02 (0,568) & 0,46 (0,710) \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{RQ2 --- Interação Persona × Tipo}
+A ANOVA sobre postos alinhados, ajustada com o trecho como efeito aleatório para respeitar o pareamento intra-sujeito da persona, não detecta interação significativa entre persona e tipo de refatoração, nem para a complexidade ($F = 1{,}59$; $p = 0{,}203$) nem para \textit{code smells} ($F = 0{,}46$; $p = 0{,}710$). Logo, não há suporte para $H2_1$: a especialização da persona não se mostra mais benéfica na tarefa arquiteturalmente mais complexa (Substituir Condicional por Polimorfismo) do que na tarefa estrutural local (Extrair Método). Esse resultado é exploratório, dado o número reduzido de trechos por estrato.
+
+\subsection{Equivalência (TOST) e Veredito Placebo}
+A ausência de diferença significativa em RQ1 é condição necessária, mas não suficiente, para afirmar equivalência. O teste TOST, com margem $\pm 1$, estabelece equivalência positiva apenas entre o controle negativo e o prompt neutro ($P_{-1}$ vs $P_0$), em ambas as métricas. Para os contrastes que envolvem a persona especializada ($P_{-1}$ vs $P_2$ e $P_0$ vs $P_2$), o teste não confirma equivalência sob essa margem (Tabela IV). A análise de sensibilidade esclarece o limite: na complexidade, o contraste $P_{-1}$ vs $P_2$ só se torna equivalente sob margem $\pm 2$, e $P_0$ vs $P_2$ permanece não-equivalente mesmo em $\pm 2$; já na contagem de \textit{code smells}, a equivalência entre o controle/neutro e a persona especializada estabelece-se sob a margem $\pm 1{,}5$.
+
+\begin{table}[htbp]
+\centering
+\caption{TOST de equivalência ($\pm 1$) e sensibilidade de margem.}
+\label{tab:tost}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\columnwidth}{|>{\raggedright\arraybackslash}p{0.18\columnwidth}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{0.10\columnwidth}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+\hline
+\textbf{Métrica} & \textbf{Par} & \textbf{$\Delta$} & \textbf{$\pm 1$} & \textbf{$\pm 1{,}5$} & \textbf{$\pm 2$} \\
+\hline
+Complex. & P-1 vs P2 & $-0{,}98$ & não & não & sim \\
+\hline
+Complex. & P0 vs P2 & $-0{,}85$ & não & não & não \\
+\hline
+Complex. & P-1 vs P0 & $-0{,}13$ & sim & sim & sim \\
+\hline
+Smells & P-1 vs P2 & $+0{,}68$ & não & sim & sim \\
+\hline
+Smells & P0 vs P2 & $+0{,}63$ & não & sim & sim \\
+\hline
+Smells & P-1 vs P0 & $+0{,}05$ & sim & sim & sim \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Substituir Número Mágico: Cegueira da Métrica Agregada}
+Os 80 registros da refatoração Substituir Número Mágico apresentam delta exatamente nulo nas duas métricas agregadas (complexidade e contagem total de \textit{code smells}), motivo de sua exclusão da análise inferencial. Esse zero, porém, não significa que a refatoração não ocorreu. Ao inspecionar a regra específica do SonarQube para números mágicos (\texttt{java:S109}), constata-se que o problema foi efetivamente eliminado: o número de violações cai a zero nas refatorações bem-sucedidas (delta médio de $-1{,}2$, partindo de uma a três violações por trecho). Mais relevante para a pergunta deste estudo, esse conserto ocorreu de modo uniforme em todas as personas, inclusive na de controle negativo (o padeiro). A métrica agregada, portanto, foi cega a uma melhoria real e localizada; e o fato de todas as personas resolverem por igual uma tarefa semântica simples reforça, em vez de enfraquecer, a leitura de ausência de vantagem da especialização.
+
+\section{Discussão}
+Os resultados convergem para uma conclusão central: não há evidência de que a especialização da persona melhore a qualidade estrutural do código refatorado pelo modelo avaliado. O efeito principal é nulo em ambas as métricas (Friedman e modelo de efeitos mistos), não há interação com o tipo de tarefa, e a persona de controle negativo, semanticamente incongruente com a tarefa, desempenhou de forma estatisticamente indistinguível do prompt neutro, tanto em qualidade quanto em taxa de validade. Esse padrão é coerente com os achados de ausência de efeito de personas em pergunta-resposta e raciocínio \cite{zheng2024}, \cite{araujo2025}, e estende-os, pela primeira vez, ao domínio da refatoração de código.
+
+A interpretação de efeito placebo, contudo, deve ser qualificada. O estudo sustenta-a apenas parcialmente. De um lado, a equivalência estatística positiva ficou comprovada entre o controle negativo e o prompt neutro, o que mostra que o instrumento é capaz de declarar igualdade quando ela existe. De outro, para a persona especializada não foi possível, sob a margem $\pm 1$, nem detectar diferença nem cravar equivalência: persiste uma pequena tendência não-significativa de redução de \textit{code smells} que a amostra atual não tem poder para confirmar como efeito real ou descartar como ruído. A leitura mais fiel é, portanto, que a vantagem atribuída às personas especializadas não se confirma, embora não se possa, com os dados disponíveis, afirmar equivalência estrita para esse nível. Em termos práticos, o esforço adicional de elaborar prompts identitários sofisticados não encontra retorno mensurável em qualidade, observação reforçada pelo fato de a persona especializada não ter reduzido sequer o custo em tokens frente ao prompt neutro.
+
+Um achado metodológico secundário merece registro. A complexidade ciclomática medida em escopo de arquivo cresceu nas duas refatorações estruturais (Extrair Método e Substituir Condicional por Polimorfismo). O fenômeno não indica piora de qualidade, mas decorre da forma de medição: ao multiplicar o número de métodos ou classes, essas refatorações elevam a soma de caminhos independentes do arquivo, ainda que cada unidade resultante seja mais simples. A métrica, nesse escopo, não se comporta monotonicamente com a noção intuitiva de melhoria estrutural, e a inferência principal de qualidade foi, por isso, ancorada na contagem de \textit{code smells}. Esse resultado, somado à cegueira da contagem agregada de \textit{smells} diante do conserto de números mágicos, sugere que avaliações automáticas de refatoração ganham robustez ao combinar métricas de escopo e de granularidade distintos.
+
+\section{Ameaças à Validade}
+Esta seção discute as ameaças à validade nas quatro dimensões clássicas da experimentação em engenharia de software \cite{wohlin}, junto às mitigações adotadas.
+
+\subsection{Validade de Construto}
+A qualidade estrutural foi representada por dois indicadores objetivos, a complexidade ciclomática de McCabe \cite{mccabe1976} e a contagem de \textit{code smells} \cite{sonarqube}. Os próprios resultados expuseram limites de construto desses indicadores: a complexidade em escopo de arquivo não capta a simplificação local promovida por refatorações que multiplicam unidades de código, e a contagem agregada de \textit{smells} foi cega ao conserto de números mágicos, visível apenas na regra específica \texttt{java:S109}. Essas limitações foram tratadas ancorando a inferência principal nos \textit{smells}, interpretando a complexidade com ressalva e reportando o efeito do número mágico pela regra granular. Há ainda o risco de o modelo descartar a persona de controle negativo ($P_{-1}$, o padeiro) por alinhamento de contexto; uma amostra das saídas geradas sob $P_{-1}$ foi inspecionada qualitativamente para verificar se o papel atribuído foi mantido.
+
+\subsection{Validade Interna}
+O não-determinismo do modelo foi mitigado pelas 2 réplicas por condição e pela agregação das medidas por média. O filtro de validade introduz um risco de viés de seleção, pois uma persona que quebre mais código deixaria sobrar apenas as refatorações aprovadas, o que poderia inflar sua qualidade média. Esse risco mostrou-se baixo, dado que as taxas de validade foram altas e estatisticamente equivalentes entre as personas (Cochran $Q$); ainda assim, a comparação de qualidade ocorreu em regime \textit{complete-case} e foi corroborada pelo modelo de efeitos mistos sobre todas as réplicas válidas, cujas conclusões convergiram com as da análise pareada.
+
+\subsection{Validade Externa}
+O escopo limita-se à linguagem Java e a um único modelo de LLM, o que restringe a generalização dos resultados a outras linguagens e modelos. O uso do Defects4J \cite{defects4j}, por outro lado, garante código real e suítes de teste robustas, e a refatoração de sistemas orientados a objetos representa um paradigma maduro e amplamente praticado. Além disso, como o Defects4J é um benchmark público, o modelo pode ter tido contato com esse código durante o treinamento; esse efeito de contaminação atinge igualmente as quatro condições de persona, que operam sobre os mesmos trechos, e por isso não compromete a comparação pareada, embora limite a generalização para código inédito.
+
+\subsection{Validade de Conclusão}
+A amostra de 30 trechos e 240 observações confere poder adequado à análise descritiva e ao efeito principal da persona, mas o regime \textit{complete-case} restrito aos dois tipos mensuráveis (20 trechos) reduz o poder dos testes de equivalência e de interação, o que recomenda cautela ao interpretar a não confirmação de equivalência para a persona especializada como ausência de efeito. A elevação da taxa de validade a indicador analisado (Cochran) e a execução do modelo de efeitos mistos como verificação de robustez reduzem o risco de que as conclusões sejam artefatos do descarte de dados. A análise da interação dispõe de menos dados por estrato e, por isso, é tratada como exploratória.
+
+\section{Conclusão}
+Este trabalho conduziu um experimento controlado para investigar o impacto do \textit{persona prompting} na qualidade de tarefas de refatoração de código realizadas por um LLM. Sob um desenho fatorial misto que isolou a variável identitária ao longo de um gradiente de especialização, não se encontrou efeito estatisticamente significativo da persona sobre a qualidade estrutural do código refatorado, em nenhuma das métricas e em nenhum dos tipos de refatoração. A persona de controle negativo, deliberadamente incongruente, desempenhou de modo indistinguível do prompt neutro, e a persona especializada não produziu ganho mensurável de qualidade nem economia de tokens.
+
+O efeito placebo é, assim, sustentado de forma parcial: a equivalência estatística positiva foi comprovada entre o controle negativo e o prompt neutro, mas não pôde ser cravada para a persona especializada, em torno da qual subsiste uma pequena tendência não-significativa que a amostra não tem poder para resolver. A mensagem prática para a engenharia de prompts em manutenção de software é, ainda assim, clara: não há evidência que justifique o esforço de elaborar personas altamente especializadas na expectativa de melhorar a refatoração, e a adoção dessa heurística deveria apoiar-se em dados, não em impressões anedóticas. Como trabalho futuro, a investigação pode ser estendida a outros modelos e linguagens, a métricas de granularidade de método e a amostras maiores, capazes de resolver a tendência residual observada na contagem de \textit{code smells}.
+
+\section*{Agradecimentos}
+Os autores agradecem ao corpo docente do Programa de Engenharia de Software da UNIJUÍ pela orientação.
+
+\begin{thebibliography}{00}
+\bibitem{fowler} M. Fowler, \textit{Refactoring: Improving the Design of Existing Code}, 2nd ed. Boston, MA, USA: Addison-Wesley, 2018.
+\bibitem{brown2020} T. Brown et al., ``Language models are few-shot learners,'' in \textit{Advances in Neural Information Processing Systems (NeurIPS)}, vol. 33, 2020, pp. 1877--1901.
+\bibitem{wei2022} J. Wei et al., ``Chain-of-thought prompting elicits reasoning in large language models,'' in \textit{Advances in Neural Information Processing Systems (NeurIPS)}, vol. 35, 2022, pp. 24824--24837.
+\bibitem{wohlin} C. Wohlin, P. Runeson, M. Höst, M. C. Ohlsson, B. Regnell, and A. Wesslén, \textit{Experimentation in Software Engineering}, 2nd ed. Berlin, Germany: Springer, 2012.
+\bibitem{defects4j} R. Just, D. Jalali, and M. D. Ernst, ``Defects4J: A database of existing faults to enable controlled testing studies for Java programs,'' in \textit{Proc. Int. Symp. Software Testing and Analysis (ISSTA)}, 2014, pp. 437--440.
+\bibitem{sonarqube} G. A. Campbell and P. P. Papapetrou, \textit{SonarQube in Action}. Shelter Island, NY, USA: Manning Publications, 2013.
+\bibitem{stackoverflow} Stack Overflow, ``2024 Developer Survey,'' 2024. [Online]. Available: https://survey.stackoverflow.co/2024/
+\bibitem{white2023} J. White et al., ``A prompt pattern catalog to enhance prompt engineering with ChatGPT,'' \textit{arXiv preprint arXiv:2302.11382}, 2023.
+\bibitem{shanahan2023} M. Shanahan, K. McDonell, and L. Reynolds, ``Role play with large language models,'' \textit{Nature}, vol. 623, pp. 493--498, 2023.
+\bibitem{zheng2024} M. Zheng, J. Pei, L. Logeswaran, M. Lee, and D. Jurgens, ``When 'a helpful assistant' is not really helpful: Personas in system prompts do not improve performances of large language models,'' in \textit{Findings of the Association for Computational Linguistics: EMNLP 2024}, 2024.
+\bibitem{araujo2025} P. H. Luz de Araujo, P. Röttger, D. Hovy, and B. Roth, ``Principled personas: Defining and measuring the intended effects of persona prompting on task performance,'' \textit{arXiv preprint arXiv:2508.19764}, 2025.
+\bibitem{schulhoff2024} S. Schulhoff et al., ``The prompt report: A systematic survey of prompting techniques,'' \textit{arXiv preprint arXiv:2406.06608}, 2024.
+\bibitem{depalma2024} K. DePalma, I. Miminoshvili, C. Henselder, K. Moss, and E. A. AlOmar, ``Exploring ChatGPT's code refactoring capabilities: An empirical study,'' \textit{Expert Systems with Applications}, vol. 249, art. 123602, 2024.
+\bibitem{liu2024} B. Liu et al., ``An empirical study on the potential of LLMs in automated software refactoring,'' \textit{arXiv preprint arXiv:2411.04444}, 2024.
+\bibitem{mccabe1976} T. J. McCabe, ``A complexity measure,'' \textit{IEEE Transactions on Software Engineering}, vol. SE-2, no. 4, pp. 308--320, 1976.
+\bibitem{wobbrock2011} J. O. Wobbrock, L. Findlater, D. Gergle, and J. J. Higgins, ``The aligned rank transform for nonparametric factorial analyses using only ANOVA procedures,'' in \textit{Proc. SIGCHI Conf. Human Factors in Computing Systems (CHI)}, 2011, pp. 143--146.
+\bibitem{lakens2017} D. Lakens, ``Equivalence tests: A practical primer for t tests, correlations, and meta-analyses,'' \textit{Social Psychological and Personality Science}, vol. 8, no. 4, pp. 355--362, 2017.
+\bibitem{pinheiro2000} J. C. Pinheiro and D. M. Bates, \textit{Mixed-Effects Models in S and S-PLUS}. New York, NY, USA: Springer, 2000.
+\end{thebibliography}
+
+\end{document}
