@@ -58,7 +58,6 @@ public class MullerSolver extends AbstractUnivariateSolver {
     public MullerSolver() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
-
     /**
      * Construct a solver.
      *
@@ -67,7 +66,6 @@ public class MullerSolver extends AbstractUnivariateSolver {
     public MullerSolver(double absoluteAccuracy) {
         super(absoluteAccuracy);
     }
-
     /**
      * Construct a solver.
      *
@@ -112,10 +110,9 @@ public class MullerSolver extends AbstractUnivariateSolver {
         verifyBracketing(min, max);
 
         SolverTask task = isBracketing(min, initial) ?
-            new LowerIntervalTask(min, initial, fMin, fInitial) :
-            new UpperIntervalTask(initial, max, fInitial, fMax);
-
-        return task.solve(this);
+            new BracketingTask(min, initial, fMin, fInitial) :
+            new NonBracketingTask(initial, max, fInitial, fMax);
+        return task.execute();
     }
 
     /**
@@ -136,20 +133,9 @@ public class MullerSolver extends AbstractUnivariateSolver {
         final double absoluteAccuracy = getAbsoluteAccuracy();
         final double functionValueAccuracy = getFunctionValueAccuracy();
 
-        final SolverState state = new SolverState(
-            min, fMin,
-            0.5 * (min + max), computeObjectiveValue(0.5 * (min + max)),
-            max, fMax,
-            Double.POSITIVE_INFINITY
-        );
-
-        final EvaluationProvider evaluator = this::computeObjectiveValue;
+        IterationState state = new IterationState(min, fMin, 0.5 * (min + max), computeObjectiveValue(0.5 * (min + max)), max, fMax);
 
         while (true) {
-            // Muller's method employs quadratic interpolation through
-            // x0, x1, x2 and x is the zero of the interpolating parabola.
-            // Due to bracketing condition, this parabola must have two
-            // real roots and we choose one in [x0, x2] to be x.
             final double d01 = (state.y1 - state.y0) / (state.x1 - state.x0);
             final double d12 = (state.y2 - state.y1) / (state.x2 - state.x1);
             final double d012 = (d12 - d01) / (state.x2 - state.x0);
@@ -158,10 +144,10 @@ public class MullerSolver extends AbstractUnivariateSolver {
             final double xplus = state.x1 + (-2.0 * state.y1) / (c1 + FastMath.sqrt(delta));
             final double xminus = state.x1 + (-2.0 * state.y1) / (c1 - FastMath.sqrt(delta));
             
-            // xplus and xminus are two roots of parabola and at least
-            // one of them should lie in (x0, x2)
-            final double x = isSequence(state.x0, xplus, state.x2) ? xplus : xminus;
-            final double y = evaluator.evaluate(x);
+            RootSelector rootSelector = isSequence(state.x0, xplus, state.x2) ?
+                new SequenceRootSelector() : new AlternativeRootSelector();
+            final double x = rootSelector.select(xplus, xminus);
+            final double y = computeObjectiveValue(x);
 
             // check for convergence
             final double tolerance = FastMath.max(relativeAccuracy * FastMath.abs(x), absoluteAccuracy);
@@ -170,23 +156,16 @@ public class MullerSolver extends AbstractUnivariateSolver {
                 return x;
             }
 
-            // Polymorphically update the state using standard or bisection step
-            UpdateStrategy strategy = UpdateStrategy.determine(x, state);
-            strategy.update(state, x, y, evaluator);
-        }
+            boolean bisect = (x < state.x1 && (state.x1 - state.x0) > 0.95 * (state.x2 - state.x0)) ||
+                             (x > state.x1 && (state.x2 - state.x1) > 0.95 * (state.x2 - state.x0)) ||
+                             (x == state.x1);
+                             
+            IterationStep step = bisect ? new BisectionStep() : new MullerStep();
+            step.update(state, x, y);
+        } 
     }
 
-    /**
-     * Helper interface to decouple function evaluations.
-     */
-    private interface EvaluationProvider {
-        double evaluate(double x);
-    }
-
-    /**
-     * SolverState holds the mutable parameters of the iteration.
-     */
-    private static class SolverState {
+    private static class IterationState {
         double x0;
         double y0;
         double x1;
@@ -195,31 +174,28 @@ public class MullerSolver extends AbstractUnivariateSolver {
         double y2;
         double oldx;
 
-        SolverState(double x0, double y0, double x1, double y1, double x2, double y2, double oldx) {
+        IterationState(double x0, double y0, double x1, double y1, double x2, double y2) {
             this.x0 = x0;
             this.y0 = y0;
             this.x1 = x1;
             this.y1 = y1;
             this.x2 = x2;
             this.y2 = y2;
-            this.oldx = oldx;
+            this.oldx = Double.POSITIVE_INFINITY;
         } 
     }
 
-    /**
-     * Interface representing the polymorphic task of solving a specific interval.
-     */
-    private interface SolverTask {
-        double solve(MullerSolver solver) throws TooManyEvaluationsException;
+    private abstract class SolverTask {
+        abstract double execute();
     }
 
-    private static class LowerIntervalTask implements SolverTask {
+    private class BracketingTask extends SolverTask {
         private final double min;
         private final double initial;
         private final double fMin;
         private final double fInitial;
 
-        LowerIntervalTask(double min, double initial, double fMin, double fInitial) {
+        BracketingTask(double min, double initial, double fMin, double fInitial) {
             this.min = min;
             this.initial = initial;
             this.fMin = fMin;
@@ -227,18 +203,18 @@ public class MullerSolver extends AbstractUnivariateSolver {
         }
 
         @Override
-        public double solve(MullerSolver solver) throws TooManyEvaluationsException {
-            return solver.solve(min, initial, fMin, fInitial);
+        double execute() {
+            return solve(min, initial, fMin, fInitial);
         }
     }
 
-    private static class UpperIntervalTask implements SolverTask {
+    private class NonBracketingTask extends SolverTask {
         private final double initial;
         private final double max;
         private final double fInitial;
         private final double fMax;
 
-        UpperIntervalTask(double initial, double max, double fInitial, double fMax) {
+        NonBracketingTask(double initial, double max, double fInitial, double fMax) {
             this.initial = initial;
             this.max = max;
             this.fInitial = fInitial;
@@ -246,37 +222,36 @@ public class MullerSolver extends AbstractUnivariateSolver {
         }
 
         @Override
-        public double solve(MullerSolver solver) throws TooManyEvaluationsException {
-            return solver.solve(initial, max, fInitial, fMax);
+        double execute() {
+            return solve(initial, max, fInitial, fMax);
         }
     }
 
-    /**
-     * Abstract UpdateStrategy strategy for adapting iteration states.
-     */
-    private abstract static class UpdateStrategy {
-        abstract void update(SolverState state, double x, double y, EvaluationProvider evaluator);
-
-        static UpdateStrategy determine(double x, SolverState state) {
-            if (isBisectionRequired(x, state)) {
-                return BISECTION;
-            } 
-            return STANDARD;
-        }
-
-        private static boolean isBisectionRequired(double x, SolverState state) {
-            return (x < state.x1 && (state.x1 - state.x0) > 0.95 * (state.x2 - state.x0)) ||
-                   (x > state.x1 && (state.x2 - state.x1) > 0.95 * (state.x2 - state.x0)) ||
-                   (x == state.x1);
-        }
-
-        private static final UpdateStrategy STANDARD = new StandardMullerUpdate();
-        private static final UpdateStrategy BISECTION = new BisectionUpdate();
+    private abstract class RootSelector {
+        abstract double select(double xplus, double xminus);
     }
 
-    private static class StandardMullerUpdate extends UpdateStrategy {
+    private class SequenceRootSelector extends RootSelector {
         @Override
-        void update(SolverState state, double x, double y, EvaluationProvider evaluator) {
+        double select(double xplus, double xminus) {
+            return xplus;
+        }
+    }
+
+    private class AlternativeRootSelector extends RootSelector {
+        @Override
+        double select(double xplus, double xminus) {
+            return xminus;
+        }
+    }
+
+    private abstract class IterationStep {
+        abstract void update(IterationState state, double x, double y);
+    }
+
+    private class MullerStep extends IterationStep {
+        @Override
+        void update(IterationState state, double x, double y) {
             state.x0 = x < state.x1 ? state.x0 : state.x1;
             state.y0 = x < state.x1 ? state.y0 : state.y1;
             state.x2 = x > state.x1 ? state.x2 : state.x1;
@@ -287,21 +262,39 @@ public class MullerSolver extends AbstractUnivariateSolver {
         }
     }
 
-    private static class BisectionUpdate extends UpdateStrategy {
+    private class BisectionStep extends IterationStep {
         @Override
-        void update(SolverState state, double x, double y, EvaluationProvider evaluator) {
+        void update(IterationState state, double x, double y) {
             double xm = 0.5 * (state.x0 + state.x2);
-            double ym = evaluator.evaluate(xm);
-            if (FastMath.signum(state.y0) + FastMath.signum(ym) == 0.0) {
-                state.x2 = xm;
-                state.y2 = ym;
-            } else {
-                state.x0 = xm;
-                state.y0 = ym;
-            }
+            double ym = computeObjectiveValue(xm);
+            
+            SignumUpdater signumUpdater = (FastMath.signum(state.y0) + FastMath.signum(ym) == 0.0) ?
+                new LowerBoundUpdater() : new UpperBoundUpdater();
+            signumUpdater.updateBound(state, xm, ym);
+
             state.x1 = 0.5 * (state.x0 + state.x2);
-            state.y1 = evaluator.evaluate(state.x1);
+            state.y1 = computeObjectiveValue(state.x1);
             state.oldx = Double.POSITIVE_INFINITY;
+        }
+    }
+
+    private abstract class SignumUpdater {
+        abstract void updateBound(IterationState state, double xm, double ym);
+    }
+
+    private class LowerBoundUpdater extends SignumUpdater {
+        @Override
+        void updateBound(IterationState state, double xm, double ym) {
+            state.x2 = xm;
+            state.y2 = ym;
+        }
+    }
+
+    private class UpperBoundUpdater extends SignumUpdater {
+        @Override
+        void updateBound(IterationState state, double xm, double ym) {
+            state.x0 = xm;
+            state.y0 = ym;
         }
     }
 }

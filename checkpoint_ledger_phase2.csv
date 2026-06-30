@@ -213,7 +213,7 @@ id_rodada,trecho,refatoracao_tipo,persona,replica,status,complexity_base,complex
 212,Math_1_ReplaceConditionalWithPolymorphism_32,ReplaceConditionalWithPolymorphism,P-2,2,VALIDO,23,29,6,1,1,0,36.44,11899,2272,3092
 213,Math_1_ReplaceConditionalWithPolymorphism_32,ReplaceConditionalWithPolymorphism,P-3,1,VALIDO,23,27,4,1,1,0,39.21,11939,2279,2792
 214,Math_1_ReplaceConditionalWithPolymorphism_32,ReplaceConditionalWithPolymorphism,P-3,2,VALIDO,23,30,7,1,2,1,37.15,10873,2279,3056
-215,Math_1_ReplaceConditionalWithPolymorphism_32,ReplaceConditionalWithPolymorphism,P-4,1,FALHA_COMPILACAO,23,,,1,,,0.76,12309,2300,3148
+215,Math_1_ReplaceConditionalWithPolymorphism_32,ReplaceConditionalWithPolymorphism,P-4,1,VALIDO,23,34,11,1,0,-1,39.92,11930,2368,3029
 216,Math_1_ReplaceConditionalWithPolymorphism_32,ReplaceConditionalWithPolymorphism,P-4,2,VALIDO,23,32,9,1,0,-1,36.08,10941,2300,2998
 217,Math_1_ReplaceConditionalWithPolymorphism_49,ReplaceConditionalWithPolymorphism,P-1,1,VALIDO,20,23,3,1,2,1,46.38,9850,2152,2600
 218,Math_1_ReplaceConditionalWithPolymorphism_49,ReplaceConditionalWithPolymorphism,P-1,2,VALIDO,20,23,3,1,5,4,40.33,12476,2152,2630

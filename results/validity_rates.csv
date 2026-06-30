@@ -1,0 +1,5 @@
+persona,desc,n_total,n_valido,taxa_validade
+P-1,controle negativo (padeiro),60,59,0.9833
+P0,neutro (sem persona),60,60,1.0
+P1,genérico (developer),60,59,0.9833
+P2,especializado (arquiteto sênior),60,58,0.9667

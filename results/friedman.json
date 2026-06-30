@@ -1,0 +1,18 @@
+{
+  "complexity_delta": {
+    "metric": "complexity_delta",
+    "label": "complexidade ciclomática",
+    "n_complete_case": 30,
+    "statistic": 4.01694915254238,
+    "pvalue": 0.2596397344315917,
+    "significant": false
+  },
+  "smells_delta": {
+    "metric": "smells_delta",
+    "label": "code smells",
+    "n_complete_case": 30,
+    "statistic": 2.022727272727242,
+    "pvalue": 0.5677029996728418,
+    "significant": false
+  }
+}

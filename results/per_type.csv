@@ -1,0 +1,7 @@
+metric,tipo,n_cells,media,mediana
+complexity_delta,ExtractMethod,40,5.213,5.5
+complexity_delta,ReplaceConditionalWithPolymorphism,40,8.7,7.25
+complexity_delta,ReplaceMagicNumber,40,0.0,0.0
+smells_delta,ExtractMethod,40,-0.087,-1.0
+smells_delta,ReplaceConditionalWithPolymorphism,40,0.087,0.0
+smells_delta,ReplaceMagicNumber,40,0.0,0.0
