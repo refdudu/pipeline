@@ -175,6 +175,32 @@ pt <- do.call(rbind, lapply(names(METRICS), function(m)
                media=round(mean(g[[m]]),3), mediana=round(median(g[[m]]),3))))))
 write.csv(pt, file.path(OUTDIR,"per_type.csv"), row.names = FALSE)
 
+# ---------------------------------------------------------------- 7. ReplaceMagicNumber via ΔS109
+# McCabe/code_smells are blind to magic-number removal (Δ≡0). The proper metric is
+# the delta of java:S109 ("Magic numbers should not be used") violations, collected
+# by scan_s109.py into s109_magicnumber.csv. Lower (negative) = magic numbers removed.
+s109 <- NULL
+if (file.exists("s109_magicnumber.csv")) {
+  sdf <- read.csv("s109_magicnumber.csv", stringsAsFactors = FALSE)
+  sdf$persona <- factor(RELABEL[sdf$persona], levels = ORDER)
+  sdf$s109_delta <- suppressWarnings(as.numeric(sdf$s109_delta))
+  sv <- sdf[!is.na(sdf$s109_delta), ]
+  sa <- aggregate(s109_delta ~ trecho + persona, data = sv, FUN = median)   # cell median
+  write.csv(sa, file.path(OUTDIR, "s109_cell_medians.csv"), row.names = FALSE)
+  by_p <- aggregate(s109_delta ~ persona, data = sv, FUN = function(x) round(mean(x), 3))
+  write.csv(by_p, file.path(OUTDIR, "s109_by_persona.csv"), row.names = FALSE)
+  w <- tapply(sa$s109_delta, list(sa$trecho, sa$persona), function(x) x[1])
+  w <- w[, ORDER, drop = FALSE]; w <- w[complete.cases(w), , drop = FALSE]
+  s109 <- list(n = nrow(w), by_persona = by_p,
+               base_total = sum(aggregate(s109_base ~ trecho, sdf, FUN = function(x) x[1])$s109_base))
+  row_var <- nrow(w) > 0 && any(apply(w, 1, function(x) length(unique(x)) > 1))
+  if (nrow(w) >= 3 && row_var) {
+    ft <- friedman.test(as.matrix(w))
+    s109$chi <- unname(ft$statistic); s109$p <- ft$p.value
+    if (!is.na(ft$p.value) && ft$p.value < ALPHA) write.csv(round(nemenyi(w), 4), file.path(OUTDIR, "s109_nemenyi.csv"))
+  } else { s109$chi <- NA; s109$p <- NA; s109$note <- "ΔS109 idêntico entre personas em cada trecho (todas removem igualmente) → sem efeito de persona" }
+}
+
 # ---------------------------------------------------------------- plots (base graphics)
 for (m in names(METRICS)) {
   w <- cc_wide(m)
@@ -197,7 +223,7 @@ placebo <- cochran_ns && fried_ns && tost_eq
 L <- c("# Resultados e Discussão (R) — rascunho","",
   "> Gerado por `analysis.R` (ARTool/TOSTER/lme4) a partir de `checkpoint_ledger_phase2.csv`. ",
   "Personas: P-1 controle negativo, P0 neutro, P1 genérico, P2 especializado. P3 contextual não executado. α=0,05; margem TOST=±1.","",
-  "**Análise inferencial de qualidade (Friedman/ART/TOST/LMM) restrita a ExtractMethod + ReplaceConditionalWithPolymorphism.** ReplaceMagicNumber foi excluído por insensibilidade de construto (Δ≡0 nas métricas → artefato no ART, deflação no TOST) e consta apenas como descritivo. Validade e tokens usam todos os tipos.","",
+  "**Testes de complexidade/smells (Friedman/ART/TOST/LMM) restritos a ExtractMethod + ReplaceConditionalWithPolymorphism.** ReplaceMagicNumber é insensível a McCabe/code_smells (Δ≡0 → artefato no ART, deflação no TOST), então é medido à parte pela regra específica **java:S109 (ΔS109)** — ver seção própria. Validade e tokens usam todos os tipos.","",
   "## Dataset",
   sprintf("- %d obs; %d válidas (%.1f%%); complete-case (tipos mensuráveis) n=%d.",
           nrow(d), sum(d$valido), 100*mean(d$valido), friedman[["complexity_delta"]]$n_complete_case),"",
@@ -220,6 +246,19 @@ L <- c(L, "", "## LMM (ref. P0)")
 for (m in names(METRICS)) { e<-lmm[[m]]; if(!is.null(e$coef)) {
   L<-c(L, sprintf("- *%s*: %s", e$label, paste(sprintf("%s β=%.3f (p=%s)", e$coef$level, e$coef$beta, sapply(e$coef$p, fmtp)), collapse=", ")))
 } else L<-c(L, sprintf("- *%s*: %s", e$label, e$note)) }
+if (!is.null(s109)) {
+  L <- c(L, "", "## ReplaceMagicNumber — remoção de magic numbers (ΔS109)",
+    "Métrica específica java:S109 (McCabe/code_smells são cegos a essa refatoração). ΔS109<0 = magic numbers removidos.",
+    sprintf("- Total de violações S109 na linha de base (10 trechos): %d.", s109$base_total),
+    "", "| Persona | ΔS109 médio |", "|---|---|")
+  for (i in 1:nrow(s109$by_persona))
+    L <- c(L, sprintf("| %s | %s |", s109$by_persona$persona[i], s109$by_persona$s109_delta[i]))
+  L <- c(L, "",
+    if (is.na(s109$p)) sprintf("Friedman (ΔS109 entre personas): %s — todas as personas removem os magic numbers de forma equivalente (inclui o controle negativo P-1).", s109$note)
+    else sprintf("Friedman (ΔS109 entre personas): χ²=%.3f, p=%s (%s efeito de persona na remoção de magic numbers).",
+                 s109$chi, fmtp(s109$p), ifelse(s109$p < ALPHA, "com", "sem")))
+}
+
 L <- c(L, "", "## Conclusão",
   sprintf("**Efeito placebo %s**: validade %s (Cochran), %s diferença de qualidade (Friedman), equivalência TOST %s nos contrastes-chave.",
     ifelse(placebo,"SUSTENTADO","NÃO totalmente sustentado"),
@@ -231,7 +270,7 @@ L <- c(L, "", "## Conclusão",
   "",
   "### Limitações","- P3 contextual não executado (4/5 níveis).","- 2 réplicas (proposta: 5) → 240 obs.",
   "- Análise estática single-file não capta classes novas.",
-  "- **ReplaceMagicNumber excluído do inferencial** (Δ≡0; métricas McCabe/smells insensíveis a essa refatoração) — limitação de construto.",
+  "- ReplaceMagicNumber é cego a McCabe/code_smells (Δ≡0); medido à parte por java:S109 (ΔS109). Limitação de construto das métricas gerais, contornada para esse tipo.",
   "- ART/LMM divergem do Friedman no efeito principal (sensibilidade), reportados com cautela.")
 writeLines(L, file.path(OUTDIR, "results_draft.md"))
 
@@ -241,4 +280,8 @@ for (m in names(METRICS)) cat(sprintf("Friedman %s: chi2=%.3f p=%.4f (n=%d)\n",
     m, friedman[[m]]$statistic, friedman[[m]]$pvalue, friedman[[m]]$n_complete_case))
 for (m in names(METRICS)) if(!is.null(art_res[[m]]$F)) cat(sprintf("ART %s: F=%.3f p=%.4f\n", m, art_res[[m]]$F, art_res[[m]]$pvalue))
 cat("\nTOST:\n"); print(tost, row.names=FALSE)
+if (!is.null(s109)) {
+  cat(sprintf("\nΔS109 (MagicNumber): base_total=%d; por persona:\n", s109$base_total)); print(s109$by_persona, row.names=FALSE)
+  cat(sprintf("Friedman ΔS109: %s\n", if (is.na(s109$p)) s109$note else sprintf("chi2=%.3f p=%.4f", s109$chi, s109$p)))
+}
 cat(sprintf("\nVEREDITO PLACEBO: %s\n", ifelse(placebo,"SUSTENTADO","NÃO totalmente sustentado")))

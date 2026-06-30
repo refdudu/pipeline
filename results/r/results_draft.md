@@ -3,7 +3,7 @@
 > Gerado por `analysis.R` (ARTool/TOSTER/lme4) a partir de `checkpoint_ledger_phase2.csv`. 
 Personas: P-1 controle negativo, P0 neutro, P1 genérico, P2 especializado. P3 contextual não executado. α=0,05; margem TOST=±1.
 
-**Análise inferencial de qualidade (Friedman/ART/TOST/LMM) restrita a ExtractMethod + ReplaceConditionalWithPolymorphism.** ReplaceMagicNumber foi excluído por insensibilidade de construto (Δ≡0 nas métricas → artefato no ART, deflação no TOST) e consta apenas como descritivo. Validade e tokens usam todos os tipos.
+**Testes de complexidade/smells (Friedman/ART/TOST/LMM) restritos a ExtractMethod + ReplaceConditionalWithPolymorphism.** ReplaceMagicNumber é insensível a McCabe/code_smells (Δ≡0 → artefato no ART, deflação no TOST), então é medido à parte pela regra específica **java:S109 (ΔS109)** — ver seção própria. Validade e tokens usam todos os tipos.
 
 ## Dataset
 - 240 obs; 236 válidas (98.3%); complete-case (tipos mensuráveis) n=20.
@@ -44,6 +44,19 @@ Cochran Q = 2.400, p = 0,494 (sem diferença de validade).
 - *complexidade ciclomática*: P-1 β=-0.136 (p=0,811), P1 β=-0.649 (p=0,255), P2 β=0.843 (p=0,143)
 - *code smells*: P-1 β=-0.027 (p=0,948), P1 β=-0.284 (p=0,494), P2 β=-0.684 (p=0,103)
 
+## ReplaceMagicNumber — remoção de magic numbers (ΔS109)
+Métrica específica java:S109 (McCabe/code_smells são cegos a essa refatoração). ΔS109<0 = magic numbers removidos.
+- Total de violações S109 na linha de base (10 trechos): 12.
+
+| Persona | ΔS109 médio |
+|---|---|
+| P-1 | -1.2 |
+| P0 | -1.2 |
+| P1 | -1.2 |
+| P2 | -1.2 |
+
+Friedman (ΔS109 entre personas): ΔS109 idêntico entre personas em cada trecho (todas removem igualmente) → sem efeito de persona — todas as personas removem os magic numbers de forma equivalente (inclui o controle negativo P-1).
+
 ## Conclusão
 **Efeito placebo NÃO totalmente sustentado**: validade semelhante (Cochran), ausência de diferença de qualidade (Friedman), equivalência TOST não confirmada nos contrastes-chave.
 
@@ -54,5 +67,5 @@ Cochran Q = 2.400, p = 0,494 (sem diferença de validade).
 - P3 contextual não executado (4/5 níveis).
 - 2 réplicas (proposta: 5) → 240 obs.
 - Análise estática single-file não capta classes novas.
-- **ReplaceMagicNumber excluído do inferencial** (Δ≡0; métricas McCabe/smells insensíveis a essa refatoração) — limitação de construto.
+- ReplaceMagicNumber é cego a McCabe/code_smells (Δ≡0); medido à parte por java:S109 (ΔS109). Limitação de construto das métricas gerais, contornada para esse tipo.
 - ART/LMM divergem do Friedman no efeito principal (sensibilidade), reportados com cautela.
