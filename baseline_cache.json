@@ -1,0 +1,122 @@
+{
+  "Math_1_ExtractMethod_141": {
+    "complexity": 13,
+    "code_smells": 1
+  },
+  "Math_1_ReplaceMagicNumber_194": {
+    "complexity": 2,
+    "code_smells": 0
+  },
+  "Math_1_ExtractMethod_116": {
+    "complexity": 22,
+    "code_smells": 5
+  },
+  "Math_1_ExtractMethod_121": {
+    "complexity": 12,
+    "code_smells": 6
+  },
+  "Math_1_ExtractMethod_156": {
+    "complexity": 16,
+    "code_smells": 2
+  },
+  "Math_1_ExtractMethod_144": {
+    "complexity": 20,
+    "code_smells": 1
+  },
+  "Math_1_ExtractMethod_140": {
+    "complexity": 15,
+    "code_smells": 1
+  },
+  "Math_1_ExtractMethod_115": {
+    "complexity": 13,
+    "code_smells": 1
+  },
+  "Math_1_ExtractMethod_159": {
+    "complexity": 20,
+    "code_smells": 5
+  },
+  "Math_1_ExtractMethod_119": {
+    "complexity": 12,
+    "code_smells": 7
+  },
+  "Math_1_ExtractMethod_182": {
+    "complexity": 16,
+    "code_smells": 5
+  },
+  "Math_1_ReplaceMagicNumber_201": {
+    "complexity": 2,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceMagicNumber_169": {
+    "complexity": 5,
+    "code_smells": 2
+  },
+  "Math_1_ReplaceMagicNumber_167": {
+    "complexity": 5,
+    "code_smells": 2
+  },
+  "Math_1_ReplaceMagicNumber_189": {
+    "complexity": 8,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceMagicNumber_110": {
+    "complexity": 5,
+    "code_smells": 5
+  },
+  "Math_1_ReplaceMagicNumber_163": {
+    "complexity": 13,
+    "code_smells": 3
+  },
+  "Math_1_ReplaceMagicNumber_181": {
+    "complexity": 8,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceMagicNumber_157": {
+    "complexity": 6,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceMagicNumber_195": {
+    "complexity": 5,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_68": {
+    "complexity": 17,
+    "code_smells": 2
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_34": {
+    "complexity": 10,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_41": {
+    "complexity": 25,
+    "code_smells": 0
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_50": {
+    "complexity": 17,
+    "code_smells": 1
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_30": {
+    "complexity": 27,
+    "code_smells": 2
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_61": {
+    "complexity": 15,
+    "code_smells": 1
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_32": {
+    "complexity": 23,
+    "code_smells": 1
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_49": {
+    "complexity": 20,
+    "code_smells": 1
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_39": {
+    "complexity": 30,
+    "code_smells": 4
+  },
+  "Math_1_ReplaceConditionalWithPolymorphism_16": {
+    "complexity": 34,
+    "code_smells": 4
+  }
+}

@@ -62,7 +62,7 @@ class SonarQubeManager:
             logger.error(f"Ping failed: {e}")
             raise SonarQubeServerError(f"Connection failed: {e}") from e
 
-    def scan(self, project_key: str, project_name: str, source_file: str, classes_dir: str):
+    def scan(self, project_key: str, project_name: str, source_file: str, classes_dir: str, work_dir: str = None):
         cmd = [
             self.scanner_bin,
             f"-Dsonar.projectKey={project_key}",
@@ -72,6 +72,10 @@ class SonarQubeManager:
             f"-Dsonar.java.binaries={classes_dir}",
             "-Dsonar.scm.exclusions.disabled=true"
         ]
+        # Isolate the scanner working dir so concurrent native scans don't collide
+        # on the default <cwd>/.scannerwork temp folder.
+        if work_dir:
+            cmd.append(f"-Dsonar.working.directory={work_dir}")
         logger = _get_logger()
         cmd_for_log = [
             "-Dsonar.token=******" if arg.startswith("-Dsonar.token=") else arg
