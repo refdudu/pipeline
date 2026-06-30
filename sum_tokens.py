@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-def parse_and_sum_tokens(root_dir: Path):
+def parse_and_sum_tokens(root_dir: Path) -> tuple[int, int]:
     total_inputs = 0
     total_outputs = 0
     
@@ -17,10 +17,10 @@ def parse_and_sum_tokens(root_dir: Path):
                 total_inputs += metadata.get("prompt_token_count") or 0
                 total_outputs += metadata.get("candidates_token_count") or 0
         except Exception as e:
-            # Silently ignore read/parse errors for robustness, or print a warning
-            pass
+            print(f"Warning: Failed to process {filepath}: {e}", file=sys.stderr)
             
     return total_inputs, total_outputs
+
 
 if __name__ == "__main__":
     refactored_dir = Path(__file__).parent / "refactored_code"
